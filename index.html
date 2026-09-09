@@ -116,6 +116,8 @@
         #enter-text:hover { color: #E2FF26; }
         .fade-in { opacity: 1 !important; }
         .hidden { display: none !important; }
+        
+        .abstract-icon { position: absolute; top: 20px; left: 20px; width: 100px; opacity: 0.8; z-index: 100; }
     </style>
 </head>
 <body>
@@ -532,10 +534,14 @@
                 option.textContent = player.name;
                 playerSelect.appendChild(option);
             });
-            const addNewOption = document.createElement('option');
-            addNewOption.value = 'ADD_NEW';
-            addNewOption.textContent = '+ Add a new name...';
-            playerSelect.appendChild(addNewOption);
+
+            // ONLY ALLOW ADDING NEW NAMES IN WEEK 1
+            if (currentAppState.week === 1) {
+                const addNewOption = document.createElement('option');
+                addNewOption.value = 'ADD_NEW';
+                addNewOption.textContent = '+ Add a new name...';
+                playerSelect.appendChild(addNewOption);
+            }
         }
 
         playerSelect.addEventListener('change', (e) => {
@@ -787,7 +793,7 @@
         // --- INITIALIZATION ---
         document.addEventListener("DOMContentLoaded", () => {
             updateScheduleEngine();
-            fetchGoogleSheetData(); // Fetch live predictions from Google Sheet
+            fetchGoogleSheetData(); 
             
             const hasVisited = localStorage.getItem("gbbo_visited");
             if (!hasVisited) {
