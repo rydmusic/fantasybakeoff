@@ -309,44 +309,33 @@
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         th { background-color: rgba(53, 43, 255, 0.3); color: #E2FF26; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 
-        /* --- INTRO SEQUENCE & VIDEO OVERLAY --- */
-        #intro-sequence { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #000000; z-index: 10005; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease; }
+        /* --- INTRO SEQUENCE --- */
+        #intro-sequence { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background-color: #000000; z-index: 10005; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 1s ease; 
+        }
         #gbbo-logo { max-width: 80%; max-height: 50vh; opacity: 0; transition: opacity 1.5s ease-in-out; }
-        #enter-text { color: #ffffff; font-size: 24px; margin-top: 40px; cursor: pointer; opacity: 0; transition: opacity 1.5s ease-in-out; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; }
+        #enter-text { 
+            color: #ffffff; font-size: 24px; margin-top: 40px; cursor: pointer; 
+            opacity: 0; transition: opacity 1.5s ease-in-out; text-transform: uppercase; 
+            letter-spacing: 2px; font-weight: bold; 
+        }
         #enter-text:hover { color: #E2FF26; }
         .fade-in { opacity: 1 !important; }
-
-        #video-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 10004; }
         .hidden { display: none !important; }
-        .video-container { width: 100%; height: 100%; position: relative; }
-        #intro-video { pointer-events: none; }
-        #black-fade-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 2s ease; display: flex; justify-content: center; align-items: center; }
-        #black-fade-screen.active { opacity: 1; pointer-events: auto; }
-        #close-video-btn { background: transparent; color: #E2FF26; border: 2px solid #E2FF26; padding: 15px 40px; font-size: 20px; cursor: pointer; border-radius: 30px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s ease; }
-        #close-video-btn:hover { background: #E2FF26; color: black; }
-        
-        .abstract-icon { position: absolute; top: 20px; left: 20px; width: 100px; opacity: 0.8; z-index: 100; }
     </style>
 </head>
 <body>
+
+    <!-- Hidden Audio Player (Using Google Drive direct download link structure) -->
+    <audio id="bg-audio" src="https://drive.google.com/uc?export=download&id=14u1AOjrbx_KfuPw8U2Wck7BBg-GZv9e_"></audio>
 
     <!-- Cinematic Intro Sequence -->
     <div id="intro-sequence">
         <img id="gbbo-logo" src="https://ic.c4assets.com/bips/10683838/08B3E439-97FF-4e5e-998b-cb45c11bf795.png?imformat=chrome" alt="GBBO Logo">
         <p id="enter-text">Click here to enter</p>
-    </div>
-
-    <!-- Video Overlay -->
-    <div id="video-overlay" class="hidden">
-        <div class="video-container">
-            <div id="black-fade-screen">
-                <button id="close-video-btn">Continue to Site</button>
-            </div>
-            <iframe id="intro-video" width="100%" height="100%" 
-                src="https://drive.google.com/file/d/1Fb9ChUeBb8GPhjhE5Ij0XYGeQkLysrxI/preview" 
-                frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
-            </iframe>
-        </div>
     </div>
 
     <!-- Interactive Baker Selection Modal (For Forms) -->
@@ -371,12 +360,6 @@
             <button class="modal-btn" id="close-bio-btn">Close</button>
         </div>
     </div>
-
-    <!-- Abstract Icon decoration -->
-    <svg class="abstract-icon" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4">
-        <path d="M 40 10 Q 10 10 10 40 Q 10 70 40 70 Q 70 70 70 40 Q 70 10 40 10 Z" />
-        <path d="M 60 30 Q 30 30 30 60 Q 30 90 60 90 Q 90 90 90 60 Q 90 30 60 30 Z" />
-    </svg>
 
     <!-- COUNTDOWN TIMER -->
     <div class="countdown-wrapper">
@@ -557,7 +540,6 @@
         
         document.querySelectorAll('#main-cast-grid .cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
-                // FIXED: Using textContent to ignore CSS text-transform overrides!
                 const bakerName = tile.querySelector('.baker-name').textContent.trim();
                 bioTitle.innerText = bakerName;
                 bioText.innerHTML = bakerBios[bakerName] || "Bio coming soon...";
@@ -586,7 +568,6 @@
 
         modalGrid.querySelectorAll('.cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
-                // FIXED: Using textContent to ignore CSS text-transform overrides!
                 const bakerName = tile.querySelector('.baker-name').textContent.trim();
                 document.getElementById(activeInputId).value = bakerName;
                 activeBtn.innerText = bakerName;
@@ -633,36 +614,32 @@
             });
         }
 
-        // --- Intro Sequence & Video Timing Logic ---
+        // --- Intro Sequence & Audio Timing Logic ---
         document.addEventListener("DOMContentLoaded", () => {
             const hasVisited = localStorage.getItem("gbbo_visited");
             const introSequence = document.getElementById("intro-sequence");
             const logo = document.getElementById("gbbo-logo");
             const enterText = document.getElementById("enter-text");
-            const videoOverlay = document.getElementById("video-overlay");
-            const blackFadeScreen = document.getElementById("black-fade-screen");
-            const closeVideoBtn = document.getElementById("close-video-btn");
-            const iframe = document.getElementById("intro-video");
+            const bgAudio = document.getElementById("bg-audio");
 
             if (!hasVisited) {
                 setTimeout(() => { logo.classList.add("fade-in"); }, 1000);
                 setTimeout(() => { enterText.classList.add("fade-in"); }, 3000);
+                
                 enterText.addEventListener("click", () => {
+                    // Hide intro sequence immediately
                     introSequence.classList.add("hidden");
-                    videoOverlay.classList.remove("hidden");
-                    const currentSrc = iframe.src;
-                    if (!currentSrc.includes("autoplay=1")) { iframe.src = currentSrc + "?autoplay=1"; }
-                    setTimeout(() => { blackFadeScreen.classList.add("active"); }, 20000); 
-                });
-                closeVideoBtn.addEventListener("click", () => {
-                    videoOverlay.classList.add("hidden");
                     localStorage.setItem("gbbo_visited", "true"); 
-                    iframe.src = ""; 
+                    
+                    // Trigger Background Audio Playback
+                    bgAudio.volume = 0.5; // Starts at 50% volume so it isn't jarring
+                    bgAudio.play().catch(e => console.log("Audio playback was prevented by the browser.", e));
+
                     setTimeout(animateGrid, 300); 
                 });
             } else {
+                // If they have visited before, skip the visual intro sequence
                 introSequence.classList.add("hidden");
-                videoOverlay.classList.add("hidden");
                 setTimeout(animateGrid, 300);
             }
             renderLeaderboard();
