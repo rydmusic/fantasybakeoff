@@ -9,18 +9,79 @@
         /* --- GLOBAL THEME BASE --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #080C16; /* Dark navy background */
+            background-color: #080C16; 
             color: #ffffff;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
         }
 
+        /* --- COUNTDOWN TIMER --- */
+        .countdown-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px 10px;
+            text-align: center;
+            position: relative;
+            z-index: 100;
+        }
+
+        .countdown-wrapper h3 {
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            margin-top: 0;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 60px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .time-box span {
+            color: #E2FF26;
+            font-size: clamp(20px, 5vw, 32px);
+            font-weight: bold;
+        }
+
+        .time-box small {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        .started-msg {
+            color: #E2FF26;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 20px;
+        }
+
         /* --- TAB NAVIGATION --- */
         .tabs-nav {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap; /* Allows tabs to stack on small screens */
+            flex-wrap: wrap; 
             gap: 15px;
             padding: 20px;
             background-color: #080C16;
@@ -42,15 +103,8 @@
             transition: all 0.3s ease;
         }
 
-        .tab-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .tab-btn.active {
-            color: #080C16;
-            background: #E2FF26;
-            border-color: #E2FF26;
-        }
+        .tab-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .tab-btn.active { color: #080C16; background: #E2FF26; border-color: #E2FF26; }
 
         .tab-content {
             display: none;
@@ -61,9 +115,7 @@
             padding-bottom: 50px;
         }
 
-        .tab-content.active {
-            display: flex;
-        }
+        .tab-content.active { display: flex; }
 
         @keyframes fadeInTab {
             from { opacity: 0; transform: translateY(10px); }
@@ -104,25 +156,20 @@
             overflow: hidden;
         }
 
-        /* Jigsaw puzzle background positioning */
         .cast-tile:nth-child(1) { background-position: 0% 0%; }
         .cast-tile:nth-child(2) { background-position: 33.333% 0%; }
         .cast-tile:nth-child(3) { background-position: 66.666% 0%; }
         .cast-tile:nth-child(4) { background-position: 100% 0%; }
-        
         .cast-tile:nth-child(5) { background-position: 0% 50%; }
         .cast-tile:nth-child(6) { background-position: 33.333% 50%; }
         .cast-tile:nth-child(7) { background-position: 66.666% 50%; }
         .cast-tile:nth-child(8) { background-position: 100% 50%; }
-        
         .cast-tile:nth-child(9) { background-position: 0% 100%; }
         .cast-tile:nth-child(10) { background-position: 33.333% 100%; }
         .cast-tile:nth-child(11) { background-position: 66.666% 100%; }
         .cast-tile:nth-child(12) { background-position: 100% 100%; }
 
-        .cast-tile.visible {
-            opacity: 1;
-        }
+        .cast-tile.visible { opacity: 1; }
 
         /* Hover Overlay for Tab 1 */
         #tab-bakers .cast-tile::before {
@@ -175,18 +222,8 @@
             margin-bottom: 10px;
         }
 
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .input-group label {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-group label { font-size: 14px; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 1px; }
 
         .text-input {
             background: transparent;
@@ -198,10 +235,7 @@
             outline: none;
             transition: border-color 0.3s;
         }
-
-        .text-input:focus {
-            border-color: #E2FF26;
-        }
+        .text-input:focus { border-color: #E2FF26; }
 
         .select-baker-btn {
             background: rgba(255, 255, 255, 0.05);
@@ -214,239 +248,84 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
-        .select-baker-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: white;
-        }
-
-        .select-baker-btn.selected {
-            border-style: solid;
-            border-color: #E2FF26;
-            color: #E2FF26;
-            font-weight: bold;
-        }
+        .select-baker-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: white; }
+        .select-baker-btn.selected { border-style: solid; border-color: #E2FF26; color: #E2FF26; font-weight: bold; }
 
         .submit-btn {
-            background-color: #352BFF;
-            color: white;
-            border: none;
-            padding: 18px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
+            background-color: #352BFF; color: white; border: none; padding: 18px;
+            font-size: 18px; font-weight: bold; border-radius: 8px; text-transform: uppercase;
+            letter-spacing: 2px; cursor: pointer; margin-top: 20px; transition: background-color 0.3s;
         }
+        .submit-btn:hover { background-color: #E2FF26; color: #080C16; }
 
-        .submit-btn:hover {
-            background-color: #E2FF26;
-            color: #080C16;
-        }
-
-        /* --- BAKER SELECTOR MODAL --- */
+        /* --- BAKER SELECTOR MODAL (Form) --- */
         #baker-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(8, 12, 22, 0.95);
-            z-index: 10002;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(8, 12, 22, 0.95); z-index: 10002;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
-
-        #baker-modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        #baker-modal h3 {
-            color: #E2FF26;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-align: center;
-        }
-
-        #baker-modal .cast-wrapper {
-            max-width: 800px;
-        }
-
-        /* Always show names in the modal so they know who to tap on mobile */
+        #baker-modal.active { opacity: 1; pointer-events: auto; }
+        #baker-modal h3 { color: #E2FF26; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+        #baker-modal .cast-wrapper { max-width: 800px; }
         #baker-modal .cast-tile { opacity: 1; }
         #baker-modal .cast-tile::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(8, 12, 22, 0.5); 
-            z-index: 1;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(8, 12, 22, 0.5); z-index: 1;
         }
         #baker-modal .cast-tile:hover::before { background-color: rgba(8, 12, 22, 0.2); }
-        
         #baker-modal .baker-name {
-            opacity: 1;
-            transform: translateY(0);
-            background: rgba(8, 12, 22, 0.8);
-            padding: 4px 8px;
-            border-radius: 4px;
+            opacity: 1; transform: translateY(0); background: rgba(8, 12, 22, 0.8);
+            padding: 4px 8px; border-radius: 4px;
         }
 
-        .modal-controls {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .modal-btn {
-            background: transparent;
-            color: white;
-            border: 1px solid white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 1px;
-        }
-
+        .modal-controls { display: flex; gap: 15px; margin-top: 20px; }
+        .modal-btn { background: transparent; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 20px; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
         .modal-btn:hover { background: white; color: black; }
 
+        /* --- BAKER BIO MODAL (Tab 1) --- */
+        #bio-modal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(8, 12, 22, 0.95); z-index: 10003;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            padding: 20px; box-sizing: border-box;
+        }
+        #bio-modal.active { opacity: 1; pointer-events: auto; }
+        .bio-content {
+            background: #111827; border: 2px solid #E2FF26; border-radius: 12px;
+            padding: 30px; max-width: 500px; width: 100%; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .bio-content h3 { color: #E2FF26; text-transform: uppercase; font-size: 28px; margin-top: 0; margin-bottom: 15px; letter-spacing: 2px; }
+        .bio-content p { font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 25px; text-align: left; }
+
         /* --- LEADERBOARD REDESIGN (TAB 3) --- */
-        .leaderboard-section {
-            width: 100%;
-            max-width: 800px;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .leaderboard-section h2 {
-            color: #E2FF26; 
-            text-align: center;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        th {
-            background-color: rgba(53, 43, 255, 0.3);
-            color: #E2FF26;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 1px;
-        }
+        .leaderboard-section { width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; }
+        .leaderboard-section h2 { color: #E2FF26; text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        th { background-color: rgba(53, 43, 255, 0.3); color: #E2FF26; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 
         /* --- INTRO SEQUENCE & VIDEO OVERLAY --- */
-        #intro-sequence {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #000000;
-            z-index: 10001; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease;
-        }
-
-        #gbbo-logo {
-            max-width: 80%;
-            max-height: 50vh;
-            opacity: 0; 
-            transition: opacity 1.5s ease-in-out; 
-        }
-
-        #enter-text {
-            color: #ffffff;
-            font-size: 24px;
-            margin-top: 40px;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 1.5s ease-in-out; 
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: bold;
-        }
-
+        #intro-sequence { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #000000; z-index: 10005; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease; }
+        #gbbo-logo { max-width: 80%; max-height: 50vh; opacity: 0; transition: opacity 1.5s ease-in-out; }
+        #enter-text { color: #ffffff; font-size: 24px; margin-top: 40px; cursor: pointer; opacity: 0; transition: opacity 1.5s ease-in-out; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; }
         #enter-text:hover { color: #E2FF26; }
         .fade-in { opacity: 1 !important; }
 
-        #video-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: black;
-            z-index: 9999;
-        }
-
+        #video-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 10004; }
         .hidden { display: none !important; }
         .video-container { width: 100%; height: 100%; position: relative; }
         #intro-video { pointer-events: none; }
-
-        #black-fade-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: black;
-            z-index: 10000;
-            opacity: 0;
-            pointer-events: none; 
-            transition: opacity 2s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #black-fade-screen.active {
-            opacity: 1;
-            pointer-events: auto; 
-        }
-
-        #close-video-btn {
-            background: transparent;
-            color: #E2FF26;
-            border: 2px solid #E2FF26;
-            padding: 15px 40px;
-            font-size: 20px;
-            cursor: pointer;
-            border-radius: 30px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-        }
-
-        #close-video-btn:hover {
-            background: #E2FF26;
-            color: black;
-        }
+        #black-fade-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity 2s ease; display: flex; justify-content: center; align-items: center; }
+        #black-fade-screen.active { opacity: 1; pointer-events: auto; }
+        #close-video-btn { background: transparent; color: #E2FF26; border: 2px solid #E2FF26; padding: 15px 40px; font-size: 20px; cursor: pointer; border-radius: 30px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s ease; }
+        #close-video-btn:hover { background: #E2FF26; color: black; }
         
-        .abstract-icon {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 100px;
-            opacity: 0.8;
-            z-index: 100;
-        }
+        .abstract-icon { position: absolute; top: 20px; left: 20px; width: 100px; opacity: 0.8; z-index: 100; }
     </style>
 </head>
 <body>
@@ -470,12 +349,12 @@
         </div>
     </div>
 
-    <!-- Interactive Baker Selection Modal -->
+    <!-- Interactive Baker Selection Modal (For Forms) -->
     <div id="baker-modal">
         <h3 id="modal-title">Select Baker</h3>
         <div class="cast-wrapper">
             <div class="cast-grid" id="modal-grid">
-                <!-- Javascript will populate this grid to match the main one -->
+                <!-- Javascript will populate this grid -->
             </div>
         </div>
         <div class="modal-controls">
@@ -484,11 +363,31 @@
         </div>
     </div>
 
+    <!-- Baker Bio Modal -->
+    <div id="bio-modal">
+        <div class="bio-content">
+            <h3 id="bio-title">Baker Name</h3>
+            <p id="bio-text">Baker bio text goes here.</p>
+            <button class="modal-btn" id="close-bio-btn">Close</button>
+        </div>
+    </div>
+
     <!-- Abstract Icon decoration -->
     <svg class="abstract-icon" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4">
         <path d="M 40 10 Q 10 10 10 40 Q 10 70 40 70 Q 70 70 70 40 Q 70 10 40 10 Z" />
         <path d="M 60 30 Q 30 30 30 60 Q 30 90 60 90 Q 90 90 90 60 Q 90 30 60 30 Z" />
     </svg>
+
+    <!-- COUNTDOWN TIMER -->
+    <div class="countdown-wrapper">
+        <h3>Bake Off Starts In:</h3>
+        <div class="countdown" id="countdown-display">
+            <div class="time-box"><span id="days">00</span><small>Days</small></div>
+            <div class="time-box"><span id="hours">00</span><small>Hours</small></div>
+            <div class="time-box"><span id="minutes">00</span><small>Minutes</small></div>
+            <div class="time-box"><span id="seconds">00</span><small>Seconds</small></div>
+        </div>
+    </div>
 
     <!-- Header Navigation Tabs -->
     <nav class="tabs-nav">
@@ -499,7 +398,6 @@
 
     <!-- Main App Container -->
     <main>
-        
         <!-- TAB 1: Animated Baker Grid -->
         <div id="tab-bakers" class="tab-content active">
             <section class="cast-wrapper">
@@ -536,39 +434,29 @@
                         <input type="text" id="player-name" class="text-input" placeholder="Enter your name" required>
                     </div>
 
-                    <!-- Hidden inputs store the actual form data -->
                     <input type="hidden" id="technical" required>
                     <input type="hidden" id="star-baker" required>
                     <input type="hidden" id="leaving" required>
                     <input type="hidden" id="handshake">
 
-                    <!-- Visual buttons trigger the modal -->
                     <div class="input-group">
                         <label>Technical Winner (3 pts)</label>
-                        <button type="button" class="select-baker-btn" data-target-input="technical" data-label="Technical Winner">
-                            Tap to select a baker...
-                        </button>
+                        <button type="button" class="select-baker-btn" data-target-input="technical" data-label="Technical Winner">Tap to select a baker...</button>
                     </div>
 
                     <div class="input-group">
                         <label>Star Baker (5 pts)</label>
-                        <button type="button" class="select-baker-btn" data-target-input="star-baker" data-label="Star Baker">
-                            Tap to select a baker...
-                        </button>
+                        <button type="button" class="select-baker-btn" data-target-input="star-baker" data-label="Star Baker">Tap to select a baker...</button>
                     </div>
 
                     <div class="input-group">
                         <label>Who is leaving? (2 pts)</label>
-                        <button type="button" class="select-baker-btn" data-target-input="leaving" data-label="Leaving">
-                            Tap to select a baker...
-                        </button>
+                        <button type="button" class="select-baker-btn" data-target-input="leaving" data-label="Leaving">Tap to select a baker...</button>
                     </div>
 
                     <div class="input-group">
                         <label>Hollywood Handshake? (10 pts)</label>
-                        <button type="button" class="select-baker-btn" data-target-input="handshake" data-label="Hollywood Handshake">
-                            Tap to select a baker... (Optional)
-                        </button>
+                        <button type="button" class="select-baker-btn" data-target-input="handshake" data-label="Hollywood Handshake">Tap to select a baker... (Optional)</button>
                     </div>
 
                     <button type="submit" class="submit-btn">Submit Predictions</button>
@@ -594,10 +482,56 @@
                 </table>
             </section>
         </div>
-
     </main>
 
     <script>
+        // --- BAKER BIOS ---
+        const bakerBios = {
+            "Clara": `<strong>24 | Hertfordshire | Marketing Graduate</strong><br><br>A passionate Portuguese polyglot pocket rocket, Clara is a bundle of energy and believes "the first bite of a bake is always with the eyes". She loves creating colourful, chaotically beautiful designs, balanced with fresh, fruity flavours. Originally from Aveiro in Portugal, Clara moved to the UK at 18 to study marketing. She began baking cakes two years ago as a creative outlet, and then recreating Portuguese classics like Tarte de Nata for her British fiancé Kieran and his family. Clara’s greatest loves are her spaniel Gigi and pygmy hedgehog, Pecan, and she is happiest when surrounded by animals. A self-confessed "fantasy girly", Clara is bringing plenty of colour, warmth and Portuguese sunshine to the tent.`,
+            
+            "Connie": `<strong>63 | London | NHS Hospital Discharge Lead</strong><br><br>Known as "the Cake Lady", Connie can’t remember a time when she didn’t bake. After over 20 years working for the NHS, baking is her way to unwind after a busy day. She is best known for her hearty carrot cakes, with favourite flavours including rum fruit, lemon and lavender. She keeps a jar of fruit permanently soaking in rum, wine and cinnamon - "you can smell the cake before you see it!" A devoted fan of black-and-white films, Connie loves an audiobook and often has a thriller series playing in the background while she bakes. She has been married to Myke, a musician and music teacher, for 23 years, and together they run a music centre in London where Connie loves to try out her new recipes on the students.`,
+            
+            "Danni": `<strong>25 | Dorset | HGV Service Centre Administrator</strong><br><br>Naturally curious and experimental, Danni loves exploring the countryside and foraging for ingredients. Their bakes often combine foraged finds such as magnolia, chestnut and dandelion with far-flung flavours like ube and red bean paste. Living in Dorset with their parents, sister and three cocker spaniels, Danni works alongside their dad at an HGV service centre, keeping the mechanics on their toes with invoices and cost-tracking. Always tinkering, Danni has a host of projects on the go, from anime doodling to soldering broken traces on the motherboard of her Commodore 64. A tech enthusiast, they love decorating their bakes with inspiration from video games and animation. Danni's designed websites for fun, created their own visual novel games using Ren’Py and even managed to bring an old VCR back to life.`,
+            
+            "Gabe": `<strong>32 | West Midlands | Artist & Drag King</strong><br><br>Self-styled "daddy of Birmingham drag", Gabe discovered baking after watching the very first series of Bake Off aged 13. Their baking style is "gorgeous but very homemade", with a preference for savoury, meat-filled bakes and an obsession with meringue. Raised in Grimsby, "the home of fish and chips and zero gay bars", they now live in the West Midlands with partners Ellis and Tyler, and their two sausage dogs, Dill and Sage. An all-round creative and self-proclaimed "professional nuisance", Gabe produces theatre shows and performs as their drag persona, Blü Romantic. They are also a costume designer and once made a wedding dress for their best friend. At home, they’re a keen gardener, crafter and dinner party host.`,
+            
+            "Gary": `<strong>67 | Nottinghamshire | Retired Garment Technologist</strong><br><br>Gary is a methodical and precise baker who discovered his love of baking later in life. He bought his first cookbook in a gift shop 5 years ago and hasn’t looked back, developing a traditional yet creative style with a focus on impeccable presentation and bold flavours, particularly citrus. Born and bred in Chesterfield, Gary now lives on a smallholding in Nottinghamshire with his wife of over 30 years, Donna. Their countryside home is filled with animals, including sheep, horses, chickens and miniature pygmy goats and Shetland ponies. Having beat prostate cancer himself, Gary is passionate about raising awareness and funds for cancer charities through bake sales and coffee mornings. When he’s not baking, Gary is usually out walking with his two Border Collies, Ollie and Alfie, who are his pride and joy.`,
+            
+            "Molly": `<strong>31 | London | Accessibility Coordinator</strong><br><br>Molly is a caring and determined baker who started baking over 25 years ago, inspired by her grandmother. She loves traditional bakes and classic flavours, with hazelnut, fresh fruit and mint among her favourites. During a difficult period with her health in 2020, Molly turned to baking to stay motivated and keep connected to friends and family, taking her skills to a new level. Living in London with her husband Ash and their sausage dog, Lando, Molly works for a disability charity, reviewing accessibility in transport. A musical theatre fanatic, she has been involved in many drama groups and supports her local theatre. She is also a huge Formula 1 fan, clearing her diary for every race, and is currently 25% through a 350,000-stich cross-stich landscape of Rivendell.`,
+            
+            "Moyin": `<strong>22 | Essex | Political Economy Student</strong><br><br>Moyin is a high achiever who balances his studies with athletics, baking and a part-time job. He started baking with his mum at 5 and by 14 had mastered the tricky art of Macaronage! His bakes are fun and precise, with flavours inspired by his Nigerian heritage, including grains of paradise and groundnuts. A competitive sprinter, Moyin was crowned U20 County Champion in the 100m, and his pre-race motivational playlist features Afrobeats, R&B and conscious rap. He lives with his mum, sister and grandmother, and regularly visits family in Nigeria, Canada and the USA. Outside of baking, Moyin loves fashion, collecting vinyl, and visiting comedy clubs. He’s also a dedicated matcha latte fan, pre-ordering his for a swift pick-up on the way to seminars on Global Political Thought.`,
+            
+            "Mo": `<strong>21 | West Midlands | Law Student</strong><br><br>Mo is a self-confessed "chaotic and random" character who is determined to make his family proud. Born and bred in the West Midlands, he lives with his family, and their three cats, Pablo, Simba and Gucci. Studying law at university with ambitions of becoming a solicitor, Mo’s wider family are often surprised to discover that he’s also a keen baker. His love of baking started at 3, when he would pretend to cook with Play-Doh. At 9, he stumbled across a video about mug cakes and was hooked. Starting out with boxed vanilla cake mixes from the corner shop, Mo has since graduated to precise, professional-looking bakes, often infusing Asian flavours with traditional British classics. When he’s not baking or studying, Mo is in the gym lifting weights or getting to grips with calisthenics.`,
+            
+            "Nikki": `<strong>50 | London | Advertising Post-Producer</strong><br><br>Nikki is a colourful character with a colourful baking style. She started baking with her mum at seven and has always found baking to be a form of therapy. Her kitchen soundtrack depends on the bake: nostalgic R&B for tried and tested desserts and classical music to bring in the moment of calm needed for experimentation. Nikki is happiest surrounded by others and loves nothing more than feeding her family and friends. She has been with her "soul mate" Tom for 22 years, and they have a 16-year-old daughter, Ava. A former podium dancer at Basingstoke’s Ziggy’s Night Club in the 90s, Nikki still loves hitting the dance floor at R&B clubs with her cousins. She also enjoys theatre trips with her family and long walks, recently completing a 100-mile walk to raise money for breast cancer.`,
+            
+            "Shannon": `<strong>29 | Gloucestershire | Project Planner and Scheduler</strong><br><br>Shannon is a fun-loving, nature-loving foodie who dreams of bringing "a little forest magic" to the Bake Off tent. Growing up in Bristol, she now lives in the countryside with her fiancé Scott, her two black Staffordshire Bull Terriers and Tyrone the tortoise. Her home life revolves around the great outdoors, from long walks to gardening and cooking with ingredients she has grown herself. Shannon has been baking for as long as she can remember, taught by her beloved Nan, and describes her style as whimsical, quirky and rustic. Organised and focused thanks to her day job, Shannon is determined to get her timings just right, however she once rode a horse through a drive-thru, so there’s still plenty of room for chaos!`,
+            
+            "Tom": `<strong>25 | West Yorkshire | Hairdresser</strong><br><br>Tom is a self-proclaimed Northern Diva who loves nothing more than creating bakes that are witty, pretty and, most importantly, delicious. While his older brother was off at football matches, six-year-old Tom would escape to his Nan’s to bake, mastering the perfect brandy snap before he was 10! Tom now works in a busy salon, where he weaves perfect sets of highlights and occasionally overshares about his personal life. His colleagues are gleeful taste-testers, particularly when he brings in his famous salted caramel brownies. Outside of baking, Tom loves travelling and recently spent seven months exploring Southeast Asia with his boyfriend, Alex. The pair are now saving for a house together.`,
+            
+            "Yannis": `<strong>28 | London | Paediatric Doctor</strong><br><br>Yannis is challenging the stigma that Bangladeshi men don’t belong in the kitchen, one pastry at a time! Working in a busy NICU, he loves how a cake can bring joy to the ward and has won over the nurses with his bakes. Born in Vienna before moving to London aged 11, Yannis’ baking has been influenced by many food cultures. His first baking memory is making Bhapa Pitha with his grandmother, while his school days introduced him to classic Austrian treats. Watching Bake Off also helped Yannis learn English, making the show especially close to his heart. Outside the kitchen, he is also a Bhangra dancer, and his wedding shimmy has become legendary! For Yannis, baking and medicine have a lot in common: both are about caring for people.`
+        };
+
+        // --- Countdown Timer Logic ---
+        const targetDate = new Date("Sep 22, 2026 20:00:00 GMT+0100").getTime();
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown-display").innerHTML = "<div class='started-msg'>Bake Off Has Started!</div>";
+                return;
+            }
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }, 1000);
+
         // --- Setup Modal Grid by cloning Main Grid ---
         const mainGrid = document.getElementById('main-cast-grid');
         const modalGrid = document.getElementById('modal-grid');
@@ -606,81 +540,81 @@
         // --- Tab Switching Logic ---
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
-
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 tabBtns.forEach(b => b.classList.remove('active'));
                 tabContents.forEach(c => c.classList.remove('active'));
-                
                 btn.classList.add('active');
                 const targetId = btn.getAttribute('data-target');
                 document.getElementById(targetId).classList.add('active');
             });
         });
 
-        // --- Form Modal Picker Logic ---
-        const modal = document.getElementById('baker-modal');
-        const modalTitle = document.getElementById('modal-title');
+        // --- Bio Modal Logic (Tab 1) ---
+        const bioModal = document.getElementById('bio-modal');
+        const bioTitle = document.getElementById('bio-title');
+        const bioText = document.getElementById('bio-text');
+        
+        document.querySelectorAll('#main-cast-grid .cast-tile').forEach(tile => {
+            tile.addEventListener('click', () => {
+                const bakerName = tile.querySelector('.baker-name').innerText;
+                bioTitle.innerText = bakerName;
+                bioText.innerHTML = bakerBios[bakerName] || "Bio coming soon...";
+                bioModal.classList.add('active');
+            });
+        });
+
+        document.getElementById('close-bio-btn').addEventListener('click', () => {
+            bioModal.classList.remove('active');
+        });
+
+        // --- Form Modal Picker Logic (Tab 2) ---
+        const formBakerModal = document.getElementById('baker-modal');
+        const formModalTitle = document.getElementById('modal-title');
         let activeInputId = null;
         let activeBtn = null;
 
-        // Open modal when tapping a select button
         document.querySelectorAll('.select-baker-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 activeInputId = btn.getAttribute('data-target-input');
                 activeBtn = btn;
-                modalTitle.innerText = `Select ${btn.getAttribute('data-label')}`;
-                modal.classList.add('active');
+                formModalTitle.innerText = `Select ${btn.getAttribute('data-label')}`;
+                formBakerModal.classList.add('active');
             });
         });
 
-        // Handle Baker Selection from Modal
         modalGrid.querySelectorAll('.cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
                 const bakerName = tile.querySelector('.baker-name').innerText;
-                
-                // Update hidden input
                 document.getElementById(activeInputId).value = bakerName;
-                
-                // Update button UI
                 activeBtn.innerText = bakerName;
                 activeBtn.classList.add('selected');
-                
-                // Close modal
-                modal.classList.remove('active');
+                formBakerModal.classList.remove('active');
             });
         });
 
-        // Modal Controls (None / Cancel)
         document.getElementById('modal-none-btn').addEventListener('click', () => {
             document.getElementById(activeInputId).value = "None";
             activeBtn.innerText = "None Selected";
             activeBtn.classList.remove('selected');
-            modal.classList.remove('active');
+            formBakerModal.classList.remove('active');
         });
 
         document.getElementById('modal-cancel-btn').addEventListener('click', () => {
-            modal.classList.remove('active');
+            formBakerModal.classList.remove('active');
         });
 
-        // Handle Form Submission
         document.getElementById('prediction-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // Check if mandatory visual fields are filled (since hidden inputs don't trigger native required UI well)
             const tech = document.getElementById('technical').value;
             const star = document.getElementById('star-baker').value;
             const leave = document.getElementById('leaving').value;
-            
             if(!tech || !star || !leave || tech === "None" || star === "None" || leave === "None") {
                 alert("Please select a baker for Technical, Star Baker, and Leaving.");
                 return;
             }
-
             const playerName = document.getElementById('player-name').value;
             alert(`Predictions successfully saved for ${playerName}!`);
-            
-            // Reset form UI
             e.target.reset();
             document.querySelectorAll('.select-baker-btn').forEach(btn => {
                 btn.innerText = "Tap to select a baker...";
@@ -689,24 +623,20 @@
             document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
         });
 
-        // --- Grid Animation Logic (Only targets Tab 1) ---
+        // --- Grid Animation Logic ---
         function animateGrid() {
             const tiles = document.querySelectorAll('#tab-bakers .cast-tile');
             tiles.forEach((tile, index) => {
-                setTimeout(() => {
-                    tile.classList.add('visible');
-                }, index * 400);
+                setTimeout(() => { tile.classList.add('visible'); }, index * 400);
             });
         }
 
         // --- Intro Sequence & Video Timing Logic ---
         document.addEventListener("DOMContentLoaded", () => {
             const hasVisited = localStorage.getItem("gbbo_visited");
-            
             const introSequence = document.getElementById("intro-sequence");
             const logo = document.getElementById("gbbo-logo");
             const enterText = document.getElementById("enter-text");
-            
             const videoOverlay = document.getElementById("video-overlay");
             const blackFadeScreen = document.getElementById("black-fade-screen");
             const closeVideoBtn = document.getElementById("close-video-btn");
@@ -715,38 +645,28 @@
             if (!hasVisited) {
                 setTimeout(() => { logo.classList.add("fade-in"); }, 1000);
                 setTimeout(() => { enterText.classList.add("fade-in"); }, 3000);
-
                 enterText.addEventListener("click", () => {
                     introSequence.classList.add("hidden");
                     videoOverlay.classList.remove("hidden");
-                    
                     const currentSrc = iframe.src;
-                    if (!currentSrc.includes("autoplay=1")) {
-                        iframe.src = currentSrc + "?autoplay=1";
-                    }
-
-                    setTimeout(() => {
-                        blackFadeScreen.classList.add("active");
-                    }, 20000); 
+                    if (!currentSrc.includes("autoplay=1")) { iframe.src = currentSrc + "?autoplay=1"; }
+                    setTimeout(() => { blackFadeScreen.classList.add("active"); }, 20000); 
                 });
-
                 closeVideoBtn.addEventListener("click", () => {
                     videoOverlay.classList.add("hidden");
                     localStorage.setItem("gbbo_visited", "true"); 
                     iframe.src = ""; 
                     setTimeout(animateGrid, 300); 
                 });
-
             } else {
                 introSequence.classList.add("hidden");
                 videoOverlay.classList.add("hidden");
                 setTimeout(animateGrid, 300);
             }
-
             renderLeaderboard();
         });
 
-        // --- Mock Data & Points Config ---
+        // --- Mock Data ---
         let players = [
             { name: "Alice", score: 12 },
             { name: "Bob", score: 8 },
@@ -754,20 +674,13 @@
             { name: "Dan", score: 5 }
         ];
 
-        // --- Leaderboard Rendering ---
         function renderLeaderboard() {
             const tbody = document.getElementById("leaderboard-body");
             tbody.innerHTML = "";
-
             players.sort((a, b) => b.score - a.score);
-
             players.forEach((player, index) => {
                 const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${player.name}</td>
-                    <td>${player.score}</td>
-                `;
+                row.innerHTML = `<td>${index + 1}</td><td>${player.name}</td><td>${player.score}</td>`;
                 tbody.appendChild(row);
             });
         }
