@@ -17,6 +17,8 @@
         .time-box span { color: #E2FF26; font-size: clamp(20px, 5vw, 32px); font-weight: bold; }
         .time-box small { color: rgba(255, 255, 255, 0.7); font-size: 10px; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; }
 
+        .started-msg { color: #E2FF26; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; padding: 20px; }
+
         /* --- TAB NAVIGATION --- */
         .tabs-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 20px; background-color: #080C16; position: relative; z-index: 100; }
         .tab-btn { background: transparent; color: #ffffff; border: 2px solid #ffffff; padding: 10px 15px; font-size: clamp(10px, 2.5vw, 14px); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
@@ -46,39 +48,15 @@
         .cast-tile.visible { opacity: 1; }
 
         /* ELIMINATION STYLES */
-        .cast-tile.eliminated {
-            filter: grayscale(100%) brightness(40%);
-            pointer-events: none !important;
-            cursor: not-allowed;
-        }
-        .cast-tile.eliminated::after {
-            content: '❌';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: clamp(3rem, 10vw, 6rem);
-            color: red;
-            opacity: 0.8;
-            z-index: 10;
-        }
-
+        .cast-tile.eliminated { filter: grayscale(100%) brightness(40%); pointer-events: none !important; cursor: not-allowed; }
+        .cast-tile.eliminated::after { content: '❌'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: clamp(3rem, 10vw, 6rem); color: red; opacity: 0.8; z-index: 10; }
         #tab-bakers .cast-tile::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(8, 12, 22, 0.7); opacity: 0; transition: opacity 0.3s ease; z-index: 1; }
         #tab-bakers .cast-tile:not(.eliminated):hover::before { opacity: 1; }
         #tab-bakers .cast-tile:not(.eliminated):hover .baker-name { opacity: 1; transform: translateY(0); }
-
         .baker-name { position: relative; z-index: 2; color: #E2FF26; font-size: clamp(10px, 2.5vw, 24px); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; opacity: 0; transform: translateY(15px); transition: all 0.3s ease; pointer-events: none; text-align: center; }
         .cast-tile.eliminated .baker-name { opacity: 1; transform: translateY(0); color: #ff4c4c; z-index: 11; }
 
-        /* --- ADMIN RESULTS PANEL --- */
-        #admin-results-panel { display: none; width: 100%; background: rgba(53, 43, 255, 0.2); border: 2px solid #352BFF; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
-        #admin-results-panel.active { display: block; }
-        .admin-btn { background: #E2FF26; color: #080C16; border: none; padding: 10px 20px; font-weight: bold; text-transform: uppercase; border-radius: 5px; cursor: pointer; letter-spacing: 1px; }
-        .admin-btn:hover { background: #ffffff; }
-        .multi-select-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 5px; }
-        .multi-check { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 5px; font-size: 14px; cursor: pointer; }
-
-        /* --- PREDICTION FORM (TAB 2) --- */
+        /* --- PREDICTION & ADMIN FORMS --- */
         .form-container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; position: relative; }
         .form-container h2 { text-align: center; color: #E2FF26; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
         #prediction-form { transition: all 0.5s ease; }
@@ -97,6 +75,10 @@
         .submit-btn:hover { background-color: #E2FF26; color: #080C16; }
         .hidden-field { display: none !important; }
 
+        .multi-select-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
+        .multi-check { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 5px; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+        .multi-check:hover { background: rgba(255,255,255,0.2); }
+
         /* --- MODALS --- */
         .custom-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(8, 12, 22, 0.95); z-index: 10002; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; overflow-y: auto; padding: 20px; box-sizing: border-box;}
         .custom-modal.active { opacity: 1; pointer-events: auto; }
@@ -112,10 +94,9 @@
         .modal-btn { background: transparent; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 20px; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
         .modal-btn:hover { background: white; color: black; }
 
-        .bio-content { background: #111827; border: 2px solid #E2FF26; border-radius: 12px; padding: 30px; max-width: 500px; width: 100%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .bio-content { background: #111827; border: 2px solid #E2FF26; border-radius: 12px; padding: 30px; max-width: 500px; width: 100%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); max-height: 80vh; overflow-y: auto; }
         .bio-content h3 { font-size: 28px; margin-top: 0; margin-bottom: 15px; }
         .bio-content p { font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 25px; text-align: left; }
-        #results-modal .bio-content { max-width: 600px; text-align: left; }
 
         /* --- TABLES (Tab 3 & 4) --- */
         .data-section { width: 100%; max-width: 900px; padding: 20px; box-sizing: border-box; position: relative; }
@@ -137,9 +118,6 @@
         .hidden { display: none !important; }
         
         .abstract-icon { position: absolute; top: 20px; left: 20px; width: 100px; opacity: 0.8; z-index: 100; }
-        
-        /* Highlight testing mode visually for the admin */
-        #test-mode-banner { position: fixed; top: 0; left: 0; width: 100vw; background: #ff4c4c; color: white; text-align: center; font-weight: bold; padding: 5px; z-index: 20000; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -171,38 +149,10 @@
         </div>
     </div>
 
-    <!-- Admin Results Modal -->
-    <div id="results-modal" class="custom-modal">
-        <div class="bio-content">
-            <h3 id="results-title">Log Week Results</h3>
-            <form id="results-form">
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label>Technical Winner</label>
-                    <select id="res-tech" class="styled-select" required></select>
-                </div>
-                
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label>Star Baker (Select multiple if needed)</label>
-                    <div class="multi-select-container" id="res-star-container"></div>
-                </div>
-
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label>Leaving</label>
-                    <select id="res-leaving" class="styled-select" required></select>
-                </div>
-
-                <div class="input-group" style="margin-bottom: 15px;">
-                    <label>Hollywood Handshake (Optional)</label>
-                    <select id="res-handshake" class="styled-select"></select>
-                </div>
-
-                <div class="modal-controls" style="justify-content: center;">
-                    <button type="submit" class="admin-btn">Save Results & Update League</button>
-                    <button type="button" class="modal-btn" id="close-results-btn">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <svg class="abstract-icon" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4">
+        <path d="M 40 10 Q 10 10 10 40 Q 10 70 40 70 Q 70 70 70 40 Q 70 10 40 10 Z" />
+        <path d="M 60 30 Q 30 30 30 60 Q 30 90 60 90 Q 90 90 90 60 Q 90 30 60 30 Z" />
+    </svg>
 
     <div class="countdown-wrapper">
         <h3 id="timer-header">Loading Schedule...</h3>
@@ -214,23 +164,19 @@
         </div>
     </div>
 
+    <!-- Header Navigation Tabs -->
     <nav class="tabs-nav">
         <button class="tab-btn active" data-target="tab-bakers">The Bakers</button>
         <button class="tab-btn" data-target="tab-choices">Make Your Choices</button>
         <button class="tab-btn" data-target="tab-choices-table">The Choices</button>
         <button class="tab-btn" data-target="tab-league">League Table</button>
+        <button class="tab-btn" data-target="tab-admin">Admin</button>
     </nav>
 
     <main>
         <!-- TAB 1: Animated Baker Grid -->
         <div id="tab-bakers" class="tab-content active">
             <section class="cast-wrapper">
-                
-                <div id="admin-results-panel">
-                    <p style="margin-top: 0; color: #E2FF26; font-weight: bold; text-transform: uppercase;">Voting is Locked</p>
-                    <button class="admin-btn" id="open-results-btn">Log Episode Results</button>
-                </div>
-
                 <div class="cast-grid" id="main-cast-grid">
                     <div class="cast-tile"><span class="baker-name">Clara</span></div>
                     <div class="cast-tile"><span class="baker-name">Connie</span></div>
@@ -344,65 +290,98 @@
                 </div>
             </section>
         </div>
+
+        <!-- TAB 5: ADMIN (Password Protected) -->
+        <div id="tab-admin" class="tab-content">
+            
+            <!-- Login View -->
+            <div id="admin-login-view" class="form-container">
+                <h2>Admin Access</h2>
+                <div class="input-group">
+                    <label>Enter Password</label>
+                    <input type="password" id="admin-password" class="text-input" placeholder="Password">
+                </div>
+                <p id="admin-error" style="color: #ff4c4c; display: none; font-size: 14px; text-align: center;">Incorrect password.</p>
+                <button id="admin-login-btn" class="submit-btn">Login</button>
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="admin-dashboard-view" class="form-container" style="display: none; max-width: 600px;">
+                <h2>Log Episode Results</h2>
+                <p style="text-align: center; color: rgba(255,255,255,0.7); font-size: 12px; margin-top: -10px;">Updates league and eliminates bakers instantly.</p>
+                
+                <form id="admin-results-form">
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label>Select Week to Edit</label>
+                        <select id="admin-week-select" class="styled-select">
+                            <option value="1">Week 1</option>
+                            <option value="2">Week 2</option>
+                            <option value="3">Week 3</option>
+                            <option value="4">Week 4</option>
+                            <option value="5">Week 5</option>
+                            <option value="6">Week 6</option>
+                            <option value="7">Week 7</option>
+                            <option value="8">Week 8</option>
+                            <option value="9">Week 9</option>
+                            <option value="10">Week 10</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label>Technical Winner</label>
+                        <select id="res-tech" class="styled-select" required></select>
+                    </div>
+                    
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label>Star Baker (Select multiple if needed)</label>
+                        <div class="multi-select-container" id="res-star-container"></div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label>Who Left?</label>
+                        <select id="res-leaving" class="styled-select" required></select>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label>Hollywood Handshake (Optional)</label>
+                        <select id="res-handshake" class="styled-select"></select>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Save Results & Update League</button>
+                </form>
+            </div>
+        </div>
     </main>
 
     <script>
-        /* 
-        =============================================================================
-        TEST MODE TOGGLE
-        Set this to FALSE before you officially launch.
-        When TRUE, time speeds up: A week lasts 60 seconds (30s open, 30s locked) 
-        so you can easily test the transitions, unblurring, and elimination logic!
-        =============================================================================
-        */
-        const TEST_MODE = true; 
-
-        if (TEST_MODE) {
-            const banner = document.createElement("div");
-            banner.id = "test-mode-banner";
-            banner.innerText = "TEST MODE IS ACTIVE: Time is moving incredibly fast!";
-            document.body.prepend(banner);
-        }
-
         // --- DATA SETUP ---
         const ALL_BAKERS = ["Clara", "Connie", "Gabe", "Danni", "Gary", "Mo", "Molly", "Moyin", "Nikki", "Shannon", "Tom", "Yannis"];
         
         const bakerBios = {
-            "Clara": `<strong>24 | Hertfordshire | Marketing Graduate</strong><br><br>A passionate Portuguese polyglot pocket rocket...`,
-            "Connie": `<strong>63 | London | NHS Hospital Discharge Lead</strong><br><br>Known as "the Cake Lady"...`,
-            "Danni": `<strong>25 | Dorset | HGV Service Centre Administrator</strong><br><br>Naturally curious and experimental...`,
-            "Gabe": `<strong>32 | West Midlands | Artist & Drag King</strong><br><br>Self-styled "daddy of Birmingham drag"...`,
-            "Gary": `<strong>67 | Nottinghamshire | Retired Garment Technologist</strong><br><br>Gary is a methodical and precise baker...`,
-            "Molly": `<strong>31 | London | Accessibility Coordinator</strong><br><br>Molly is a caring and determined baker...`,
-            "Moyin": `<strong>22 | Essex | Political Economy Student</strong><br><br>Moyin is a high achiever who balances his studies...`,
-            "Mo": `<strong>21 | West Midlands | Law Student</strong><br><br>Mo is a self-confessed "chaotic and random" character...`,
-            "Nikki": `<strong>50 | London | Advertising Post-Producer</strong><br><br>Nikki is a colourful character...`,
-            "Shannon": `<strong>29 | Gloucestershire | Project Planner and Scheduler</strong><br><br>Shannon is a fun-loving, nature-loving foodie...`,
-            "Tom": `<strong>25 | West Yorkshire | Hairdresser</strong><br><br>Tom is a self-proclaimed Northern Diva...`,
-            "Yannis": `<strong>28 | London | Paediatric Doctor</strong><br><br>Yannis is challenging the stigma...`
+            "Clara": `<strong>24 | Hertfordshire | Marketing Graduate</strong><br><br>A passionate Portuguese polyglot pocket rocket, Clara is a bundle of energy and believes "the first bite of a bake is always with the eyes". She loves creating colourful, chaotically beautiful designs, balanced with fresh, fruity flavours. Originally from Aveiro in Portugal, Clara moved to the UK at 18 to study marketing. She began baking cakes two years ago as a creative outlet, and then recreating Portuguese classics like Tarte de Nata for her British fiancé Kieran and his family. Clara’s greatest loves are her spaniel Gigi and pygmy hedgehog, Pecan, and she is happiest when surrounded by animals. A self-confessed "fantasy girly", Clara is bringing plenty of colour, warmth and Portuguese sunshine to the tent.`,
+            "Connie": `<strong>63 | London | NHS Hospital Discharge Lead</strong><br><br>Known as "the Cake Lady", Connie can’t remember a time when she didn’t bake. After over 20 years working for the NHS, baking is her way to unwind after a busy day. She is best known for her hearty carrot cakes, with favourite flavours including rum fruit, lemon and lavender. She keeps a jar of fruit permanently soaking in rum, wine and cinnamon - "you can smell the cake before you see it!" A devoted fan of black-and-white films, Connie loves an audiobook and often has a thriller series playing in the background while she bakes. She has been married to Myke, a musician and music teacher, for 23 years, and together they run a music centre in London where Connie loves to try out her new recipes on the students.`,
+            "Danni": `<strong>25 | Dorset | HGV Service Centre Administrator</strong><br><br>Naturally curious and experimental, Danni loves exploring the countryside and foraging for ingredients. Their bakes often combine foraged finds such as magnolia, chestnut and dandelion with far-flung flavours like ube and red bean paste. Living in Dorset with their parents, sister and three cocker spaniels, Danni works alongside their dad at an HGV service centre, keeping the mechanics on their toes with invoices and cost-tracking. Always tinkering, Danni has a host of projects on the go, from anime doodling to soldering broken traces on the motherboard of her Commodore 64. A tech enthusiast, they love decorating their bakes with inspiration from video games and animation. Danni's designed websites for fun, created their own visual novel games using Ren’Py and even managed to bring an old VCR back to life.`,
+            "Gabe": `<strong>32 | West Midlands | Artist & Drag King</strong><br><br>Self-styled "daddy of Birmingham drag", Gabe discovered baking after watching the very first series of Bake Off aged 13. Their baking style is "gorgeous but very homemade", with a preference for savoury, meat-filled bakes and an obsession with meringue. Raised in Grimsby, "the home of fish and chips and zero gay bars", they now live in the West Midlands with partners Ellis and Tyler, and their two sausage dogs, Dill and Sage. An all-round creative and self-proclaimed "professional nuisance", Gabe produces theatre shows and performs as their drag persona, Blü Romantic. They are also a costume designer and once made a wedding dress for their best friend. At home, they’re a keen gardener, crafter and dinner party host.`,
+            "Gary": `<strong>67 | Nottinghamshire | Retired Garment Technologist</strong><br><br>Gary is a methodical and precise baker who discovered his love of baking later in life. He bought his first cookbook in a gift shop 5 years ago and hasn’t looked back, developing a traditional yet creative style with a focus on impeccable presentation and bold flavours, particularly citrus. Born and bred in Chesterfield, Gary now lives on a smallholding in Nottinghamshire with his wife of over 30 years, Donna. Their countryside home is filled with animals, including sheep, horses, chickens and miniature pygmy goats and Shetland ponies. Having beat prostate cancer himself, Gary is passionate about raising awareness and funds for cancer charities through bake sales and coffee mornings. When he’s not baking, Gary is usually out walking with his two Border Collies, Ollie and Alfie, who are his pride and joy.`,
+            "Molly": `<strong>31 | London | Accessibility Coordinator</strong><br><br>Molly is a caring and determined baker who started baking over 25 years ago, inspired by her grandmother. She loves traditional bakes and classic flavours, with hazelnut, fresh fruit and mint among her favourites. During a difficult period with her health in 2020, Molly turned to baking to stay motivated and keep connected to friends and family, taking her skills to a new level. Living in London with her husband Ash and their sausage dog, Lando, Molly works for a disability charity, reviewing accessibility in transport. A musical theatre fanatic, she has been involved in many drama groups and supports her local theatre. She is also a huge Formula 1 fan, clearing her diary for every race, and is currently 25% through a 350,000-stich cross-stich landscape of Rivendell.`,
+            "Moyin": `<strong>22 | Essex | Political Economy Student</strong><br><br>Moyin is a high achiever who balances his studies with athletics, baking and a part-time job. He started baking with his mum at 5 and by 14 had mastered the tricky art of Macaronage! His bakes are fun and precise, with flavours inspired by his Nigerian heritage, including grains of paradise and groundnuts. A competitive sprinter, Moyin was crowned U20 County Champion in the 100m, and his pre-race motivational playlist features Afrobeats, R&B and conscious rap. He lives with his mum, sister and grandmother, and regularly visits family in Nigeria, Canada and the USA. Outside of baking, Moyin loves fashion, collecting vinyl, and visiting comedy clubs. He’s also a dedicated matcha latte fan, pre-ordering his for a swift pick-up on the way to seminars on Global Political Thought.`,
+            "Mo": `<strong>21 | West Midlands | Law Student</strong><br><br>Mo is a self-confessed "chaotic and random" character who is determined to make his family proud. Born and bred in the West Midlands, he lives with his family, and their three cats, Pablo, Simba and Gucci. Studying law at university with ambitions of becoming a solicitor, Mo’s wider family are often surprised to discover that he’s also a keen baker. His love of baking started at 3, when he would pretend to cook with Play-Doh. At 9, he stumbled across a video about mug cakes and was hooked. Starting out with boxed vanilla cake mixes from the corner shop, Mo has since graduated to precise, professional-looking bakes, often infusing Asian flavours with traditional British classics. When he’s not baking or studying, Mo is in the gym lifting weights or getting to grips with calisthenics.`,
+            "Nikki": `<strong>50 | London | Advertising Post-Producer</strong><br><br>Nikki is a colourful character with a colourful baking style. She started baking with her mum at seven and has always found baking to be a form of therapy. Her kitchen soundtrack depends on the bake: nostalgic R&B for tried and tested desserts and classical music to bring in the moment of calm needed for experimentation. Nikki is happiest surrounded by others and loves nothing more than feeding her family and friends. She has been with her "soul mate" Tom for 22 years, and they have a 16-year-old daughter, Ava. A former podium dancer at Basingstoke’s Ziggy’s Night Club in the 90s, Nikki still loves hitting the dance floor at R&B clubs with her cousins. She also enjoys theatre trips with her family and long walks, recently completing a 100-mile walk to raise money for breast cancer.`,
+            "Shannon": `<strong>29 | Gloucestershire | Project Planner and Scheduler</strong><br><br>Shannon is a fun-loving, nature-loving foodie who dreams of bringing "a little forest magic" to the Bake Off tent. Growing up in Bristol, she now lives in the countryside with her fiancé Scott, her two black Staffordshire Bull Terriers and Tyrone the tortoise. Her home life revolves around the great outdoors, from long walks to gardening and cooking with ingredients she has grown herself. Shannon has been baking for as long as she can remember, taught by her beloved Nan, and describes her style as whimsical, quirky and rustic. Organised and focused thanks to her day job, Shannon is determined to get her timings just right, however she once rode a horse through a drive-thru, so there’s still plenty of room for chaos!`,
+            "Tom": `<strong>25 | West Yorkshire | Hairdresser</strong><br><br>Tom is a self-proclaimed Northern Diva who loves nothing more than creating bakes that are witty, pretty and, most importantly, delicious. While his older brother was off at football matches, six-year-old Tom would escape to his Nan’s to bake, mastering the perfect brandy snap before he was 10! Tom now works in a busy salon, where he weaves perfect sets of highlights and occasionally overshares about his personal life. His colleagues are gleeful taste-testers, particularly when he brings in his famous salted caramel brownies. Outside of baking, Tom loves travelling and recently spent seven months exploring Southeast Asia with his boyfriend, Alex. The pair are now saving for a house together.`,
+            "Yannis": `<strong>28 | London | Paediatric Doctor</strong><br><br>Yannis is challenging the stigma that Bangladeshi men don’t belong in the kitchen, one pastry at a time! Working in a busy NICU, he loves how a cake can bring joy to the ward and has won over the nurses with his bakes. Born in Vienna before moving to London aged 11, Yannis’ baking has been influenced by many food cultures. His first baking memory is making Bhapa Pitha with his grandmother, while his school days introduced him to classic Austrian treats. Watching Bake Off also helped Yannis learn English, making the show especially close to his heart. Outside the kitchen, he is also a Bhangra dancer, and his wedding shimmy has become legendary! For Yannis, baking and medicine have a lot in common: both are about caring for people.`
         };
 
         let players = JSON.parse(localStorage.getItem('gbbo_players')) || [];
         let adminResults = JSON.parse(localStorage.getItem('gbbo_results')) || {};
 
-        // --- 10 WEEK SCHEDULE ENGINE ---
+        // --- 10 WEEK SCHEDULE ENGINE (Real Time) ---
         const schedule = [];
-        if (TEST_MODE) {
-            // Test Mode Schedule: Starts NOW. Each week is 30s Open, 30s Locked.
-            let nowTime = new Date().getTime();
-            for(let i=0; i<10; i++) {
-                let lock = new Date(nowTime + (i * 60 * 1000) + 30000); 
-                let unlock = new Date(lock.getTime() + 30000);
-                schedule.push({ week: i+1, lockTime: lock.getTime(), unlockTime: unlock.getTime() });
-            }
-        } else {
-            // Real Schedule: Starts Sept 22. Locks at 8PM, Unlocks at 9:30PM
-            const START_DATE = new Date("Sep 22, 2026 20:00:00 GMT+0100"); 
-            for(let i=0; i<10; i++) {
-                let lock = new Date(START_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000));
-                let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000));
-                schedule.push({ week: i+1, lockTime: lock.getTime(), unlockTime: unlock.getTime() });
-            }
+        const START_DATE = new Date("Sep 22, 2026 20:00:00 GMT+0100"); 
+        for(let i=0; i<10; i++) {
+            let lock = new Date(START_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000));
+            let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000)); // Adds 1.5 hours
+            schedule.push({ week: i+1, lockTime: lock.getTime(), unlockTime: unlock.getTime() });
         }
 
         let currentAppState = { week: 1, status: 'OPEN', targetTime: schedule[0].lockTime };
@@ -425,7 +404,7 @@
             }
 
             renderUIBasedOnState();
-            renderEliminatedBakers(); // Update crossed-out faces based on current week
+            renderEliminatedBakers(); 
         }
 
         function renderUIBasedOnState() {
@@ -436,7 +415,6 @@
             const formTitle = document.getElementById('form-week-title');
             const choicesTitle = document.getElementById('choices-table-title');
             const timerHeader = document.getElementById('timer-header');
-            const adminPanel = document.getElementById('admin-results-panel');
             
             formTitle.innerText = `Week ${currentAppState.week} Predictions`;
             
@@ -448,7 +426,6 @@
                 choicesTitle.innerText = `Week ${currentAppState.week} Choices`;
                 choicesTable.classList.add('table-blur-active');
                 blurMsg.style.display = 'block';
-                adminPanel.classList.remove('active');
 
             } else if (currentAppState.status === 'LOCKED') {
                 timerHeader.innerText = `Week ${currentAppState.week} Voting Closed. Next Round In:`;
@@ -458,7 +435,6 @@
                 choicesTitle.innerText = `Week ${currentAppState.week} Choices`;
                 choicesTable.classList.remove('table-blur-active');
                 blurMsg.style.display = 'none';
-                adminPanel.classList.add('active');
 
             } else {
                 timerHeader.innerText = "Season Complete!";
@@ -469,7 +445,6 @@
                 choicesTitle.innerText = `Final Choices`;
                 choicesTable.classList.remove('table-blur-active');
                 blurMsg.style.display = 'none';
-                adminPanel.classList.add('active');
             }
             renderTables();
         }
@@ -477,7 +452,7 @@
         // --- ELIMINATION LOGIC ---
         function getEliminatedBakers() {
             const eliminated = [];
-            // Look at all weeks PRIOR to the current one
+            // Calculate eliminations based ONLY on weeks that have happened before the current week
             for (let w = 1; w < currentAppState.week; w++) {
                 if (adminResults[w] && adminResults[w].leaving && adminResults[w].leaving !== "None") {
                     eliminated.push(adminResults[w].leaving);
@@ -497,9 +472,6 @@
                     tile.classList.remove('eliminated');
                 }
             });
-
-            // Update dropdowns so you can't log an eliminated baker as winning a future week
-            populateAdminDropdowns(eliminated);
         }
 
         // --- TIMER LOOP ---
@@ -567,7 +539,7 @@
         const bioModal = document.getElementById('bio-modal');
         document.querySelectorAll('#main-cast-grid .cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
-                if(tile.classList.contains('eliminated')) return; // Can't click eliminated
+                if(tile.classList.contains('eliminated')) return; 
                 const bakerName = tile.querySelector('.baker-name').textContent.trim();
                 document.getElementById('bio-title').innerText = bakerName;
                 document.getElementById('bio-text').innerHTML = bakerBios[bakerName] || "Bio coming soon...";
@@ -591,7 +563,7 @@
 
         document.querySelectorAll('#modal-grid .cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
-                if(tile.classList.contains('eliminated')) return; // Can't select eliminated bakers
+                if(tile.classList.contains('eliminated')) return; 
                 const bakerName = tile.querySelector('.baker-name').textContent.trim();
                 document.getElementById(activeInputId).value = bakerName;
                 activeBtn.innerText = bakerName;
@@ -655,8 +627,25 @@
             });
         });
 
-        // --- ADMIN RESULTS LOGIC ---
-        function populateAdminDropdowns(eliminatedBakers = []) {
+        // --- ADMIN SECURE TAB LOGIC ---
+        document.getElementById('admin-login-btn').addEventListener('click', () => {
+            const pwd = document.getElementById('admin-password').value;
+            if (pwd === "GBBO26") {
+                document.getElementById('admin-login-view').style.display = 'none';
+                document.getElementById('admin-dashboard-view').style.display = 'flex';
+                
+                document.getElementById('admin-week-select').value = currentAppState.week;
+                populateAdminFormForWeek(currentAppState.week);
+            } else {
+                document.getElementById('admin-error').style.display = 'block';
+            }
+        });
+
+        document.getElementById('admin-week-select').addEventListener('change', (e) => {
+            populateAdminFormForWeek(parseInt(e.target.value));
+        });
+
+        function populateAdminFormForWeek(weekNum) {
             const tech = document.getElementById('res-tech');
             const leaving = document.getElementById('res-leaving');
             const hand = document.getElementById('res-handshake');
@@ -668,30 +657,30 @@
             starCont.innerHTML = '';
 
             ALL_BAKERS.forEach(baker => {
-                // Do not show eliminated bakers in dropdowns
-                if(!eliminatedBakers.includes(baker)) {
-                    tech.innerHTML += `<option value="${baker}">${baker}</option>`;
-                    leaving.innerHTML += `<option value="${baker}">${baker}</option>`;
-                    hand.innerHTML += `<option value="${baker}">${baker}</option>`;
-                    
-                    starCont.innerHTML += `
-                        <label class="multi-check">
-                            <input type="checkbox" name="starbakers" value="${baker}"> ${baker}
-                        </label>
-                    `;
-                }
+                tech.innerHTML += `<option value="${baker}">${baker}</option>`;
+                leaving.innerHTML += `<option value="${baker}">${baker}</option>`;
+                hand.innerHTML += `<option value="${baker}">${baker}</option>`;
+                starCont.innerHTML += `<label class="multi-check"><input type="checkbox" name="starbakers" value="${baker}"> ${baker}</label>`;
             });
+
+            // Pre-fill if results already exist for this week
+            const weekData = adminResults[weekNum];
+            if (weekData) {
+                tech.value = weekData.technical || "None";
+                leaving.value = weekData.leaving || "None";
+                hand.value = weekData.handshake || "None";
+                if (weekData.starBaker) {
+                    document.querySelectorAll('input[name="starbakers"]').forEach(cb => {
+                        if (weekData.starBaker.includes(cb.value)) cb.checked = true;
+                    });
+                }
+            }
         }
 
-        const resultsModal = document.getElementById('results-modal');
-        document.getElementById('open-results-btn').addEventListener('click', () => {
-            document.getElementById('results-title').innerText = `Log Week ${currentAppState.week} Results`;
-            resultsModal.classList.add('active');
-        });
-        document.getElementById('close-results-btn').addEventListener('click', () => resultsModal.classList.remove('active'));
-
-        document.getElementById('results-form').addEventListener('submit', (e) => {
+        document.getElementById('admin-results-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            const weekNum = parseInt(document.getElementById('admin-week-select').value);
+            
             const tech = document.getElementById('res-tech').value;
             const leaving = document.getElementById('res-leaving').value;
             const hand = document.getElementById('res-handshake').value;
@@ -699,14 +688,11 @@
             const starCheckboxes = document.querySelectorAll('input[name="starbakers"]:checked');
             const starBakers = Array.from(starCheckboxes).map(cb => cb.value);
 
-            adminResults[currentAppState.week] = { technical: tech, starBaker: starBakers, leaving: leaving, handshake: hand };
+            adminResults[weekNum] = { technical: tech, starBaker: starBakers, leaving: leaving, handshake: hand };
             localStorage.setItem('gbbo_results', JSON.stringify(adminResults));
             
             calculateScores();
-            alert(`Results for Week ${currentAppState.week} saved & scores updated!`);
-            resultsModal.classList.remove('active');
-            e.target.reset();
-            updateScheduleEngine(); // Re-trigger elimination rendering
+            alert(`Results for Week ${weekNum} saved!`);
         });
 
         // --- AUTOMATED SCORING ENGINE ---
@@ -727,6 +713,7 @@
             });
             localStorage.setItem('gbbo_players', JSON.stringify(players));
             renderTables();
+            renderEliminatedBakers(); // Update crossed-out faces
         }
 
         // --- RENDER TABLES ---
