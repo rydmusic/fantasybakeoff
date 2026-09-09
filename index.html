@@ -224,7 +224,6 @@
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         .input-group label { font-size: 14px; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Updated Select Input Styling */
         .text-input, .styled-select {
             background: rgba(8, 12, 22, 0.9);
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -523,11 +522,9 @@
         const newPlayerGroup = document.getElementById('new-player-group');
         const newPlayerInput = document.getElementById('new-player-name');
 
-        // Load players from local storage (or use defaults above)
         function loadPlayersToDropdown() {
             const savedPlayers = JSON.parse(localStorage.getItem('gbbo_players')) || players;
             
-            // Clear current options except first and last
             playerSelect.innerHTML = '<option value="" disabled selected>Select your name...</option>';
             
             savedPlayers.forEach(player => {
@@ -553,9 +550,7 @@
             }
         });
 
-        // Initialize dropdown
         loadPlayersToDropdown();
-
 
         // --- Countdown Timer Logic ---
         const targetDate = new Date("Sep 22, 2026 20:00:00 GMT+0100").getTime();
@@ -650,12 +645,17 @@
             formBakerModal.classList.remove('active');
         });
 
-        // --- Form Submission ---
+        // --- Form Submission with Google Sheets Integration ---
         document.getElementById('prediction-form').addEventListener('submit', (e) => {
             e.preventDefault();
+            
+            // --- YOUR WEB APP URL ---
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzm9kZ19JFh7NbBAZp0v2GxTGySldBfJ2y7axjyidmU4UZLsfqe7tvd4LxSmGte0GkS/exec';
+            
             const tech = document.getElementById('technical').value;
             const star = document.getElementById('star-baker').value;
             const leave = document.getElementById('leaving').value;
+            const handshake = document.getElementById('handshake').value || "None";
             
             if(!tech || !star || !leave || tech === "None" || star === "None" || leave === "None") {
                 alert("Please select a baker for Technical, Star Baker, and Leaving.");
@@ -669,37 +669,57 @@
                 
                 // Add new player to local storage
                 let savedPlayers = JSON.parse(localStorage.getItem('gbbo_players')) || players;
-                savedPlayers.push({ name: finalName, score: 0 }); // Score starts at 0
+                savedPlayers.push({ name: finalName, score: 0 }); 
                 localStorage.setItem('gbbo_players', JSON.stringify(savedPlayers));
                 
-                // Refresh dropdown and leaderboard
                 players = savedPlayers;
                 loadPlayersToDropdown();
                 renderLeaderboard();
             }
 
-            /*
-            =============================================================
-            GOOGLE SHEETS INTEGRATION NOTE:
-            Because this is a static website hosted on GitHub Pages, 
-            it cannot directly connect to your Google Sheet URL due to security rules. 
-            
-            To make this save to your sheet:
-            1. You need to create a "Google Apps Script" web app linked to your sheet.
-            2. You would use the Javascript "fetch()" API right here to send 
-               the 'finalName', 'tech', 'star', and 'leave' variables to that script URL.
-            =============================================================
-            */
+            // Change button text to show it's loading
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Saving to League...";
+            submitBtn.disabled = true;
 
-            alert(`Predictions successfully saved for ${finalName}! (Saved locally. See code comments for Google Sheets setup)`);
-            
-            e.target.reset();
-            newPlayerGroup.classList.add('hidden-field');
-            document.querySelectorAll('.select-baker-btn').forEach(btn => {
-                btn.innerText = "Tap to select a baker...";
-                btn.classList.remove('selected');
+            // Package the data
+            const payload = {
+                playerName: finalName,
+                technical: tech,
+                starBaker: star,
+                leaving: leave,
+                handshake: handshake
+            };
+
+            // Send data to Google Sheets
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`Success! Predictions saved for ${finalName}. Check the Google Sheet!`);
+                
+                // Reset Form UI
+                e.target.reset();
+                newPlayerGroup.classList.add('hidden-field');
+                document.querySelectorAll('.select-baker-btn').forEach(btn => {
+                    btn.innerText = "Tap to select a baker...";
+                    btn.classList.remove('selected');
+                });
+                document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
+                
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                alert("There was an error saving your predictions. Please try again.");
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
             });
-            document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
         });
 
         // --- Grid Animation Logic ---
