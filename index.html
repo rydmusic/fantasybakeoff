@@ -351,33 +351,34 @@
 
         /* --- TABLES (Tab 3 & 4) --- */
         .data-section { width: 100%; max-width: 900px; padding: 20px; box-sizing: border-box; position: relative; }
-        .data-section h2 { color: #E2FF26; text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; }
+        .data-section h2 { color: #E2FF26; text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
         
         .table-container {
             width: 100%;
             overflow-x: auto; /* Allows scrolling on small screens */
+            margin-top: 15px;
         }
         
         table { width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; min-width: 500px; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         th { background-color: rgba(53, 43, 255, 0.3); color: #E2FF26; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 
-        /* Blur Effect for Choices Table */
-        .blur-wrapper {
-            transition: filter 1s ease;
-        }
-        .blurred {
-            filter: blur(8px);
-            pointer-events: none;
+        /* Blur Effect for specific choices cells */
+        .table-blur-active .secret-choice {
+            filter: blur(6px);
+            opacity: 0.6;
             user-select: none;
-            opacity: 0.8;
+            pointer-events: none;
+            transition: filter 1s ease, opacity 1s ease;
         }
+        
         #blur-message {
             text-align: center;
-            color: #E2FF26;
-            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.7);
             font-style: italic;
             letter-spacing: 1px;
+            font-size: 14px;
+            margin-bottom: 20px;
         }
 
         /* --- INTRO SEQUENCE --- */
@@ -457,14 +458,19 @@
         <div id="tab-bakers" class="tab-content active">
             <section class="cast-wrapper">
                 <div class="cast-grid" id="main-cast-grid">
+                    <!-- Top Row -->
                     <div class="cast-tile"><span class="baker-name">Clara</span></div>
                     <div class="cast-tile"><span class="baker-name">Connie</span></div>
                     <div class="cast-tile"><span class="baker-name">Gabe</span></div>
                     <div class="cast-tile"><span class="baker-name">Danni</span></div>
+                    
+                    <!-- Second Row -->
                     <div class="cast-tile"><span class="baker-name">Gary</span></div>
                     <div class="cast-tile"><span class="baker-name">Mo</span></div>
                     <div class="cast-tile"><span class="baker-name">Molly</span></div>
                     <div class="cast-tile"><span class="baker-name">Moyin</span></div>
+                    
+                    <!-- Third Row -->
                     <div class="cast-tile"><span class="baker-name">Nikki</span></div>
                     <div class="cast-tile"><span class="baker-name">Shannon</span></div>
                     <div class="cast-tile"><span class="baker-name">Tom</span></div>
@@ -527,30 +533,28 @@
             </div>
         </div>
 
-        <!-- TAB 3: The Choices (Blurred Data) -->
+        <!-- TAB 3: The Choices (Data blurred until countdown ends) -->
         <div id="tab-choices-table" class="tab-content">
             <section class="data-section">
                 <h2>The Choices</h2>
+                <p id="blur-message">Choices are hidden until 8pm on Tuesday</p>
                 
-                <div id="choices-blur-wrapper" class="blur-wrapper blurred">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Player</th>
-                                    <th>Technical</th>
-                                    <th>Star Baker</th>
-                                    <th>Leaving</th>
-                                    <th>Handshake</th>
-                                </tr>
-                            </thead>
-                            <tbody id="choices-table-body">
-                                <!-- Populated by JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="table-container">
+                    <table id="choices-table" class="table-blur-active">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Technical</th>
+                                <th>Star Baker</th>
+                                <th>Leaving</th>
+                                <th>Handshake</th>
+                            </tr>
+                        </thead>
+                        <tbody id="choices-table-body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
-                <p id="blur-message">Choices are hidden to prevent copying until the countdown ends!</p>
             </section>
         </div>
 
@@ -593,7 +597,7 @@
             "Yannis": `<strong>28 | London | Paediatric Doctor</strong><br><br>Yannis is challenging the stigma that Bangladeshi men don’t belong in the kitchen, one pastry at a time! Working in a busy NICU, he loves how a cake can bring joy to the ward and has won over the nurses with his bakes. Born in Vienna before moving to London aged 11, Yannis’ baking has been influenced by many food cultures. His first baking memory is making Bhapa Pitha with his grandmother, while his school days introduced him to classic Austrian treats. Watching Bake Off also helped Yannis learn English, making the show especially close to his heart. Outside the kitchen, he is also a Bhangra dancer, and his wedding shimmy has become legendary! For Yannis, baking and medicine have a lot in common: both are about caring for people.`
         };
 
-        // Initialize players array (Starting EMPTY as requested)
+        // Initialize players array completely empty so it starts with a clean slate
         let players = JSON.parse(localStorage.getItem('gbbo_players')) || [];
 
         // --- Player Name Dropdown Logic ---
@@ -639,8 +643,8 @@
                 clearInterval(countdownInterval);
                 document.getElementById("countdown-display").innerHTML = "<div class='started-msg'>Bake Off Has Started!</div>";
                 
-                // Unblur Tab 3 (The Choices)
-                document.getElementById('choices-blur-wrapper').classList.remove('blurred');
+                // Remove blur from the specific choice cells in Tab 3
+                document.getElementById('choices-table').classList.remove('table-blur-active');
                 document.getElementById('blur-message').style.display = 'none';
                 
                 // Grey out Tab 2 (The Form)
@@ -834,12 +838,13 @@
                 // Only show players who have made predictions
                 if(player.technical) {
                     const row = document.createElement("tr");
+                    // Note the "secret-choice" class here: this causes the blur effect
                     row.innerHTML = `
                         <td><strong>${player.name}</strong></td>
-                        <td>${player.technical || "-"}</td>
-                        <td>${player.starBaker || "-"}</td>
-                        <td>${player.leaving || "-"}</td>
-                        <td>${player.handshake || "None"}</td>
+                        <td class="secret-choice">${player.technical || "-"}</td>
+                        <td class="secret-choice">${player.starBaker || "-"}</td>
+                        <td class="secret-choice">${player.leaving || "-"}</td>
+                        <td class="secret-choice">${player.handshake || "None"}</td>
                     `;
                     choicesBody.appendChild(row);
                 }
