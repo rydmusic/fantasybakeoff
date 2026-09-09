@@ -348,6 +348,7 @@
 
     <script>
         // --- DATA SETUP ---
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzm9kZ19JFh7NbBAZp0v2GxTGySldBfJ2y7axjyidmU4UZLsfqe7tvd4LxSmGte0GkS/exec';
         const ALL_BAKERS = ["Clara", "Connie", "Gabe", "Danni", "Gary", "Mo", "Molly", "Moyin", "Nikki", "Shannon", "Tom", "Yannis"];
         
         const bakerBios = {
@@ -368,12 +369,46 @@
         let players = JSON.parse(localStorage.getItem('gbbo_players')) || [];
         let adminResults = JSON.parse(localStorage.getItem('gbbo_results')) || {};
 
-        // --- 10 WEEK SCHEDULE ENGINE (Real Time) ---
+        // --- FETCH LIVE DATA FROM GOOGLE SHEETS ---
+        function fetchGoogleSheetData() {
+            fetch(SCRIPT_URL)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status === "success" && res.data) {
+                        res.data.forEach(item => {
+                            let playerName = item.playerName ? item.playerName.trim() : "";
+                            let weekNum = parseInt(item.week) || 1;
+                            
+                            if (playerName) {
+                                let playerIndex = players.findIndex(p => p.name === playerName);
+                                if (playerIndex === -1) {
+                                    players.push({ name: playerName, score: 0, predictions: {} });
+                                    playerIndex = players.length - 1;
+                                }
+                                
+                                players[playerIndex].predictions[weekNum] = {
+                                    technical: item.technical || "",
+                                    starBaker: item.starBaker || "",
+                                    leaving: item.leaving || "",
+                                    handshake: item.handshake || "None"
+                                };
+                            }
+                        });
+                        
+                        localStorage.setItem('gbbo_players', JSON.stringify(players));
+                        loadPlayersToDropdown();
+                        calculateScores();
+                    }
+                })
+                .catch(err => console.log("Note: Could not fetch remote Google Sheet data yet.", err));
+        }
+
+        // --- 10 WEEK SCHEDULE ENGINE ---
         const schedule = [];
         const START_DATE = new Date("Sep 22, 2026 20:00:00 GMT+0100"); 
         for(let i=0; i<10; i++) {
             let lock = new Date(START_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000));
-            let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000)); // Adds 1.5 hours
+            let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000));
             schedule.push({ week: i+1, lockTime: lock.getTime(), unlockTime: unlock.getTime() });
         }
 
@@ -605,7 +640,7 @@
 
             const payload = { week: currentAppState.week, playerName: finalName, technical: tech, starBaker: star, leaving: leave, handshake: handshake };
 
-            fetch('https://script.google.com/macros/s/AKfycbzm9kZ19JFh7NbBAZp0v2GxTGySldBfJ2y7axjyidmU4UZLsfqe7tvd4LxSmGte0GkS/exec', {
+            fetch(SCRIPT_URL, {
                 method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
             }).then(r => r.json()).then(data => {
                 alert(`Success! Predictions saved for ${finalName}.`);
@@ -648,7 +683,6 @@
             hand.innerHTML = '<option value="None">None</option>';
             starCont.innerHTML = '';
 
-            // Calculate who was eliminated PRIOR to this week so they don't show up in the dropdowns
             const eliminatedPrior = [];
             for (let w = 1; w < weekNum; w++) {
                 if (adminResults[w] && adminResults[w].leaving && adminResults[w].leaving !== "None") {
@@ -665,7 +699,6 @@
                 }
             });
 
-            // Pre-fill if results already exist for this week
             const weekData = adminResults[weekNum];
             if (weekData) {
                 tech.value = weekData.technical || "None";
@@ -754,6 +787,8 @@
         // --- INITIALIZATION ---
         document.addEventListener("DOMContentLoaded", () => {
             updateScheduleEngine();
+            fetchGoogleSheetData(); // Fetch live predictions from Google Sheet
+            
             const hasVisited = localStorage.getItem("gbbo_visited");
             if (!hasVisited) {
                 setTimeout(() => { document.getElementById("gbbo-logo").classList.add("fade-in"); }, 1000);
