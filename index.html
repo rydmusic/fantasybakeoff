@@ -6,7 +6,7 @@
     <title>Fantasy GBBO League</title>
     
     <style>
-        /* --- GLOBAL THEME BASE (Referencing image_d13361.png) --- */
+        /* --- GLOBAL THEME BASE --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #080C16; /* Dark navy background */
@@ -25,12 +25,14 @@
             align-items: center;
         }
 
-        /* --- THE CIRCULAR FORM DESIGN --- */
-        .form-wrapper {
+        /* --- THE BAKER GRID DESIGN --- */
+        .cast-wrapper {
             position: relative;
             width: 100%;
+            max-width: 800px; /* Constrains the image size */
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             margin-top: 40px;
             margin-bottom: 60px;
         }
@@ -38,100 +40,57 @@
         /* Curved neon text overlay */
         .neon-heading {
             position: absolute;
-            top: -40px;
-            right: 15%;
+            top: -60px;
+            right: 0%;
             width: 400px;
             height: 400px;
             pointer-events: none;
             z-index: 10;
         }
 
-        .circle-form {
-            background-color: #352BFF; /* Bright blue circle */
-            width: 450px;
-            height: 450px;
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .cast-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 100%;
+            /* 1200x795 is roughly the aspect ratio of your image */
+            aspect-ratio: 1200 / 795; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background-color: #080C16;
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
-        .circle-form form {
-            width: 60%;
-            display: flex;
-            flex-direction: column;
+        /* Each tile represents 1/12th of the image */
+        .cast-tile {
+            background-image: url('https://www.scotsman.com/jpim-static/image/2026/09/08/7/06/Great-British-Bake-Off-Cast-Series-17-2026-Channel-4-Love-Productions-Patch-Dolan.jpeg?trim=0,0,0,0&crop=&width=1200&auto=webp&quality=75');
+            /* Zoom the background in so the full image spans 4 columns and 3 rows */
+            background-size: 400% 300%;
+            opacity: 0;
+            transition: opacity 0.6s ease;
         }
 
-        /* Minimalist inputs */
-        .circle-form label {
-            font-size: 11px;
-            color: #ffffff;
-            margin-top: 15px;
-            margin-bottom: 2px;
-            text-transform: lowercase;
-            letter-spacing: 1px;
-        }
-
-        .circle-form input, 
-        .circle-form select {
-            background: transparent;
-            border: none;
-            border-bottom: 1.5px solid #ffffff;
-            color: #ffffff;
-            font-size: 14px;
-            padding: 5px 0;
-            outline: none;
-            appearance: none; /* Removes default dropdown arrow for cleaner look */
-            cursor: pointer;
-        }
+        /* Shifting the background position to recreate the jigsaw puzzle */
+        .cast-tile:nth-child(1) { background-position: 0% 0%; }
+        .cast-tile:nth-child(2) { background-position: 33.333% 0%; }
+        .cast-tile:nth-child(3) { background-position: 66.666% 0%; }
+        .cast-tile:nth-child(4) { background-position: 100% 0%; }
         
-        .circle-form input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+        .cast-tile:nth-child(5) { background-position: 0% 50%; }
+        .cast-tile:nth-child(6) { background-position: 33.333% 50%; }
+        .cast-tile:nth-child(7) { background-position: 66.666% 50%; }
+        .cast-tile:nth-child(8) { background-position: 100% 50%; }
+        
+        .cast-tile:nth-child(9) { background-position: 0% 100%; }
+        .cast-tile:nth-child(10) { background-position: 33.333% 100%; }
+        .cast-tile:nth-child(11) { background-position: 66.666% 100%; }
+        .cast-tile:nth-child(12) { background-position: 100% 100%; }
+
+        /* Class added by JS to trigger the fade */
+        .cast-tile.visible {
+            opacity: 1;
         }
 
-        .circle-form select option {
-            background-color: #352BFF; /* Keeps dropdown legible */
-            color: white;
-        }
-
-        /* Styled submit button matching the image offset outline */
-        .circle-form button {
-            margin-top: 30px;
-            background-color: transparent;
-            color: #ffffff;
-            border: 2px solid #ffffff;
-            border-radius: 25px;
-            padding: 12px;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s ease;
-        }
-
-        /* Creates the offset border effect seen in the image */
-        .circle-form button::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 4px;
-            right: -6px;
-            bottom: -4px;
-            border: 2px solid #ffffff;
-            border-radius: 25px;
-            pointer-events: none;
-        }
-
-        .circle-form button:hover {
-            background-color: #ffffff;
-            color: #352BFF;
-        }
-
-        /* --- LEADERBOARD REDESIGN (To fit the dark theme) --- */
+        /* --- LEADERBOARD REDESIGN --- */
         .leaderboard-section {
             width: 100%;
             max-width: 600px;
@@ -229,7 +188,6 @@
             position: relative;
         }
 
-        /* The black screen that fades in over the video after 20s */
         #black-fade-screen {
             position: absolute;
             top: 0;
@@ -239,7 +197,7 @@
             background: black;
             z-index: 10000;
             opacity: 0;
-            pointer-events: none; /* Lets you click the video before it fades */
+            pointer-events: none; 
             transition: opacity 2s ease;
             display: flex;
             justify-content: center;
@@ -248,7 +206,7 @@
 
         #black-fade-screen.active {
             opacity: 1;
-            pointer-events: auto; /* Re-enables clicking for the button */
+            pointer-events: auto; 
         }
 
         #close-video-btn {
@@ -270,7 +228,6 @@
             color: black;
         }
         
-        /* White abstract icon decoration from image */
         .abstract-icon {
             position: absolute;
             top: 20px;
@@ -306,63 +263,38 @@
     <!-- Main App Container -->
     <div class="app-container">
         
-        <!-- Abstract Icon decoration in top left matching image_d13361.png -->
+        <!-- Abstract Icon decoration -->
         <svg class="abstract-icon" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4">
             <path d="M 40 10 Q 10 10 10 40 Q 10 70 40 70 Q 70 70 70 40 Q 70 10 40 10 Z" />
             <path d="M 60 30 Q 30 30 30 60 Q 30 90 60 90 Q 90 90 90 60 Q 90 30 60 30 Z" />
         </svg>
 
         <main>
-            <!-- Circular Prediction Form -->
-            <section class="form-wrapper">
+            <!-- Animated Baker Grid -->
+            <section class="cast-wrapper">
                 
-                <!-- Curved Text SVG matching the neon font from the image -->
+                <!-- Curved Text SVG -->
                 <svg class="neon-heading" viewBox="0 0 400 400">
                     <path id="curve" fill="transparent" d="M 70 200 A 130 130 0 0 1 330 140" />
-                    <text font-family="'Segoe UI', sans-serif" font-size="42" fill="#E2FF26" font-weight="bold" letter-spacing="3">
-                        <textPath href="#curve" startOffset="10%">Let's predict!</textPath>
+                    <text font-family="'Segoe UI', sans-serif" font-size="40" fill="#E2FF26" font-weight="bold" letter-spacing="3">
+                        <textPath href="#curve" startOffset="15%">The Bakers!</textPath>
                     </text>
                 </svg>
 
-                <div class="circle-form">
-                    <form id="prediction-form">
-                        <label for="player-name">անուն (Name)</label>
-                        <input type="text" id="player-name" required>
-
-                        <label for="technical">Technical Winner (3 pts)</label>
-                        <select id="technical" required>
-                            <option value="" disabled selected></option>
-                            <option value="Baker 1">Baker 1</option>
-                            <option value="Baker 2">Baker 2</option>
-                            <option value="Baker 3">Baker 3</option>
-                        </select>
-
-                        <label for="star-baker">Star Baker (5 pts)</label>
-                        <select id="star-baker" required>
-                            <option value="" disabled selected></option>
-                            <option value="Baker 1">Baker 1</option>
-                            <option value="Baker 2">Baker 2</option>
-                            <option value="Baker 3">Baker 3</option>
-                        </select>
-
-                        <label for="leaving">Who is leaving? (2 pts)</label>
-                        <select id="leaving" required>
-                            <option value="" disabled selected></option>
-                            <option value="Baker 1">Baker 1</option>
-                            <option value="Baker 2">Baker 2</option>
-                            <option value="Baker 3">Baker 3</option>
-                        </select>
-
-                        <label for="handshake">Hollywood Handshake? (10 pts)</label>
-                        <select id="handshake">
-                            <option value="None" selected>None</option>
-                            <option value="Baker 1">Baker 1</option>
-                            <option value="Baker 2">Baker 2</option>
-                            <option value="Baker 3">Baker 3</option>
-                        </select>
-
-                        <button type="submit">ուղարկել (Submit)</button>
-                    </form>
+                <div class="cast-grid" id="cast-grid">
+                    <!-- 12 tiles to build the 4x3 image grid -->
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
+                    <div class="cast-tile"></div>
                 </div>
             </section>
 
@@ -386,6 +318,18 @@
     </div>
 
     <script>
+        // --- Grid Animation Logic ---
+        // This runs the stagger animation on the 12 tiles
+        function animateGrid() {
+            const tiles = document.querySelectorAll('.cast-tile');
+            tiles.forEach((tile, index) => {
+                // Adds a 150 millisecond delay between each square appearing
+                setTimeout(() => {
+                    tile.classList.add('visible');
+                }, index * 150);
+            });
+        }
+
         // --- Intro Sequence & Video Timing Logic ---
         document.addEventListener("DOMContentLoaded", () => {
             const hasVisited = localStorage.getItem("gbbo_visited");
@@ -424,7 +368,7 @@
                     // 4. Exactly 20 seconds later, fade to black and show button
                     setTimeout(() => {
                         blackFadeScreen.classList.add("active");
-                    }, 20000); // 20,000 milliseconds = 20 seconds
+                    }, 20000); // 20 seconds
                 });
 
                 // 5. User clicks "Continue to Site" -> Enter actual website
@@ -432,42 +376,29 @@
                     videoOverlay.classList.add("hidden");
                     localStorage.setItem("gbbo_visited", "true"); 
                     iframe.src = ""; // Kill video background process
+                    
+                    // Trigger the grid fade-in effect now that they are on the site
+                    setTimeout(animateGrid, 300); 
                 });
 
             } else {
                 // Skips intro completely on return visits
                 introSequence.classList.add("hidden");
                 videoOverlay.classList.add("hidden");
+                
+                // Animate grid immediately on page load
+                setTimeout(animateGrid, 300);
             }
 
             renderLeaderboard();
         });
 
         // --- Mock Data & Points Config ---
-        const POINTS = {
-            technical: 3,
-            starBaker: 5,
-            leaving: 2,
-            handshake: 10
-        };
-
         let players = [
             { name: "Alice", score: 12 },
             { name: "Bob", score: 8 },
             { name: "Charlie", score: 18 }
         ];
-
-        // --- Form Submission Logic ---
-        const form = document.getElementById("prediction-form");
-
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-
-            const playerName = document.getElementById("player-name").value;
-            
-            alert(`Predictions saved for ${playerName}!`);
-            form.reset();
-        });
 
         // --- Leaderboard Rendering ---
         function renderLeaderboard() {
