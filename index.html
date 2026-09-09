@@ -557,7 +557,8 @@
         
         document.querySelectorAll('#main-cast-grid .cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
-                const bakerName = tile.querySelector('.baker-name').innerText;
+                // FIXED: Using textContent to ignore CSS text-transform overrides!
+                const bakerName = tile.querySelector('.baker-name').textContent.trim();
                 bioTitle.innerText = bakerName;
                 bioText.innerHTML = bakerBios[bakerName] || "Bio coming soon...";
                 bioModal.classList.add('active');
@@ -585,7 +586,8 @@
 
         modalGrid.querySelectorAll('.cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
-                const bakerName = tile.querySelector('.baker-name').innerText;
+                // FIXED: Using textContent to ignore CSS text-transform overrides!
+                const bakerName = tile.querySelector('.baker-name').textContent.trim();
                 document.getElementById(activeInputId).value = bakerName;
                 activeBtn.innerText = bakerName;
                 activeBtn.classList.add('selected');
