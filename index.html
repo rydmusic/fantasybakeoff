@@ -9,7 +9,7 @@
         /* --- GLOBAL THEME BASE --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #080C16; 
+            background-color: #080C16; /* Dark navy background */
             color: #ffffff;
             margin: 0;
             padding: 0;
@@ -20,8 +20,9 @@
         .tabs-nav {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            padding: 30px;
+            flex-wrap: wrap; /* Allows tabs to stack on small screens */
+            gap: 15px;
+            padding: 20px;
             background-color: #080C16;
             position: relative;
             z-index: 100;
@@ -31,11 +32,11 @@
             background: transparent;
             color: #ffffff;
             border: 2px solid #ffffff;
-            padding: 12px 30px;
-            font-size: 16px;
+            padding: 10px 20px;
+            font-size: clamp(12px, 3vw, 16px);
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -57,6 +58,7 @@
             flex-direction: column;
             align-items: center;
             animation: fadeInTab 0.5s ease;
+            padding-bottom: 50px;
         }
 
         .tab-content.active {
@@ -68,24 +70,15 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- THE BAKER GRID DESIGN (Full Screen) --- */
+        /* --- THE BAKER GRID DESIGN --- */
         .cast-wrapper {
             position: relative;
-            width: 100vw; 
-            max-width: 100%;
+            width: 100%;
+            max-width: 1000px;
             display: flex;
             justify-content: center;
-        }
-
-        .neon-heading {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 400px;
-            height: 400px;
-            pointer-events: none;
-            z-index: 10;
+            padding: 0 10px;
+            box-sizing: border-box;
         }
 
         .cast-grid {
@@ -95,6 +88,7 @@
             width: 100%;
             aspect-ratio: 1200 / 795; 
             background-color: #080C16;
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
         .cast-tile {
@@ -108,43 +102,6 @@
             align-items: center;
             cursor: pointer;
             overflow: hidden;
-        }
-
-        /* Dark overlay for the hover effect */
-        .cast-tile::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(8, 12, 22, 0.7); /* Dark navy fade */
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-
-        /* Hover states */
-        .cast-tile:hover::before {
-            opacity: 1;
-        }
-
-        .cast-tile:hover .baker-name {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* The text inside the tile */
-        .baker-name {
-            position: relative;
-            z-index: 2;
-            color: #E2FF26; /* Neon yellow accent */
-            font-size: clamp(16px, 2.5vw, 32px); /* Scales text dynamically */
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            opacity: 0;
-            transform: translateY(15px); /* Starts slightly lower for a slide-up effect */
-            transition: all 0.3s ease;
-            pointer-events: none;
-            text-align: center;
         }
 
         /* Jigsaw puzzle background positioning */
@@ -167,11 +124,206 @@
             opacity: 1;
         }
 
-        /* --- LEADERBOARD REDESIGN --- */
+        /* Hover Overlay for Tab 1 */
+        #tab-bakers .cast-tile::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(8, 12, 22, 0.7); 
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        #tab-bakers .cast-tile:hover::before { opacity: 1; }
+        #tab-bakers .cast-tile:hover .baker-name {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .baker-name {
+            position: relative;
+            z-index: 2;
+            color: #E2FF26; 
+            font-size: clamp(10px, 2.5vw, 24px); 
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateY(15px); 
+            transition: all 0.3s ease;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        /* --- PREDICTION FORM (TAB 2) --- */
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #E2FF26;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .text-input {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .text-input:focus {
+            border-color: #E2FF26;
+        }
+
+        .select-baker-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .select-baker-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+
+        .select-baker-btn.selected {
+            border-style: solid;
+            border-color: #E2FF26;
+            color: #E2FF26;
+            font-weight: bold;
+        }
+
+        .submit-btn {
+            background-color: #352BFF;
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #E2FF26;
+            color: #080C16;
+        }
+
+        /* --- BAKER SELECTOR MODAL --- */
+        #baker-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(8, 12, 22, 0.95);
+            z-index: 10002;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #baker-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #baker-modal h3 {
+            color: #E2FF26;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        #baker-modal .cast-wrapper {
+            max-width: 800px;
+        }
+
+        /* Always show names in the modal so they know who to tap on mobile */
+        #baker-modal .cast-tile { opacity: 1; }
+        #baker-modal .cast-tile::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(8, 12, 22, 0.5); 
+            z-index: 1;
+        }
+        #baker-modal .cast-tile:hover::before { background-color: rgba(8, 12, 22, 0.2); }
+        
+        #baker-modal .baker-name {
+            opacity: 1;
+            transform: translateY(0);
+            background: rgba(8, 12, 22, 0.8);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .modal-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .modal-btn:hover { background: white; color: black; }
+
+        /* --- LEADERBOARD REDESIGN (TAB 3) --- */
         .leaderboard-section {
             width: 100%;
             max-width: 800px;
             padding: 20px;
+            box-sizing: border-box;
         }
 
         .leaderboard-section h2 {
@@ -207,10 +359,7 @@
         /* --- INTRO SEQUENCE & VIDEO OVERLAY --- */
         #intro-sequence {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background-color: #000000;
             z-index: 10001; 
             display: flex;
@@ -239,44 +388,23 @@
             font-weight: bold;
         }
 
-        #enter-text:hover {
-            color: #E2FF26;
-        }
-
-        .fade-in {
-            opacity: 1 !important;
-        }
+        #enter-text:hover { color: #E2FF26; }
+        .fade-in { opacity: 1 !important; }
 
         #video-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background: black;
             z-index: 9999;
         }
 
-        .hidden {
-            display: none !important;
-        }
-
-        .video-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        #intro-video {
-            pointer-events: none;
-        }
+        .hidden { display: none !important; }
+        .video-container { width: 100%; height: 100%; position: relative; }
+        #intro-video { pointer-events: none; }
 
         #black-fade-screen {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: black;
             z-index: 10000;
             opacity: 0;
@@ -335,11 +463,24 @@
             <div id="black-fade-screen">
                 <button id="close-video-btn">Continue to Site</button>
             </div>
-            
             <iframe id="intro-video" width="100%" height="100%" 
                 src="https://drive.google.com/file/d/1Fb9ChUeBb8GPhjhE5Ij0XYGeQkLysrxI/preview" 
                 frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
             </iframe>
+        </div>
+    </div>
+
+    <!-- Interactive Baker Selection Modal -->
+    <div id="baker-modal">
+        <h3 id="modal-title">Select Baker</h3>
+        <div class="cast-wrapper">
+            <div class="cast-grid" id="modal-grid">
+                <!-- Javascript will populate this grid to match the main one -->
+            </div>
+        </div>
+        <div class="modal-controls">
+            <button class="modal-btn" id="modal-none-btn">Select None</button>
+            <button class="modal-btn" id="modal-cancel-btn">Cancel</button>
         </div>
     </div>
 
@@ -352,6 +493,7 @@
     <!-- Header Navigation Tabs -->
     <nav class="tabs-nav">
         <button class="tab-btn active" data-target="tab-bakers">The Bakers</button>
+        <button class="tab-btn" data-target="tab-choices">Make Your Choices</button>
         <button class="tab-btn" data-target="tab-league">League Table</button>
     </nav>
 
@@ -361,15 +503,7 @@
         <!-- TAB 1: Animated Baker Grid -->
         <div id="tab-bakers" class="tab-content active">
             <section class="cast-wrapper">
-                <!-- Curved Text SVG -->
-                <svg class="neon-heading" viewBox="0 0 400 400">
-                    <path id="curve" fill="transparent" d="M 70 200 A 130 130 0 0 1 330 140" />
-                    <text font-family="'Segoe UI', sans-serif" font-size="40" fill="#E2FF26" font-weight="bold" letter-spacing="3">
-                        <textPath href="#curve" startOffset="15%">The Bakers!</textPath>
-                    </text>
-                </svg>
-
-                <div class="cast-grid" id="cast-grid">
+                <div class="cast-grid" id="main-cast-grid">
                     <!-- Top Row -->
                     <div class="cast-tile"><span class="baker-name">Clara</span></div>
                     <div class="cast-tile"><span class="baker-name">Connie</span></div>
@@ -391,7 +525,58 @@
             </section>
         </div>
 
-        <!-- TAB 2: League Table -->
+        <!-- TAB 2: Make Your Choices (Form) -->
+        <div id="tab-choices" class="tab-content">
+            <div class="form-container">
+                <h2>Week 1 Predictions</h2>
+                
+                <form id="prediction-form">
+                    <div class="input-group">
+                        <label for="player-name">Your Name</label>
+                        <input type="text" id="player-name" class="text-input" placeholder="Enter your name" required>
+                    </div>
+
+                    <!-- Hidden inputs store the actual form data -->
+                    <input type="hidden" id="technical" required>
+                    <input type="hidden" id="star-baker" required>
+                    <input type="hidden" id="leaving" required>
+                    <input type="hidden" id="handshake">
+
+                    <!-- Visual buttons trigger the modal -->
+                    <div class="input-group">
+                        <label>Technical Winner (3 pts)</label>
+                        <button type="button" class="select-baker-btn" data-target-input="technical" data-label="Technical Winner">
+                            Tap to select a baker...
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Star Baker (5 pts)</label>
+                        <button type="button" class="select-baker-btn" data-target-input="star-baker" data-label="Star Baker">
+                            Tap to select a baker...
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Who is leaving? (2 pts)</label>
+                        <button type="button" class="select-baker-btn" data-target-input="leaving" data-label="Leaving">
+                            Tap to select a baker...
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Hollywood Handshake? (10 pts)</label>
+                        <button type="button" class="select-baker-btn" data-target-input="handshake" data-label="Hollywood Handshake">
+                            Tap to select a baker... (Optional)
+                        </button>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Predictions</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB 3: League Table -->
         <div id="tab-league" class="tab-content">
             <section class="leaderboard-section">
                 <h2>League Table</h2>
@@ -413,6 +598,11 @@
     </main>
 
     <script>
+        // --- Setup Modal Grid by cloning Main Grid ---
+        const mainGrid = document.getElementById('main-cast-grid');
+        const modalGrid = document.getElementById('modal-grid');
+        modalGrid.innerHTML = mainGrid.innerHTML;
+
         // --- Tab Switching Logic ---
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -428,9 +618,80 @@
             });
         });
 
-        // --- Grid Animation Logic ---
+        // --- Form Modal Picker Logic ---
+        const modal = document.getElementById('baker-modal');
+        const modalTitle = document.getElementById('modal-title');
+        let activeInputId = null;
+        let activeBtn = null;
+
+        // Open modal when tapping a select button
+        document.querySelectorAll('.select-baker-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                activeInputId = btn.getAttribute('data-target-input');
+                activeBtn = btn;
+                modalTitle.innerText = `Select ${btn.getAttribute('data-label')}`;
+                modal.classList.add('active');
+            });
+        });
+
+        // Handle Baker Selection from Modal
+        modalGrid.querySelectorAll('.cast-tile').forEach(tile => {
+            tile.addEventListener('click', () => {
+                const bakerName = tile.querySelector('.baker-name').innerText;
+                
+                // Update hidden input
+                document.getElementById(activeInputId).value = bakerName;
+                
+                // Update button UI
+                activeBtn.innerText = bakerName;
+                activeBtn.classList.add('selected');
+                
+                // Close modal
+                modal.classList.remove('active');
+            });
+        });
+
+        // Modal Controls (None / Cancel)
+        document.getElementById('modal-none-btn').addEventListener('click', () => {
+            document.getElementById(activeInputId).value = "None";
+            activeBtn.innerText = "None Selected";
+            activeBtn.classList.remove('selected');
+            modal.classList.remove('active');
+        });
+
+        document.getElementById('modal-cancel-btn').addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        // Handle Form Submission
+        document.getElementById('prediction-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Check if mandatory visual fields are filled (since hidden inputs don't trigger native required UI well)
+            const tech = document.getElementById('technical').value;
+            const star = document.getElementById('star-baker').value;
+            const leave = document.getElementById('leaving').value;
+            
+            if(!tech || !star || !leave || tech === "None" || star === "None" || leave === "None") {
+                alert("Please select a baker for Technical, Star Baker, and Leaving.");
+                return;
+            }
+
+            const playerName = document.getElementById('player-name').value;
+            alert(`Predictions successfully saved for ${playerName}!`);
+            
+            // Reset form UI
+            e.target.reset();
+            document.querySelectorAll('.select-baker-btn').forEach(btn => {
+                btn.innerText = "Tap to select a baker...";
+                btn.classList.remove('selected');
+            });
+            document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
+        });
+
+        // --- Grid Animation Logic (Only targets Tab 1) ---
         function animateGrid() {
-            const tiles = document.querySelectorAll('.cast-tile');
+            const tiles = document.querySelectorAll('#tab-bakers .cast-tile');
             tiles.forEach((tile, index) => {
                 setTimeout(() => {
                     tile.classList.add('visible');
@@ -452,13 +713,8 @@
             const iframe = document.getElementById("intro-video");
 
             if (!hasVisited) {
-                setTimeout(() => {
-                    logo.classList.add("fade-in");
-                }, 1000);
-
-                setTimeout(() => {
-                    enterText.classList.add("fade-in");
-                }, 3000);
+                setTimeout(() => { logo.classList.add("fade-in"); }, 1000);
+                setTimeout(() => { enterText.classList.add("fade-in"); }, 3000);
 
                 enterText.addEventListener("click", () => {
                     introSequence.classList.add("hidden");
@@ -478,14 +734,12 @@
                     videoOverlay.classList.add("hidden");
                     localStorage.setItem("gbbo_visited", "true"); 
                     iframe.src = ""; 
-                    
                     setTimeout(animateGrid, 300); 
                 });
 
             } else {
                 introSequence.classList.add("hidden");
                 videoOverlay.classList.add("hidden");
-                
                 setTimeout(animateGrid, 300);
             }
 
@@ -496,7 +750,8 @@
         let players = [
             { name: "Alice", score: 12 },
             { name: "Bob", score: 8 },
-            { name: "Charlie", score: 18 }
+            { name: "Charlie", score: 18 },
+            { name: "Dan", score: 5 }
         ];
 
         // --- Leaderboard Rendering ---
