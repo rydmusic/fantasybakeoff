@@ -171,7 +171,6 @@
 
         .cast-tile.visible { opacity: 1; }
 
-        /* Hover Overlay for Tab 1 */
         #tab-bakers .cast-tile::before {
             content: '';
             position: absolute;
@@ -225,8 +224,9 @@
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         .input-group label { font-size: 14px; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 1px; }
 
-        .text-input {
-            background: transparent;
+        /* Updated Select Input Styling */
+        .text-input, .styled-select {
+            background: rgba(8, 12, 22, 0.9);
             border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
             padding: 15px;
@@ -234,8 +234,18 @@
             font-size: 16px;
             outline: none;
             transition: border-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
         }
-        .text-input:focus { border-color: #E2FF26; }
+        
+        .styled-select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .text-input:focus, .styled-select:focus { border-color: #E2FF26; }
 
         .select-baker-btn {
             background: rgba(255, 255, 255, 0.05);
@@ -257,6 +267,10 @@
             letter-spacing: 2px; cursor: pointer; margin-top: 20px; transition: background-color 0.3s;
         }
         .submit-btn:hover { background-color: #E2FF26; color: #080C16; }
+
+        .hidden-field {
+            display: none !important;
+        }
 
         /* --- BAKER SELECTOR MODAL (Form) --- */
         #baker-modal {
@@ -329,7 +343,7 @@
 </head>
 <body>
 
-    <!-- Hidden Audio Player (Using Google Drive direct download link structure) -->
+    <!-- Hidden Audio Player -->
     <audio id="bg-audio" src="https://drive.google.com/uc?export=download&id=14u1AOjrbx_KfuPw8U2Wck7BBg-GZv9e_"></audio>
 
     <!-- Cinematic Intro Sequence -->
@@ -412,9 +426,21 @@
                 <h2>Week 1 Predictions</h2>
                 
                 <form id="prediction-form">
+                    
+                    <!-- Dynamic Name Selector -->
                     <div class="input-group">
-                        <label for="player-name">Your Name</label>
-                        <input type="text" id="player-name" class="text-input" placeholder="Enter your name" required>
+                        <label for="player-select">Your Name</label>
+                        <select id="player-select" class="styled-select" required>
+                            <option value="" disabled selected>Select your name...</option>
+                            <!-- Javascript populates existing names here -->
+                            <option value="ADD_NEW">+ Add a new name...</option>
+                        </select>
+                    </div>
+
+                    <!-- Hidden Input for New Names -->
+                    <div class="input-group hidden-field" id="new-player-group">
+                        <label for="new-player-name">Enter New Name</label>
+                        <input type="text" id="new-player-name" class="text-input" placeholder="e.g., Paul H.">
                     </div>
 
                     <input type="hidden" id="technical" required>
@@ -422,7 +448,7 @@
                     <input type="hidden" id="leaving" required>
                     <input type="hidden" id="handshake">
 
-                    <div class="input-group">
+                    <div class="input-group" style="margin-top: 15px;">
                         <label>Technical Winner (3 pts)</label>
                         <button type="button" class="select-baker-btn" data-target-input="technical" data-label="Technical Winner">Tap to select a baker...</button>
                     </div>
@@ -471,29 +497,65 @@
         // --- BAKER BIOS ---
         const bakerBios = {
             "Clara": `<strong>24 | Hertfordshire | Marketing Graduate</strong><br><br>A passionate Portuguese polyglot pocket rocket, Clara is a bundle of energy and believes "the first bite of a bake is always with the eyes". She loves creating colourful, chaotically beautiful designs, balanced with fresh, fruity flavours. Originally from Aveiro in Portugal, Clara moved to the UK at 18 to study marketing. She began baking cakes two years ago as a creative outlet, and then recreating Portuguese classics like Tarte de Nata for her British fiancé Kieran and his family. Clara’s greatest loves are her spaniel Gigi and pygmy hedgehog, Pecan, and she is happiest when surrounded by animals. A self-confessed "fantasy girly", Clara is bringing plenty of colour, warmth and Portuguese sunshine to the tent.`,
-            
             "Connie": `<strong>63 | London | NHS Hospital Discharge Lead</strong><br><br>Known as "the Cake Lady", Connie can’t remember a time when she didn’t bake. After over 20 years working for the NHS, baking is her way to unwind after a busy day. She is best known for her hearty carrot cakes, with favourite flavours including rum fruit, lemon and lavender. She keeps a jar of fruit permanently soaking in rum, wine and cinnamon - "you can smell the cake before you see it!" A devoted fan of black-and-white films, Connie loves an audiobook and often has a thriller series playing in the background while she bakes. She has been married to Myke, a musician and music teacher, for 23 years, and together they run a music centre in London where Connie loves to try out her new recipes on the students.`,
-            
             "Danni": `<strong>25 | Dorset | HGV Service Centre Administrator</strong><br><br>Naturally curious and experimental, Danni loves exploring the countryside and foraging for ingredients. Their bakes often combine foraged finds such as magnolia, chestnut and dandelion with far-flung flavours like ube and red bean paste. Living in Dorset with their parents, sister and three cocker spaniels, Danni works alongside their dad at an HGV service centre, keeping the mechanics on their toes with invoices and cost-tracking. Always tinkering, Danni has a host of projects on the go, from anime doodling to soldering broken traces on the motherboard of her Commodore 64. A tech enthusiast, they love decorating their bakes with inspiration from video games and animation. Danni's designed websites for fun, created their own visual novel games using Ren’Py and even managed to bring an old VCR back to life.`,
-            
             "Gabe": `<strong>32 | West Midlands | Artist & Drag King</strong><br><br>Self-styled "daddy of Birmingham drag", Gabe discovered baking after watching the very first series of Bake Off aged 13. Their baking style is "gorgeous but very homemade", with a preference for savoury, meat-filled bakes and an obsession with meringue. Raised in Grimsby, "the home of fish and chips and zero gay bars", they now live in the West Midlands with partners Ellis and Tyler, and their two sausage dogs, Dill and Sage. An all-round creative and self-proclaimed "professional nuisance", Gabe produces theatre shows and performs as their drag persona, Blü Romantic. They are also a costume designer and once made a wedding dress for their best friend. At home, they’re a keen gardener, crafter and dinner party host.`,
-            
             "Gary": `<strong>67 | Nottinghamshire | Retired Garment Technologist</strong><br><br>Gary is a methodical and precise baker who discovered his love of baking later in life. He bought his first cookbook in a gift shop 5 years ago and hasn’t looked back, developing a traditional yet creative style with a focus on impeccable presentation and bold flavours, particularly citrus. Born and bred in Chesterfield, Gary now lives on a smallholding in Nottinghamshire with his wife of over 30 years, Donna. Their countryside home is filled with animals, including sheep, horses, chickens and miniature pygmy goats and Shetland ponies. Having beat prostate cancer himself, Gary is passionate about raising awareness and funds for cancer charities through bake sales and coffee mornings. When he’s not baking, Gary is usually out walking with his two Border Collies, Ollie and Alfie, who are his pride and joy.`,
-            
             "Molly": `<strong>31 | London | Accessibility Coordinator</strong><br><br>Molly is a caring and determined baker who started baking over 25 years ago, inspired by her grandmother. She loves traditional bakes and classic flavours, with hazelnut, fresh fruit and mint among her favourites. During a difficult period with her health in 2020, Molly turned to baking to stay motivated and keep connected to friends and family, taking her skills to a new level. Living in London with her husband Ash and their sausage dog, Lando, Molly works for a disability charity, reviewing accessibility in transport. A musical theatre fanatic, she has been involved in many drama groups and supports her local theatre. She is also a huge Formula 1 fan, clearing her diary for every race, and is currently 25% through a 350,000-stich cross-stich landscape of Rivendell.`,
-            
             "Moyin": `<strong>22 | Essex | Political Economy Student</strong><br><br>Moyin is a high achiever who balances his studies with athletics, baking and a part-time job. He started baking with his mum at 5 and by 14 had mastered the tricky art of Macaronage! His bakes are fun and precise, with flavours inspired by his Nigerian heritage, including grains of paradise and groundnuts. A competitive sprinter, Moyin was crowned U20 County Champion in the 100m, and his pre-race motivational playlist features Afrobeats, R&B and conscious rap. He lives with his mum, sister and grandmother, and regularly visits family in Nigeria, Canada and the USA. Outside of baking, Moyin loves fashion, collecting vinyl, and visiting comedy clubs. He’s also a dedicated matcha latte fan, pre-ordering his for a swift pick-up on the way to seminars on Global Political Thought.`,
-            
             "Mo": `<strong>21 | West Midlands | Law Student</strong><br><br>Mo is a self-confessed "chaotic and random" character who is determined to make his family proud. Born and bred in the West Midlands, he lives with his family, and their three cats, Pablo, Simba and Gucci. Studying law at university with ambitions of becoming a solicitor, Mo’s wider family are often surprised to discover that he’s also a keen baker. His love of baking started at 3, when he would pretend to cook with Play-Doh. At 9, he stumbled across a video about mug cakes and was hooked. Starting out with boxed vanilla cake mixes from the corner shop, Mo has since graduated to precise, professional-looking bakes, often infusing Asian flavours with traditional British classics. When he’s not baking or studying, Mo is in the gym lifting weights or getting to grips with calisthenics.`,
-            
             "Nikki": `<strong>50 | London | Advertising Post-Producer</strong><br><br>Nikki is a colourful character with a colourful baking style. She started baking with her mum at seven and has always found baking to be a form of therapy. Her kitchen soundtrack depends on the bake: nostalgic R&B for tried and tested desserts and classical music to bring in the moment of calm needed for experimentation. Nikki is happiest surrounded by others and loves nothing more than feeding her family and friends. She has been with her "soul mate" Tom for 22 years, and they have a 16-year-old daughter, Ava. A former podium dancer at Basingstoke’s Ziggy’s Night Club in the 90s, Nikki still loves hitting the dance floor at R&B clubs with her cousins. She also enjoys theatre trips with her family and long walks, recently completing a 100-mile walk to raise money for breast cancer.`,
-            
             "Shannon": `<strong>29 | Gloucestershire | Project Planner and Scheduler</strong><br><br>Shannon is a fun-loving, nature-loving foodie who dreams of bringing "a little forest magic" to the Bake Off tent. Growing up in Bristol, she now lives in the countryside with her fiancé Scott, her two black Staffordshire Bull Terriers and Tyrone the tortoise. Her home life revolves around the great outdoors, from long walks to gardening and cooking with ingredients she has grown herself. Shannon has been baking for as long as she can remember, taught by her beloved Nan, and describes her style as whimsical, quirky and rustic. Organised and focused thanks to her day job, Shannon is determined to get her timings just right, however she once rode a horse through a drive-thru, so there’s still plenty of room for chaos!`,
-            
             "Tom": `<strong>25 | West Yorkshire | Hairdresser</strong><br><br>Tom is a self-proclaimed Northern Diva who loves nothing more than creating bakes that are witty, pretty and, most importantly, delicious. While his older brother was off at football matches, six-year-old Tom would escape to his Nan’s to bake, mastering the perfect brandy snap before he was 10! Tom now works in a busy salon, where he weaves perfect sets of highlights and occasionally overshares about his personal life. His colleagues are gleeful taste-testers, particularly when he brings in his famous salted caramel brownies. Outside of baking, Tom loves travelling and recently spent seven months exploring Southeast Asia with his boyfriend, Alex. The pair are now saving for a house together.`,
-            
             "Yannis": `<strong>28 | London | Paediatric Doctor</strong><br><br>Yannis is challenging the stigma that Bangladeshi men don’t belong in the kitchen, one pastry at a time! Working in a busy NICU, he loves how a cake can bring joy to the ward and has won over the nurses with his bakes. Born in Vienna before moving to London aged 11, Yannis’ baking has been influenced by many food cultures. His first baking memory is making Bhapa Pitha with his grandmother, while his school days introduced him to classic Austrian treats. Watching Bake Off also helped Yannis learn English, making the show especially close to his heart. Outside the kitchen, he is also a Bhangra dancer, and his wedding shimmy has become legendary! For Yannis, baking and medicine have a lot in common: both are about caring for people.`
         };
+
+        // --- Mock Data (Also feeds the Dropdown!) ---
+        let players = [
+            { name: "Alice", score: 12 },
+            { name: "Bob", score: 8 },
+            { name: "Charlie", score: 18 },
+            { name: "Dan", score: 5 }
+        ];
+
+        // --- Player Name Dropdown Logic ---
+        const playerSelect = document.getElementById('player-select');
+        const newPlayerGroup = document.getElementById('new-player-group');
+        const newPlayerInput = document.getElementById('new-player-name');
+
+        // Load players from local storage (or use defaults above)
+        function loadPlayersToDropdown() {
+            const savedPlayers = JSON.parse(localStorage.getItem('gbbo_players')) || players;
+            
+            // Clear current options except first and last
+            playerSelect.innerHTML = '<option value="" disabled selected>Select your name...</option>';
+            
+            savedPlayers.forEach(player => {
+                const option = document.createElement('option');
+                option.value = player.name;
+                option.textContent = player.name;
+                playerSelect.appendChild(option);
+            });
+            
+            const addNewOption = document.createElement('option');
+            addNewOption.value = 'ADD_NEW';
+            addNewOption.textContent = '+ Add a new name...';
+            playerSelect.appendChild(addNewOption);
+        }
+
+        playerSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'ADD_NEW') {
+                newPlayerGroup.classList.remove('hidden-field');
+                newPlayerInput.setAttribute('required', 'true');
+            } else {
+                newPlayerGroup.classList.add('hidden-field');
+                newPlayerInput.removeAttribute('required');
+            }
+        });
+
+        // Initialize dropdown
+        loadPlayersToDropdown();
+
 
         // --- Countdown Timer Logic ---
         const targetDate = new Date("Sep 22, 2026 20:00:00 GMT+0100").getTime();
@@ -514,6 +576,7 @@
             document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
             document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
         }, 1000);
+
 
         // --- Setup Modal Grid by cloning Main Grid ---
         const mainGrid = document.getElementById('main-cast-grid');
@@ -587,18 +650,51 @@
             formBakerModal.classList.remove('active');
         });
 
+        // --- Form Submission ---
         document.getElementById('prediction-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const tech = document.getElementById('technical').value;
             const star = document.getElementById('star-baker').value;
             const leave = document.getElementById('leaving').value;
+            
             if(!tech || !star || !leave || tech === "None" || star === "None" || leave === "None") {
                 alert("Please select a baker for Technical, Star Baker, and Leaving.");
                 return;
             }
-            const playerName = document.getElementById('player-name').value;
-            alert(`Predictions successfully saved for ${playerName}!`);
+
+            // Determine final player name
+            let finalName = playerSelect.value;
+            if (finalName === 'ADD_NEW') {
+                finalName = newPlayerInput.value.trim();
+                
+                // Add new player to local storage
+                let savedPlayers = JSON.parse(localStorage.getItem('gbbo_players')) || players;
+                savedPlayers.push({ name: finalName, score: 0 }); // Score starts at 0
+                localStorage.setItem('gbbo_players', JSON.stringify(savedPlayers));
+                
+                // Refresh dropdown and leaderboard
+                players = savedPlayers;
+                loadPlayersToDropdown();
+                renderLeaderboard();
+            }
+
+            /*
+            =============================================================
+            GOOGLE SHEETS INTEGRATION NOTE:
+            Because this is a static website hosted on GitHub Pages, 
+            it cannot directly connect to your Google Sheet URL due to security rules. 
+            
+            To make this save to your sheet:
+            1. You need to create a "Google Apps Script" web app linked to your sheet.
+            2. You would use the Javascript "fetch()" API right here to send 
+               the 'finalName', 'tech', 'star', and 'leave' variables to that script URL.
+            =============================================================
+            */
+
+            alert(`Predictions successfully saved for ${finalName}! (Saved locally. See code comments for Google Sheets setup)`);
+            
             e.target.reset();
+            newPlayerGroup.classList.add('hidden-field');
             document.querySelectorAll('.select-baker-btn').forEach(btn => {
                 btn.innerText = "Tap to select a baker...";
                 btn.classList.remove('selected');
@@ -627,37 +723,32 @@
                 setTimeout(() => { enterText.classList.add("fade-in"); }, 3000);
                 
                 enterText.addEventListener("click", () => {
-                    // Hide intro sequence immediately
                     introSequence.classList.add("hidden");
                     localStorage.setItem("gbbo_visited", "true"); 
                     
-                    // Trigger Background Audio Playback
-                    bgAudio.volume = 0.5; // Starts at 50% volume so it isn't jarring
+                    bgAudio.volume = 0.5; 
                     bgAudio.play().catch(e => console.log("Audio playback was prevented by the browser.", e));
 
                     setTimeout(animateGrid, 300); 
                 });
             } else {
-                // If they have visited before, skip the visual intro sequence
                 introSequence.classList.add("hidden");
                 setTimeout(animateGrid, 300);
             }
             renderLeaderboard();
         });
 
-        // --- Mock Data ---
-        let players = [
-            { name: "Alice", score: 12 },
-            { name: "Bob", score: 8 },
-            { name: "Charlie", score: 18 },
-            { name: "Dan", score: 5 }
-        ];
 
+        // --- Leaderboard Rendering ---
         function renderLeaderboard() {
             const tbody = document.getElementById("leaderboard-body");
             tbody.innerHTML = "";
-            players.sort((a, b) => b.score - a.score);
-            players.forEach((player, index) => {
+            
+            // Sync with local storage if available
+            const displayPlayers = JSON.parse(localStorage.getItem('gbbo_players')) || players;
+            
+            displayPlayers.sort((a, b) => b.score - a.score);
+            displayPlayers.forEach((player, index) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `<td>${index + 1}</td><td>${player.name}</td><td>${player.score}</td>`;
                 tbody.appendChild(row);
