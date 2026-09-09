@@ -795,24 +795,30 @@
             updateScheduleEngine();
             fetchGoogleSheetData(); 
             
-            const hasVisited = localStorage.getItem("gbbo_visited");
-            if (!hasVisited) {
-                setTimeout(() => { document.getElementById("gbbo-logo").classList.add("fade-in"); }, 1000);
-                setTimeout(() => { document.getElementById("enter-text").classList.add("fade-in"); }, 3000);
-                document.getElementById("enter-text").addEventListener("click", () => {
-                    document.getElementById("intro-sequence").classList.add("hidden");
-                    localStorage.setItem("gbbo_visited", "true"); 
-                    
-                    const bgAudio = document.getElementById("bg-audio");
-                    bgAudio.volume = 0.5; 
-                    bgAudio.play().catch(e => console.log(e));
-                    
-                    setTimeout(() => { document.querySelectorAll('#tab-bakers .cast-tile').forEach((t, i) => setTimeout(() => t.classList.add('visible'), i * 400)); }, 300); 
-                });
-            } else {
-                document.getElementById("intro-sequence").classList.add("hidden");
-                setTimeout(() => { document.querySelectorAll('#tab-bakers .cast-tile').forEach((t, i) => setTimeout(() => t.classList.add('visible'), i * 400)); }, 300);
-            }
+            // SHOW THE INTRO SEQUENCE EVERY SINGLE VISIT/REFRESH
+            const introSequence = document.getElementById("intro-sequence");
+            const logo = document.getElementById("gbbo-logo");
+            const enterText = document.getElementById("enter-text");
+            const bgAudio = document.getElementById("bg-audio");
+
+            setTimeout(() => { logo.classList.add("fade-in"); }, 1000);
+            setTimeout(() => { enterText.classList.add("fade-in"); }, 3000);
+
+            enterText.addEventListener("click", () => {
+                introSequence.classList.add("hidden");
+                
+                bgAudio.volume = 0.5; 
+                bgAudio.play().catch(e => console.log(e));
+                
+                // TRIGGER STAGGERED TILE FADE-IN ON ENTER
+                setTimeout(() => { 
+                    document.querySelectorAll('#tab-bakers .cast-tile').forEach((t, i) => {
+                        t.classList.remove('visible'); // Reset
+                        setTimeout(() => t.classList.add('visible'), i * 400);
+                    });
+                }, 300); 
+            });
+
             calculateScores(); 
         });
     </script>
