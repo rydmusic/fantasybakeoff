@@ -8,11 +8,16 @@
 </head>
 <body>
 
+    <!-- Cinematic Intro Sequence -->
+    <div id="intro-sequence">
+        <img id="gbbo-logo" src="https://ic.c4assets.com/bips/10683838/08B3E439-97FF-4e5e-998b-cb45c11bf795.png?imformat=chrome" alt="GBBO Logo">
+        <p id="enter-text">Click here to enter</p>
+    </div>
+
     <!-- First Time Visitor Video Overlay -->
     <div id="video-overlay" class="hidden">
         <div class="video-container">
-            <!-- Autoplay might require user interaction depending on browser policies -->
-            <button id="enter-site-btn">Enter Fantasy GBBO</button>
+            <button id="close-video-btn">Go to Site</button>
             <iframe id="intro-video" width="100%" height="100%" 
                 src="https://www.youtube.com/embed/VDiiDOl5CKs?enablejsapi=1" 
                 frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
@@ -37,7 +42,6 @@
                     <label for="technical">Technical Round Winner (3 pts):</label>
                     <select id="technical" required>
                         <option value="">Select a Baker...</option>
-                        <!-- Add your bakers here -->
                         <option value="Baker 1">Baker 1</option>
                         <option value="Baker 2">Baker 2</option>
                         <option value="Baker 3">Baker 3</option>
