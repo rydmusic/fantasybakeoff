@@ -82,7 +82,7 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap; 
-            gap: 15px;
+            gap: 10px;
             padding: 20px;
             background-color: #080C16;
             position: relative;
@@ -93,8 +93,8 @@
             background: transparent;
             color: #ffffff;
             border: 2px solid #ffffff;
-            padding: 10px 20px;
-            font-size: clamp(12px, 3vw, 16px);
+            padding: 10px 15px;
+            font-size: clamp(10px, 2.5vw, 14px);
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -211,6 +211,7 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            position: relative;
         }
 
         .form-container h2 {
@@ -219,6 +220,39 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 10px;
+        }
+
+        /* Form Closed State Styles */
+        #prediction-form {
+            transition: all 0.5s ease;
+        }
+
+        #prediction-form.greyed-out {
+            opacity: 0.3;
+            filter: grayscale(100%);
+            pointer-events: none;
+        }
+
+        #form-closed-msg {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(8, 12, 22, 0.95);
+            border: 2px solid #E2FF26;
+            color: #E2FF26;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 1.5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 10;
+            width: 80%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
         .input-group { display: flex; flex-direction: column; gap: 8px; }
@@ -315,12 +349,36 @@
         .bio-content h3 { color: #E2FF26; text-transform: uppercase; font-size: 28px; margin-top: 0; margin-bottom: 15px; letter-spacing: 2px; }
         .bio-content p { font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 25px; text-align: left; }
 
-        /* --- LEADERBOARD REDESIGN (TAB 3) --- */
-        .leaderboard-section { width: 100%; max-width: 800px; padding: 20px; box-sizing: border-box; }
-        .leaderboard-section h2 { color: #E2FF26; text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; }
-        table { width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; }
+        /* --- TABLES (Tab 3 & 4) --- */
+        .data-section { width: 100%; max-width: 900px; padding: 20px; box-sizing: border-box; position: relative; }
+        .data-section h2 { color: #E2FF26; text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; }
+        
+        .table-container {
+            width: 100%;
+            overflow-x: auto; /* Allows scrolling on small screens */
+        }
+        
+        table { width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; min-width: 500px; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         th { background-color: rgba(53, 43, 255, 0.3); color: #E2FF26; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+
+        /* Blur Effect for Choices Table */
+        .blur-wrapper {
+            transition: filter 1s ease;
+        }
+        .blurred {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.8;
+        }
+        #blur-message {
+            text-align: center;
+            color: #E2FF26;
+            margin-top: 15px;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
 
         /* --- INTRO SEQUENCE --- */
         #intro-sequence { 
@@ -389,6 +447,7 @@
     <nav class="tabs-nav">
         <button class="tab-btn active" data-target="tab-bakers">The Bakers</button>
         <button class="tab-btn" data-target="tab-choices">Make Your Choices</button>
+        <button class="tab-btn" data-target="tab-choices-table">The Choices</button>
         <button class="tab-btn" data-target="tab-league">League Table</button>
     </nav>
 
@@ -398,19 +457,14 @@
         <div id="tab-bakers" class="tab-content active">
             <section class="cast-wrapper">
                 <div class="cast-grid" id="main-cast-grid">
-                    <!-- Top Row -->
                     <div class="cast-tile"><span class="baker-name">Clara</span></div>
                     <div class="cast-tile"><span class="baker-name">Connie</span></div>
                     <div class="cast-tile"><span class="baker-name">Gabe</span></div>
                     <div class="cast-tile"><span class="baker-name">Danni</span></div>
-                    
-                    <!-- Second Row -->
                     <div class="cast-tile"><span class="baker-name">Gary</span></div>
                     <div class="cast-tile"><span class="baker-name">Mo</span></div>
                     <div class="cast-tile"><span class="baker-name">Molly</span></div>
                     <div class="cast-tile"><span class="baker-name">Moyin</span></div>
-                    
-                    <!-- Third Row -->
                     <div class="cast-tile"><span class="baker-name">Nikki</span></div>
                     <div class="cast-tile"><span class="baker-name">Shannon</span></div>
                     <div class="cast-tile"><span class="baker-name">Tom</span></div>
@@ -424,9 +478,11 @@
             <div class="form-container">
                 <h2>Week 1 Predictions</h2>
                 
+                <!-- This message only appears when the form is greyed out -->
+                <div id="form-closed-msg">Choices are now closed. <br><br>Please wait until the end of the show to submit next week's choices!</div>
+                
                 <form id="prediction-form">
                     
-                    <!-- Dynamic Name Selector -->
                     <div class="input-group">
                         <label for="player-select">Your Name</label>
                         <select id="player-select" class="styled-select" required>
@@ -436,7 +492,6 @@
                         </select>
                     </div>
 
-                    <!-- Hidden Input for New Names -->
                     <div class="input-group hidden-field" id="new-player-group">
                         <label for="new-player-name">Enter New Name</label>
                         <input type="text" id="new-player-name" class="text-input" placeholder="e.g., Paul H.">
@@ -472,22 +527,51 @@
             </div>
         </div>
 
-        <!-- TAB 3: League Table -->
+        <!-- TAB 3: The Choices (Blurred Data) -->
+        <div id="tab-choices-table" class="tab-content">
+            <section class="data-section">
+                <h2>The Choices</h2>
+                
+                <div id="choices-blur-wrapper" class="blur-wrapper blurred">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Technical</th>
+                                    <th>Star Baker</th>
+                                    <th>Leaving</th>
+                                    <th>Handshake</th>
+                                </tr>
+                            </thead>
+                            <tbody id="choices-table-body">
+                                <!-- Populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <p id="blur-message">Choices are hidden to prevent copying until the countdown ends!</p>
+            </section>
+        </div>
+
+        <!-- TAB 4: League Table -->
         <div id="tab-league" class="tab-content">
-            <section class="leaderboard-section">
+            <section class="data-section">
                 <h2>League Table</h2>
-                <table id="league-table">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Player</th>
-                            <th>Points</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body">
-                        <!-- Populated by JavaScript -->
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table id="league-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </section>
         </div>
     </main>
@@ -509,13 +593,8 @@
             "Yannis": `<strong>28 | London | Paediatric Doctor</strong><br><br>Yannis is challenging the stigma that Bangladeshi men don’t belong in the kitchen, one pastry at a time! Working in a busy NICU, he loves how a cake can bring joy to the ward and has won over the nurses with his bakes. Born in Vienna before moving to London aged 11, Yannis’ baking has been influenced by many food cultures. His first baking memory is making Bhapa Pitha with his grandmother, while his school days introduced him to classic Austrian treats. Watching Bake Off also helped Yannis learn English, making the show especially close to his heart. Outside the kitchen, he is also a Bhangra dancer, and his wedding shimmy has become legendary! For Yannis, baking and medicine have a lot in common: both are about caring for people.`
         };
 
-        // --- Mock Data (Also feeds the Dropdown!) ---
-        let players = [
-            { name: "Alice", score: 12 },
-            { name: "Bob", score: 8 },
-            { name: "Charlie", score: 18 },
-            { name: "Dan", score: 5 }
-        ];
+        // Initialize players array (Starting EMPTY as requested)
+        let players = JSON.parse(localStorage.getItem('gbbo_players')) || [];
 
         // --- Player Name Dropdown Logic ---
         const playerSelect = document.getElementById('player-select');
@@ -523,17 +602,13 @@
         const newPlayerInput = document.getElementById('new-player-name');
 
         function loadPlayersToDropdown() {
-            const savedPlayers = JSON.parse(localStorage.getItem('gbbo_players')) || players;
-            
             playerSelect.innerHTML = '<option value="" disabled selected>Select your name...</option>';
-            
-            savedPlayers.forEach(player => {
+            players.forEach(player => {
                 const option = document.createElement('option');
                 option.value = player.name;
                 option.textContent = player.name;
                 playerSelect.appendChild(option);
             });
-            
             const addNewOption = document.createElement('option');
             addNewOption.value = 'ADD_NEW';
             addNewOption.textContent = '+ Add a new name...';
@@ -552,26 +627,38 @@
 
         loadPlayersToDropdown();
 
-        // --- Countdown Timer Logic ---
+        // --- Countdown Timer & "Form Closed" Logic ---
         const targetDate = new Date("Sep 22, 2026 20:00:00 GMT+0100").getTime();
+        
         const countdownInterval = setInterval(() => {
             const now = new Date().getTime();
             const distance = targetDate - now;
+            
             if (distance < 0) {
+                // Countdown reached 0
                 clearInterval(countdownInterval);
                 document.getElementById("countdown-display").innerHTML = "<div class='started-msg'>Bake Off Has Started!</div>";
+                
+                // Unblur Tab 3 (The Choices)
+                document.getElementById('choices-blur-wrapper').classList.remove('blurred');
+                document.getElementById('blur-message').style.display = 'none';
+                
+                // Grey out Tab 2 (The Form)
+                document.getElementById('prediction-form').classList.add('greyed-out');
+                document.getElementById('form-closed-msg').style.display = 'block';
                 return;
             }
+            
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
             document.getElementById("days").innerText = days < 10 ? "0" + days : days;
             document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
             document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
             document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
         }, 1000);
-
 
         // --- Setup Modal Grid by cloning Main Grid ---
         const mainGrid = document.getElementById('main-cast-grid');
@@ -617,6 +704,9 @@
 
         document.querySelectorAll('.select-baker-btn').forEach(btn => {
             btn.addEventListener('click', () => {
+                // Prevent opening if form is greyed out
+                if (document.getElementById('prediction-form').classList.contains('greyed-out')) return;
+                
                 activeInputId = btn.getAttribute('data-target-input');
                 activeBtn = btn;
                 formModalTitle.innerText = `Select ${btn.getAttribute('data-label')}`;
@@ -645,11 +735,13 @@
             formBakerModal.classList.remove('active');
         });
 
-        // --- Form Submission with Google Sheets Integration ---
+        // --- Form Submission with Local Storage & Google Sheets Sync ---
         document.getElementById('prediction-form').addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // --- YOUR WEB APP URL ---
+            // Safety check in case they try to submit via keyboard after deadline
+            if (document.getElementById('prediction-form').classList.contains('greyed-out')) return;
+
             const scriptURL = 'https://script.google.com/macros/s/AKfycbzm9kZ19JFh7NbBAZp0v2GxTGySldBfJ2y7axjyidmU4UZLsfqe7tvd4LxSmGte0GkS/exec';
             
             const tech = document.getElementById('technical').value;
@@ -662,28 +754,37 @@
                 return;
             }
 
-            // Determine final player name
             let finalName = playerSelect.value;
             if (finalName === 'ADD_NEW') {
                 finalName = newPlayerInput.value.trim();
-                
-                // Add new player to local storage
-                let savedPlayers = JSON.parse(localStorage.getItem('gbbo_players')) || players;
-                savedPlayers.push({ name: finalName, score: 0 }); 
-                localStorage.setItem('gbbo_players', JSON.stringify(savedPlayers));
-                
-                players = savedPlayers;
-                loadPlayersToDropdown();
-                renderLeaderboard();
             }
 
-            // Change button text to show it's loading
+            // Save data locally so we can render the tables instantly
+            let playerIndex = players.findIndex(p => p.name === finalName);
+            if (playerIndex >= 0) {
+                // Update existing player's choices
+                players[playerIndex].technical = tech;
+                players[playerIndex].starBaker = star;
+                players[playerIndex].leaving = leave;
+                players[playerIndex].handshake = handshake;
+            } else {
+                // Add new player
+                players.push({ 
+                    name: finalName, score: 0, 
+                    technical: tech, starBaker: star, 
+                    leaving: leave, handshake: handshake 
+                });
+            }
+            
+            localStorage.setItem('gbbo_players', JSON.stringify(players));
+            loadPlayersToDropdown();
+            renderTables();
+
             const submitBtn = document.querySelector('.submit-btn');
             const originalBtnText = submitBtn.innerText;
             submitBtn.innerText = "Saving to League...";
             submitBtn.disabled = true;
 
-            // Package the data
             const payload = {
                 playerName: finalName,
                 technical: tech,
@@ -692,7 +793,6 @@
                 handshake: handshake
             };
 
-            // Send data to Google Sheets
             fetch(scriptURL, {
                 method: 'POST',
                 body: JSON.stringify(payload),
@@ -702,7 +802,6 @@
             .then(data => {
                 alert(`Success! Predictions saved for ${finalName}. Check the Google Sheet!`);
                 
-                // Reset Form UI
                 e.target.reset();
                 newPlayerGroup.classList.add('hidden-field');
                 document.querySelectorAll('.select-baker-btn').forEach(btn => {
@@ -721,6 +820,47 @@
                 submitBtn.disabled = false;
             });
         });
+
+        // --- Render Both Tab 3 (Choices) and Tab 4 (League) ---
+        function renderTables() {
+            const choicesBody = document.getElementById("choices-table-body");
+            const leagueBody = document.getElementById("leaderboard-body");
+            
+            choicesBody.innerHTML = "";
+            leagueBody.innerHTML = "";
+            
+            // Tab 3: The Choices Table
+            players.forEach((player) => {
+                // Only show players who have made predictions
+                if(player.technical) {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td><strong>${player.name}</strong></td>
+                        <td>${player.technical || "-"}</td>
+                        <td>${player.starBaker || "-"}</td>
+                        <td>${player.leaving || "-"}</td>
+                        <td>${player.handshake || "None"}</td>
+                    `;
+                    choicesBody.appendChild(row);
+                }
+            });
+
+            // Tab 4: League Table
+            let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+            sortedPlayers.forEach((player, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${index + 1}</td><td>${player.name}</td><td>${player.score}</td>`;
+                leagueBody.appendChild(row);
+            });
+            
+            // Show empty states if no data exists yet
+            if(choicesBody.innerHTML === "") {
+                choicesBody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No predictions submitted yet!</td></tr>";
+            }
+            if(leagueBody.innerHTML === "") {
+                leagueBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No players have joined yet!</td></tr>";
+            }
+        }
 
         // --- Grid Animation Logic ---
         function animateGrid() {
@@ -755,25 +895,11 @@
                 introSequence.classList.add("hidden");
                 setTimeout(animateGrid, 300);
             }
-            renderLeaderboard();
+            
+            // Populate initial tables
+            renderTables();
         });
 
-
-        // --- Leaderboard Rendering ---
-        function renderLeaderboard() {
-            const tbody = document.getElementById("leaderboard-body");
-            tbody.innerHTML = "";
-            
-            // Sync with local storage if available
-            const displayPlayers = JSON.parse(localStorage.getItem('gbbo_players')) || players;
-            
-            displayPlayers.sort((a, b) => b.score - a.score);
-            displayPlayers.forEach((player, index) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `<td>${index + 1}</td><td>${player.name}</td><td>${player.score}</td>`;
-                tbody.appendChild(row);
-            });
-        }
     </script>
 </body>
 </html>
