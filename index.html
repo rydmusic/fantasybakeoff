@@ -122,7 +122,13 @@
 </head>
 <body>
 
-    <audio id="bg-audio" src="https://drive.google.com/uc?export=download&id=14u1AOjrbx_KfuPw8U2Wck7BBg-GZv9e_"></audio>
+    <!-- 
+      AUDIO SETUP INSTRUCTIONS:
+      Download the audio file from Google Drive and place it in the same folder as this HTML file.
+      Name the audio file exactly "theme.mp3". 
+      This guarantees playback works across all modern browsers.
+    -->
+    <audio id="bg-audio" src="theme.mp3" loop></audio>
 
     <div id="intro-sequence">
         <img id="gbbo-logo" src="https://ic.c4assets.com/bips/10683838/08B3E439-97FF-4e5e-998b-cb45c11bf795.png?imformat=chrome" alt="GBBO Logo">
@@ -375,12 +381,12 @@
         let players = JSON.parse(localStorage.getItem('gbbo_players')) || [];
         let adminResults = JSON.parse(localStorage.getItem('gbbo_results')) || {};
 
-        // --- 10 WEEK SCHEDULE ENGINE (Real Time) ---
+        // --- 10 WEEK SCHEDULE ENGINE ---
         const schedule = [];
         const START_DATE = new Date("Sep 22, 2026 20:00:00 GMT+0100"); 
         for(let i=0; i<10; i++) {
             let lock = new Date(START_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000));
-            let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000)); // Adds 1.5 hours
+            let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000));
             schedule.push({ week: i+1, lockTime: lock.getTime(), unlockTime: unlock.getTime() });
         }
 
@@ -452,8 +458,8 @@
         // --- ELIMINATION LOGIC ---
         function getEliminatedBakers() {
             const eliminated = [];
-            // Calculate eliminations based ONLY on weeks that have happened before the current week
-            for (let w = 1; w < currentAppState.week; w++) {
+            // If the admin has logged them as leaving at any point, they are eliminated globally
+            for (let w = 1; w <= 10; w++) {
                 if (adminResults[w] && adminResults[w].leaving && adminResults[w].leaving !== "None") {
                     eliminated.push(adminResults[w].leaving);
                 }
@@ -656,11 +662,21 @@
             hand.innerHTML = '<option value="None">None</option>';
             starCont.innerHTML = '';
 
+            // Calculate who was eliminated PRIOR to this week so they don't show up in the dropdowns
+            const eliminatedPrior = [];
+            for (let w = 1; w < weekNum; w++) {
+                if (adminResults[w] && adminResults[w].leaving && adminResults[w].leaving !== "None") {
+                    eliminatedPrior.push(adminResults[w].leaving);
+                }
+            }
+
             ALL_BAKERS.forEach(baker => {
-                tech.innerHTML += `<option value="${baker}">${baker}</option>`;
-                leaving.innerHTML += `<option value="${baker}">${baker}</option>`;
-                hand.innerHTML += `<option value="${baker}">${baker}</option>`;
-                starCont.innerHTML += `<label class="multi-check"><input type="checkbox" name="starbakers" value="${baker}"> ${baker}</label>`;
+                if(!eliminatedPrior.includes(baker)) {
+                    tech.innerHTML += `<option value="${baker}">${baker}</option>`;
+                    leaving.innerHTML += `<option value="${baker}">${baker}</option>`;
+                    hand.innerHTML += `<option value="${baker}">${baker}</option>`;
+                    starCont.innerHTML += `<label class="multi-check"><input type="checkbox" name="starbakers" value="${baker}"> ${baker}</label>`;
+                }
             });
 
             // Pre-fill if results already exist for this week
@@ -713,7 +729,7 @@
             });
             localStorage.setItem('gbbo_players', JSON.stringify(players));
             renderTables();
-            renderEliminatedBakers(); // Update crossed-out faces
+            renderEliminatedBakers(); // Instantly update crossed-out faces across the app
         }
 
         // --- RENDER TABLES ---
@@ -759,8 +775,11 @@
                 document.getElementById("enter-text").addEventListener("click", () => {
                     document.getElementById("intro-sequence").classList.add("hidden");
                     localStorage.setItem("gbbo_visited", "true"); 
-                    document.getElementById("bg-audio").volume = 0.5; 
-                    document.getElementById("bg-audio").play().catch(e => console.log(e));
+                    
+                    const bgAudio = document.getElementById("bg-audio");
+                    bgAudio.volume = 0.5; 
+                    bgAudio.play().catch(e => console.log(e));
+                    
                     setTimeout(() => { document.querySelectorAll('#tab-bakers .cast-tile').forEach((t, i) => setTimeout(() => t.classList.add('visible'), i * 400)); }, 300); 
                 });
             } else {
