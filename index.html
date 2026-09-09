@@ -6,92 +6,175 @@
     <title>Fantasy GBBO League</title>
     
     <style>
+        /* --- GLOBAL THEME BASE (Referencing image_d13361.png) --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fdf5e6;
-            color: #333;
+            background-color: #080C16; /* Dark navy background */
+            color: #ffffff;
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
         .app-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            background-color: #e2a1c9;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            color: white;
-        }
-
-        form {
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            align-items: center;
         }
 
-        label {
-            margin-top: 10px;
-            font-weight: bold;
+        /* --- THE CIRCULAR FORM DESIGN --- */
+        .form-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            margin-bottom: 60px;
         }
 
-        select, input, button {
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 16px;
+        /* Curved neon text overlay */
+        .neon-heading {
+            position: absolute;
+            top: -40px;
+            right: 15%;
+            width: 400px;
+            height: 400px;
+            pointer-events: none;
+            z-index: 10;
         }
 
-        button[type="submit"] {
-            margin-top: 20px;
-            background-color: #7badd3;
-            color: white;
+        .circle-form {
+            background-color: #352BFF; /* Bright blue circle */
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .circle-form form {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Minimalist inputs */
+        .circle-form label {
+            font-size: 11px;
+            color: #ffffff;
+            margin-top: 15px;
+            margin-bottom: 2px;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+        }
+
+        .circle-form input, 
+        .circle-form select {
+            background: transparent;
             border: none;
+            border-bottom: 1.5px solid #ffffff;
+            color: #ffffff;
+            font-size: 14px;
+            padding: 5px 0;
+            outline: none;
+            appearance: none; /* Removes default dropdown arrow for cleaner look */
             cursor: pointer;
-            font-weight: bold;
+        }
+        
+        .circle-form input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
-        button[type="submit"]:hover {
-            background-color: #5a94bf;
+        .circle-form select option {
+            background-color: #352BFF; /* Keeps dropdown legible */
+            color: white;
+        }
+
+        /* Styled submit button matching the image offset outline */
+        .circle-form button {
+            margin-top: 30px;
+            background-color: transparent;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            border-radius: 25px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        /* Creates the offset border effect seen in the image */
+        .circle-form button::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            right: -6px;
+            bottom: -4px;
+            border: 2px solid #ffffff;
+            border-radius: 25px;
+            pointer-events: none;
+        }
+
+        .circle-form button:hover {
+            background-color: #ffffff;
+            color: #352BFF;
+        }
+
+        /* --- LEADERBOARD REDESIGN (To fit the dark theme) --- */
+        .leaderboard-section {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .leaderboard-section h2 {
+            color: #E2FF26; /* Neon yellow-green accent */
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         th, td {
-            padding: 12px;
+            padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         th {
-            background-color: #a3d9a5;
-            color: white;
+            background-color: rgba(53, 43, 255, 0.3);
+            color: #E2FF26;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
         }
 
-        /* --- NEW INTRO SEQUENCE STYLES --- */
+        /* --- INTRO SEQUENCE & VIDEO OVERLAY --- */
         #intro-sequence {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: black;
-            z-index: 10001; /* Must be above the video overlay */
+            background-color: #000000;
+            z-index: 10001; 
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -103,31 +186,29 @@
             max-width: 80%;
             max-height: 50vh;
             opacity: 0; 
-            transition: opacity 1.5s ease-in-out; /* Smooth fade effect */
+            transition: opacity 1.5s ease-in-out; 
         }
 
         #enter-text {
-            color: white;
+            color: #ffffff;
             font-size: 24px;
             margin-top: 40px;
             cursor: pointer;
             opacity: 0;
-            transition: opacity 1.5s ease-in-out; /* Smooth fade effect */
+            transition: opacity 1.5s ease-in-out; 
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: bold;
         }
 
         #enter-text:hover {
-            color: #e2a1c9;
+            color: #E2FF26;
         }
 
-        /* Class added via JavaScript to trigger the fade */
         .fade-in {
             opacity: 1 !important;
         }
 
-        /* Video Overlay Styles */
         #video-overlay {
             position: fixed;
             top: 0;
@@ -136,10 +217,6 @@
             height: 100vh;
             background: black;
             z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
         .hidden {
@@ -152,24 +229,54 @@
             position: relative;
         }
 
-        #close-video-btn {
+        /* The black screen that fades in over the video after 20s */
+        #black-fade-screen {
             position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.8);
-            color: black;
-            padding: 15px 30px;
-            font-size: 20px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
             z-index: 10000;
-            border: none;
+            opacity: 0;
+            pointer-events: none; /* Lets you click the video before it fades */
+            transition: opacity 2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #black-fade-screen.active {
+            opacity: 1;
+            pointer-events: auto; /* Re-enables clicking for the button */
+        }
+
+        #close-video-btn {
+            background: transparent;
+            color: #E2FF26;
+            border: 2px solid #E2FF26;
+            padding: 15px 40px;
+            font-size: 20px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 30px;
             font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
         }
 
         #close-video-btn:hover {
-            background: white;
+            background: #E2FF26;
+            color: black;
+        }
+        
+        /* White abstract icon decoration from image */
+        .abstract-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 100px;
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -181,65 +288,82 @@
         <p id="enter-text">Click here to enter</p>
     </div>
 
-    <!-- First Time Visitor Video Overlay -->
+    <!-- Video Overlay -->
     <div id="video-overlay" class="hidden">
         <div class="video-container">
-            <button id="close-video-btn">Go to Site</button>
+            <!-- 20-second Fade to Black Screen with Button -->
+            <div id="black-fade-screen">
+                <button id="close-video-btn">Continue to Site</button>
+            </div>
+            
             <iframe id="intro-video" width="100%" height="100%" 
-                src="https://www.youtube.com/embed/VDiiDOl5CKs?enablejsapi=1" 
+                src="https://drive.google.com/file/d/1Fb9ChUeBb8GPhjhE5Ij0XYGeQkLysrxI/preview" 
                 frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
             </iframe>
         </div>
     </div>
 
+    <!-- Main App Container -->
     <div class="app-container">
-        <header>
-            <h1>🧁 Fantasy Great British Bake Off 🧁</h1>
-            <p>Make your weekly predictions and climb the leaderboard!</p>
-        </header>
+        
+        <!-- Abstract Icon decoration in top left matching image_d13361.png -->
+        <svg class="abstract-icon" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4">
+            <path d="M 40 10 Q 10 10 10 40 Q 10 70 40 70 Q 70 70 70 40 Q 70 10 40 10 Z" />
+            <path d="M 60 30 Q 30 30 30 60 Q 30 90 60 90 Q 90 90 90 60 Q 90 30 60 30 Z" />
+        </svg>
 
         <main>
-            <!-- Prediction Form -->
-            <section class="prediction-section">
-                <h2>Week <span id="current-week">1</span> Predictions</h2>
-                <form id="prediction-form">
-                    <label for="player-name">Your Name:</label>
-                    <input type="text" id="player-name" required placeholder="e.g., Paul H.">
+            <!-- Circular Prediction Form -->
+            <section class="form-wrapper">
+                
+                <!-- Curved Text SVG matching the neon font from the image -->
+                <svg class="neon-heading" viewBox="0 0 400 400">
+                    <path id="curve" fill="transparent" d="M 70 200 A 130 130 0 0 1 330 140" />
+                    <text font-family="'Segoe UI', sans-serif" font-size="42" fill="#E2FF26" font-weight="bold" letter-spacing="3">
+                        <textPath href="#curve" startOffset="10%">Let's predict!</textPath>
+                    </text>
+                </svg>
 
-                    <label for="technical">Technical Round Winner (3 pts):</label>
-                    <select id="technical" required>
-                        <option value="">Select a Baker...</option>
-                        <option value="Baker 1">Baker 1</option>
-                        <option value="Baker 2">Baker 2</option>
-                        <option value="Baker 3">Baker 3</option>
-                    </select>
+                <div class="circle-form">
+                    <form id="prediction-form">
+                        <label for="player-name">անուն (Name)</label>
+                        <input type="text" id="player-name" required>
 
-                    <label for="star-baker">Star Baker (5 pts):</label>
-                    <select id="star-baker" required>
-                        <option value="">Select a Baker...</option>
-                        <option value="Baker 1">Baker 1</option>
-                        <option value="Baker 2">Baker 2</option>
-                        <option value="Baker 3">Baker 3</option>
-                    </select>
+                        <label for="technical">Technical Winner (3 pts)</label>
+                        <select id="technical" required>
+                            <option value="" disabled selected></option>
+                            <option value="Baker 1">Baker 1</option>
+                            <option value="Baker 2">Baker 2</option>
+                            <option value="Baker 3">Baker 3</option>
+                        </select>
 
-                    <label for="leaving">Who is leaving? (2 pts):</label>
-                    <select id="leaving" required>
-                        <option value="">Select a Baker...</option>
-                        <option value="Baker 1">Baker 1</option>
-                        <option value="Baker 2">Baker 2</option>
-                        <option value="Baker 3">Baker 3</option>
-                    </select>
+                        <label for="star-baker">Star Baker (5 pts)</label>
+                        <select id="star-baker" required>
+                            <option value="" disabled selected></option>
+                            <option value="Baker 1">Baker 1</option>
+                            <option value="Baker 2">Baker 2</option>
+                            <option value="Baker 3">Baker 3</option>
+                        </select>
 
-                    <label for="handshake">Hollywood Handshake? (10 pts):</label>
-                    <select id="handshake">
-                        <option value="None">None</option>
-                        <option value="Baker 1">Baker 1</option>
-                        <option value="Baker 2">Baker 2</option>
-                        <option value="Baker 3">Baker 3</option>
-                    </select>
+                        <label for="leaving">Who is leaving? (2 pts)</label>
+                        <select id="leaving" required>
+                            <option value="" disabled selected></option>
+                            <option value="Baker 1">Baker 1</option>
+                            <option value="Baker 2">Baker 2</option>
+                            <option value="Baker 3">Baker 3</option>
+                        </select>
 
-                    <button type="submit">Submit Predictions</button>
-                </form>
+                        <label for="handshake">Hollywood Handshake? (10 pts)</label>
+                        <select id="handshake">
+                            <option value="None" selected>None</option>
+                            <option value="Baker 1">Baker 1</option>
+                            <option value="Baker 2">Baker 2</option>
+                            <option value="Baker 3">Baker 3</option>
+                        </select>
+
+                        <button type="submit">ուղարկել (Submit)</button>
+                    </form>
+                </div>
             </section>
 
             <!-- League Table -->
@@ -262,7 +386,7 @@
     </div>
 
     <script>
-        // --- First Time Visitor Logic & Cinematic Intro ---
+        // --- Intro Sequence & Video Timing Logic ---
         document.addEventListener("DOMContentLoaded", () => {
             const hasVisited = localStorage.getItem("gbbo_visited");
             
@@ -271,38 +395,47 @@
             const enterText = document.getElementById("enter-text");
             
             const videoOverlay = document.getElementById("video-overlay");
+            const blackFadeScreen = document.getElementById("black-fade-screen");
             const closeVideoBtn = document.getElementById("close-video-btn");
             const iframe = document.getElementById("intro-video");
 
             if (!hasVisited) {
-                // 1. Wait 3 seconds, then fade in the logo
+                // 1. Wait 1 second, then fade in the logo
                 setTimeout(() => {
                     logo.classList.add("fade-in");
-                }, 3000);
+                }, 1000);
 
-                // 2. Wait an additional 2 seconds (5 seconds total), then fade in text
+                // 2. Wait an additional 2 seconds (3 seconds total), fade in "Click to enter"
                 setTimeout(() => {
                     enterText.classList.add("fade-in");
-                }, 5000);
+                }, 3000);
 
-                // 3. User clicks text -> Hide Intro, Show Video, Autoplay Video
+                // 3. User clicks text -> Show Video, Start 20s Timer
                 enterText.addEventListener("click", () => {
                     introSequence.classList.add("hidden");
                     videoOverlay.classList.remove("hidden");
                     
-                    // Appending autoplay to the src string forces it to play
-                    iframe.src += "&autoplay=1"; 
+                    // Force autoplay via URL param if not present
+                    const currentSrc = iframe.src;
+                    if (!currentSrc.includes("autoplay=1")) {
+                        iframe.src = currentSrc + "?autoplay=1";
+                    }
+
+                    // 4. Exactly 20 seconds later, fade to black and show button
+                    setTimeout(() => {
+                        blackFadeScreen.classList.add("active");
+                    }, 20000); // 20,000 milliseconds = 20 seconds
                 });
 
-                // 4. User closes video to access the site
+                // 5. User clicks "Continue to Site" -> Enter actual website
                 closeVideoBtn.addEventListener("click", () => {
                     videoOverlay.classList.add("hidden");
-                    localStorage.setItem("gbbo_visited", "true"); // Mark site as visited
-                    iframe.src = ""; // Clear iframe source to stop audio playing in background
+                    localStorage.setItem("gbbo_visited", "true"); 
+                    iframe.src = ""; // Kill video background process
                 });
 
             } else {
-                // If they have visited before, skip the intro and video completely
+                // Skips intro completely on return visits
                 introSequence.classList.add("hidden");
                 videoOverlay.classList.add("hidden");
             }
@@ -310,7 +443,7 @@
             renderLeaderboard();
         });
 
-        // --- Points System Configuration ---
+        // --- Mock Data & Points Config ---
         const POINTS = {
             technical: 3,
             starBaker: 5,
@@ -318,7 +451,6 @@
             handshake: 10
         };
 
-        // Mock data for the league table
         let players = [
             { name: "Alice", score: 12 },
             { name: "Bob", score: 8 },
@@ -333,23 +465,15 @@
 
             const playerName = document.getElementById("player-name").value;
             
-            const predictions = {
-                technical: document.getElementById("technical").value,
-                starBaker: document.getElementById("star-baker").value,
-                leaving: document.getElementById("leaving").value,
-                handshake: document.getElementById("handshake").value
-            };
-
             alert(`Predictions saved for ${playerName}!`);
             form.reset();
         });
 
-        // --- Leaderboard Logic ---
+        // --- Leaderboard Rendering ---
         function renderLeaderboard() {
             const tbody = document.getElementById("leaderboard-body");
             tbody.innerHTML = "";
 
-            // Sort players by highest score
             players.sort((a, b) => b.score - a.score);
 
             players.forEach((player, index) => {
