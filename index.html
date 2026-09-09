@@ -116,18 +116,10 @@
         #enter-text:hover { color: #E2FF26; }
         .fade-in { opacity: 1 !important; }
         .hidden { display: none !important; }
-        
-        .abstract-icon { position: absolute; top: 20px; left: 20px; width: 100px; opacity: 0.8; z-index: 100; }
     </style>
 </head>
 <body>
 
-    <!-- 
-      AUDIO SETUP INSTRUCTIONS:
-      Download the audio file from Google Drive and place it in the same folder as this HTML file.
-      Name the audio file exactly "theme.mp3". 
-      This guarantees playback works across all modern browsers.
-    -->
     <audio id="bg-audio" src="theme.mp3" loop></audio>
 
     <div id="intro-sequence">
@@ -154,11 +146,6 @@
             <button class="modal-btn" id="close-bio-btn">Close</button>
         </div>
     </div>
-
-    <svg class="abstract-icon" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4">
-        <path d="M 40 10 Q 10 10 10 40 Q 10 70 40 70 Q 70 70 70 40 Q 70 10 40 10 Z" />
-        <path d="M 60 30 Q 30 30 30 60 Q 30 90 60 90 Q 90 90 90 60 Q 90 30 60 30 Z" />
-    </svg>
 
     <div class="countdown-wrapper">
         <h3 id="timer-header">Loading Schedule...</h3>
@@ -381,12 +368,12 @@
         let players = JSON.parse(localStorage.getItem('gbbo_players')) || [];
         let adminResults = JSON.parse(localStorage.getItem('gbbo_results')) || {};
 
-        // --- 10 WEEK SCHEDULE ENGINE ---
+        // --- 10 WEEK SCHEDULE ENGINE (Real Time) ---
         const schedule = [];
         const START_DATE = new Date("Sep 22, 2026 20:00:00 GMT+0100"); 
         for(let i=0; i<10; i++) {
             let lock = new Date(START_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000));
-            let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000));
+            let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000)); // Adds 1.5 hours
             schedule.push({ week: i+1, lockTime: lock.getTime(), unlockTime: unlock.getTime() });
         }
 
@@ -458,7 +445,6 @@
         // --- ELIMINATION LOGIC ---
         function getEliminatedBakers() {
             const eliminated = [];
-            // If the admin has logged them as leaving at any point, they are eliminated globally
             for (let w = 1; w <= 10; w++) {
                 if (adminResults[w] && adminResults[w].leaving && adminResults[w].leaving !== "None") {
                     eliminated.push(adminResults[w].leaving);
@@ -729,7 +715,7 @@
             });
             localStorage.setItem('gbbo_players', JSON.stringify(players));
             renderTables();
-            renderEliminatedBakers(); // Instantly update crossed-out faces across the app
+            renderEliminatedBakers(); 
         }
 
         // --- RENDER TABLES ---
