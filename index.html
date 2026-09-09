@@ -7,155 +7,30 @@
     
     <style>
         /* --- GLOBAL THEME BASE --- */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #080C16; 
-            color: #ffffff;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #080C16; color: #ffffff; margin: 0; padding: 0; overflow-x: hidden; }
 
         /* --- COUNTDOWN TIMER --- */
-        .countdown-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 30px 20px 10px;
-            text-align: center;
-            position: relative;
-            z-index: 100;
-        }
-
-        .countdown-wrapper h3 {
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 14px;
-            margin-bottom: 15px;
-            margin-top: 0;
-        }
-
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .time-box {
-            display: flex;
-            flex-direction: column;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 60px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .time-box span {
-            color: #E2FF26;
-            font-size: clamp(20px, 5vw, 32px);
-            font-weight: bold;
-        }
-
-        .time-box small {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 10px;
-            text-transform: uppercase;
-            margin-top: 5px;
-            letter-spacing: 1px;
-        }
-
-        .started-msg {
-            color: #E2FF26;
-            font-size: 24px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            padding: 20px;
-        }
+        .countdown-wrapper { display: flex; flex-direction: column; align-items: center; padding: 30px 20px 10px; text-align: center; position: relative; z-index: 100; }
+        .countdown-wrapper h3 { color: #ffffff; text-transform: uppercase; letter-spacing: 2px; font-size: 14px; margin-bottom: 15px; margin-top: 0; }
+        .countdown { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .time-box { display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; min-width: 60px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .time-box span { color: #E2FF26; font-size: clamp(20px, 5vw, 32px); font-weight: bold; }
+        .time-box small { color: rgba(255, 255, 255, 0.7); font-size: 10px; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; }
 
         /* --- TAB NAVIGATION --- */
-        .tabs-nav {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap; 
-            gap: 10px;
-            padding: 20px;
-            background-color: #080C16;
-            position: relative;
-            z-index: 100;
-        }
-
-        .tab-btn {
-            background: transparent;
-            color: #ffffff;
-            border: 2px solid #ffffff;
-            padding: 10px 15px;
-            font-size: clamp(10px, 2.5vw, 14px);
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
+        .tabs-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 20px; background-color: #080C16; position: relative; z-index: 100; }
+        .tab-btn { background: transparent; color: #ffffff; border: 2px solid #ffffff; padding: 10px 15px; font-size: clamp(10px, 2.5vw, 14px); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
         .tab-btn:hover { background: rgba(255, 255, 255, 0.1); }
         .tab-btn.active { color: #080C16; background: #E2FF26; border-color: #E2FF26; }
-
-        .tab-content {
-            display: none;
-            width: 100%;
-            flex-direction: column;
-            align-items: center;
-            animation: fadeInTab 0.5s ease;
-            padding-bottom: 50px;
-        }
-
+        .tab-content { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeInTab 0.5s ease; padding-bottom: 50px; }
         .tab-content.active { display: flex; }
-
-        @keyframes fadeInTab {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeInTab { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- THE BAKER GRID DESIGN --- */
-        .cast-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 1000px;
-            display: flex;
-            justify-content: center;
-            padding: 0 10px;
-            box-sizing: border-box;
-        }
-
-        .cast-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            width: 100%;
-            aspect-ratio: 1200 / 795; 
-            background-color: #080C16;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .cast-tile {
-            position: relative;
-            background-image: url('https://www.scotsman.com/jpim-static/image/2026/09/08/7/06/Great-British-Bake-Off-Cast-Series-17-2026-Channel-4-Love-Productions-Patch-Dolan.jpeg?trim=0,0,0,0&crop=&width=1200&auto=webp&quality=75');
-            background-size: 400% 300%;
-            opacity: 0;
-            transition: opacity 2.5s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
+        .cast-wrapper { position: relative; width: 100%; max-width: 1000px; display: flex; flex-direction: column; align-items: center; padding: 0 10px; box-sizing: border-box; }
+        .cast-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); width: 100%; aspect-ratio: 1200 / 795; background-color: #080C16; border: 2px solid rgba(255, 255, 255, 0.1); }
+        .cast-tile { position: relative; background-image: url('https://www.scotsman.com/jpim-static/image/2026/09/08/7/06/Great-British-Bake-Off-Cast-Series-17-2026-Channel-4-Love-Productions-Patch-Dolan.jpeg?trim=0,0,0,0&crop=&width=1200&auto=webp&quality=75'); background-size: 400% 300%; opacity: 0; transition: opacity 2.5s ease; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; }
+        
         .cast-tile:nth-child(1) { background-position: 0% 0%; }
         .cast-tile:nth-child(2) { background-position: 33.333% 0%; }
         .cast-tile:nth-child(3) { background-position: 66.666% 0%; }
@@ -168,255 +43,103 @@
         .cast-tile:nth-child(10) { background-position: 33.333% 100%; }
         .cast-tile:nth-child(11) { background-position: 66.666% 100%; }
         .cast-tile:nth-child(12) { background-position: 100% 100%; }
-
         .cast-tile.visible { opacity: 1; }
 
-        #tab-bakers .cast-tile::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(8, 12, 22, 0.7); 
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-        }
-
+        #tab-bakers .cast-tile::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(8, 12, 22, 0.7); opacity: 0; transition: opacity 0.3s ease; z-index: 1; }
         #tab-bakers .cast-tile:hover::before { opacity: 1; }
-        #tab-bakers .cast-tile:hover .baker-name {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        #tab-bakers .cast-tile:hover .baker-name { opacity: 1; transform: translateY(0); }
 
-        .baker-name {
-            position: relative;
-            z-index: 2;
-            color: #E2FF26; 
-            font-size: clamp(10px, 2.5vw, 24px); 
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0;
-            transform: translateY(15px); 
-            transition: all 0.3s ease;
-            pointer-events: none;
-            text-align: center;
-        }
+        .baker-name { position: relative; z-index: 2; color: #E2FF26; font-size: clamp(10px, 2.5vw, 24px); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; opacity: 0; transform: translateY(15px); transition: all 0.3s ease; pointer-events: none; text-align: center; }
+
+        /* --- ADMIN RESULTS PANEL --- */
+        #admin-results-panel { display: none; width: 100%; background: rgba(53, 43, 255, 0.2); border: 2px solid #352BFF; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        #admin-results-panel.active { display: block; }
+        .admin-btn { background: #E2FF26; color: #080C16; border: none; padding: 10px 20px; font-weight: bold; text-transform: uppercase; border-radius: 5px; cursor: pointer; letter-spacing: 1px; }
+        .admin-btn:hover { background: #ffffff; }
+
+        .multi-select-container { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 5px; }
+        .multi-check { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 5px; font-size: 14px; }
 
         /* --- PREDICTION FORM (TAB 2) --- */
-        .form-container {
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            position: relative;
-        }
-
-        .form-container h2 {
-            text-align: center;
-            color: #E2FF26;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        /* Form Closed State Styles */
-        #prediction-form {
-            transition: all 0.5s ease;
-        }
-
-        #prediction-form.greyed-out {
-            opacity: 0.3;
-            filter: grayscale(100%);
-            pointer-events: none;
-        }
-
-        #form-closed-msg {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(8, 12, 22, 0.95);
-            border: 2px solid #E2FF26;
-            color: #E2FF26;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            line-height: 1.5;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            z-index: 10;
-            width: 80%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
+        .form-container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; position: relative; }
+        .form-container h2 { text-align: center; color: #E2FF26; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
+        #prediction-form { transition: all 0.5s ease; }
+        #prediction-form.greyed-out { opacity: 0.2; filter: grayscale(100%); pointer-events: none; }
+        #form-closed-msg { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(8, 12, 22, 0.95); border: 2px solid #E2FF26; color: #E2FF26; padding: 30px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 18px; line-height: 1.5; text-transform: uppercase; letter-spacing: 1px; z-index: 10; width: 80%; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
 
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         .input-group label { font-size: 14px; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 1px; }
-
-        .text-input, .styled-select {
-            background: rgba(8, 12, 22, 0.9);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        
-        .styled-select {
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
-
+        .text-input, .styled-select { background: rgba(8, 12, 22, 0.9); border: 2px solid rgba(255, 255, 255, 0.3); color: white; padding: 15px; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.3s; width: 100%; box-sizing: border-box; }
+        .styled-select { cursor: pointer; appearance: none; -webkit-appearance: none; }
         .text-input:focus, .styled-select:focus { border-color: #E2FF26; }
 
-        .select-baker-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+        .select-baker-btn { background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(255, 255, 255, 0.3); color: white; padding: 15px; border-radius: 8px; font-size: 16px; text-align: left; cursor: pointer; transition: all 0.3s; }
         .select-baker-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: white; }
         .select-baker-btn.selected { border-style: solid; border-color: #E2FF26; color: #E2FF26; font-weight: bold; }
-
-        .submit-btn {
-            background-color: #352BFF; color: white; border: none; padding: 18px;
-            font-size: 18px; font-weight: bold; border-radius: 8px; text-transform: uppercase;
-            letter-spacing: 2px; cursor: pointer; margin-top: 20px; transition: background-color 0.3s;
-        }
+        .submit-btn { background-color: #352BFF; color: white; border: none; padding: 18px; font-size: 18px; font-weight: bold; border-radius: 8px; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-top: 20px; transition: background-color 0.3s; }
         .submit-btn:hover { background-color: #E2FF26; color: #080C16; }
+        .hidden-field { display: none !important; }
 
-        .hidden-field {
-            display: none !important;
-        }
-
-        /* --- BAKER SELECTOR MODAL (Form) --- */
-        #baker-modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(8, 12, 22, 0.95); z-index: 10002;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
-        #baker-modal.active { opacity: 1; pointer-events: auto; }
-        #baker-modal h3 { color: #E2FF26; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+        /* --- MODALS --- */
+        .custom-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(8, 12, 22, 0.95); z-index: 10002; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; overflow-y: auto; padding: 20px; box-sizing: border-box;}
+        .custom-modal.active { opacity: 1; pointer-events: auto; }
+        .custom-modal h3 { color: #E2FF26; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+        
+        /* Form Baker Picker Specifics */
         #baker-modal .cast-wrapper { max-width: 800px; }
         #baker-modal .cast-tile { opacity: 1; }
-        #baker-modal .cast-tile::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(8, 12, 22, 0.5); z-index: 1;
-        }
+        #baker-modal .cast-tile::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(8, 12, 22, 0.5); z-index: 1; }
         #baker-modal .cast-tile:hover::before { background-color: rgba(8, 12, 22, 0.2); }
-        #baker-modal .baker-name {
-            opacity: 1; transform: translateY(0); background: rgba(8, 12, 22, 0.8);
-            padding: 4px 8px; border-radius: 4px;
-        }
+        #baker-modal .baker-name { opacity: 1; transform: translateY(0); background: rgba(8, 12, 22, 0.8); padding: 4px 8px; border-radius: 4px; }
 
         .modal-controls { display: flex; gap: 15px; margin-top: 20px; }
         .modal-btn { background: transparent; color: white; border: 1px solid white; padding: 10px 20px; border-radius: 20px; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
         .modal-btn:hover { background: white; color: black; }
 
-        /* --- BAKER BIO MODAL (Tab 1) --- */
-        #bio-modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(8, 12, 22, 0.95); z-index: 10003;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-            padding: 20px; box-sizing: border-box;
-        }
-        #bio-modal.active { opacity: 1; pointer-events: auto; }
-        .bio-content {
-            background: #111827; border: 2px solid #E2FF26; border-radius: 12px;
-            padding: 30px; max-width: 500px; width: 100%; text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .bio-content h3 { color: #E2FF26; text-transform: uppercase; font-size: 28px; margin-top: 0; margin-bottom: 15px; letter-spacing: 2px; }
+        /* Bio Specifics */
+        .bio-content { background: #111827; border: 2px solid #E2FF26; border-radius: 12px; padding: 30px; max-width: 500px; width: 100%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .bio-content h3 { font-size: 28px; margin-top: 0; margin-bottom: 15px; }
         .bio-content p { font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 25px; text-align: left; }
+
+        /* Results Form Modal */
+        #results-modal .bio-content { max-width: 600px; text-align: left; }
 
         /* --- TABLES (Tab 3 & 4) --- */
         .data-section { width: 100%; max-width: 900px; padding: 20px; box-sizing: border-box; position: relative; }
         .data-section h2 { color: #E2FF26; text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
-        
-        .table-container {
-            width: 100%;
-            overflow-x: auto; /* Allows scrolling on small screens */
-            margin-top: 15px;
-        }
-        
+        .table-container { width: 100%; overflow-x: auto; margin-top: 15px; }
         table { width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; min-width: 500px; }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         th { background-color: rgba(53, 43, 255, 0.3); color: #E2FF26; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 
-        /* Blur Effect for specific choices cells */
-        .table-blur-active .secret-choice {
-            filter: blur(6px);
-            opacity: 0.6;
-            user-select: none;
-            pointer-events: none;
-            transition: filter 1s ease, opacity 1s ease;
-        }
-        
-        #blur-message {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            font-style: italic;
-            letter-spacing: 1px;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
+        .table-blur-active .secret-choice { filter: blur(6px); opacity: 0.6; user-select: none; pointer-events: none; transition: filter 1s ease, opacity 1s ease; }
+        #blur-message { text-align: center; color: rgba(255, 255, 255, 0.7); font-style: italic; letter-spacing: 1px; font-size: 14px; margin-bottom: 20px; }
 
         /* --- INTRO SEQUENCE --- */
-        #intro-sequence { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background-color: #000000; z-index: 10005; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            transition: opacity 1s ease; 
-        }
+        #intro-sequence { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #000000; z-index: 10005; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease; }
         #gbbo-logo { max-width: 80%; max-height: 50vh; opacity: 0; transition: opacity 1.5s ease-in-out; }
-        #enter-text { 
-            color: #ffffff; font-size: 24px; margin-top: 40px; cursor: pointer; 
-            opacity: 0; transition: opacity 1.5s ease-in-out; text-transform: uppercase; 
-            letter-spacing: 2px; font-weight: bold; 
-        }
+        #enter-text { color: #ffffff; font-size: 24px; margin-top: 40px; cursor: pointer; opacity: 0; transition: opacity 1.5s ease-in-out; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; }
         #enter-text:hover { color: #E2FF26; }
         .fade-in { opacity: 1 !important; }
         .hidden { display: none !important; }
+        
+        .abstract-icon { position: absolute; top: 20px; left: 20px; width: 100px; opacity: 0.8; z-index: 100; }
     </style>
 </head>
 <body>
 
-    <!-- Hidden Audio Player -->
     <audio id="bg-audio" src="https://drive.google.com/uc?export=download&id=14u1AOjrbx_KfuPw8U2Wck7BBg-GZv9e_"></audio>
 
-    <!-- Cinematic Intro Sequence -->
     <div id="intro-sequence">
         <img id="gbbo-logo" src="https://ic.c4assets.com/bips/10683838/08B3E439-97FF-4e5e-998b-cb45c11bf795.png?imformat=chrome" alt="GBBO Logo">
         <p id="enter-text">Click here to enter</p>
     </div>
 
-    <!-- Interactive Baker Selection Modal (For Forms) -->
-    <div id="baker-modal">
+    <!-- Modals -->
+    <div id="baker-modal" class="custom-modal">
         <h3 id="modal-title">Select Baker</h3>
         <div class="cast-wrapper">
-            <div class="cast-grid" id="modal-grid">
-                <!-- Javascript will populate this grid -->
-            </div>
+            <div class="cast-grid" id="modal-grid"></div>
         </div>
         <div class="modal-controls">
             <button class="modal-btn" id="modal-none-btn">Select None</button>
@@ -424,8 +147,7 @@
         </div>
     </div>
 
-    <!-- Baker Bio Modal -->
-    <div id="bio-modal">
+    <div id="bio-modal" class="custom-modal">
         <div class="bio-content">
             <h3 id="bio-title">Baker Name</h3>
             <p id="bio-text">Baker bio text goes here.</p>
@@ -433,9 +155,48 @@
         </div>
     </div>
 
-    <!-- COUNTDOWN TIMER -->
+    <!-- Admin Results Modal -->
+    <div id="results-modal" class="custom-modal">
+        <div class="bio-content">
+            <h3 id="results-title">Log Week Results</h3>
+            <form id="results-form">
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>Technical Winner</label>
+                    <select id="res-tech" class="styled-select" required></select>
+                </div>
+                
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>Star Baker (Select multiple if needed)</label>
+                    <div class="multi-select-container" id="res-star-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>Leaving</label>
+                    <select id="res-leaving" class="styled-select" required></select>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>Hollywood Handshake (Optional)</label>
+                    <select id="res-handshake" class="styled-select"></select>
+                </div>
+
+                <div class="modal-controls" style="justify-content: center;">
+                    <button type="submit" class="admin-btn">Save Results & Update League</button>
+                    <button type="button" class="modal-btn" id="close-results-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <svg class="abstract-icon" viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="4">
+        <path d="M 40 10 Q 10 10 10 40 Q 10 70 40 70 Q 70 70 70 40 Q 70 10 40 10 Z" />
+        <path d="M 60 30 Q 30 30 30 60 Q 30 90 60 90 Q 90 90 90 60 Q 90 30 60 30 Z" />
+    </svg>
+
     <div class="countdown-wrapper">
-        <h3>Bake Off Starts In:</h3>
+        <h3 id="timer-header">Loading Schedule...</h3>
         <div class="countdown" id="countdown-display">
             <div class="time-box"><span id="days">00</span><small>Days</small></div>
             <div class="time-box"><span id="hours">00</span><small>Hours</small></div>
@@ -444,7 +205,6 @@
         </div>
     </div>
 
-    <!-- Header Navigation Tabs -->
     <nav class="tabs-nav">
         <button class="tab-btn active" data-target="tab-bakers">The Bakers</button>
         <button class="tab-btn" data-target="tab-choices">Make Your Choices</button>
@@ -452,25 +212,25 @@
         <button class="tab-btn" data-target="tab-league">League Table</button>
     </nav>
 
-    <!-- Main App Container -->
     <main>
         <!-- TAB 1: Animated Baker Grid -->
         <div id="tab-bakers" class="tab-content active">
             <section class="cast-wrapper">
+                
+                <div id="admin-results-panel">
+                    <p style="margin-top: 0; color: #E2FF26; font-weight: bold; text-transform: uppercase;">Voting is Locked</p>
+                    <button class="admin-btn" id="open-results-btn">Log Episode Results</button>
+                </div>
+
                 <div class="cast-grid" id="main-cast-grid">
-                    <!-- Top Row -->
                     <div class="cast-tile"><span class="baker-name">Clara</span></div>
                     <div class="cast-tile"><span class="baker-name">Connie</span></div>
                     <div class="cast-tile"><span class="baker-name">Gabe</span></div>
                     <div class="cast-tile"><span class="baker-name">Danni</span></div>
-                    
-                    <!-- Second Row -->
                     <div class="cast-tile"><span class="baker-name">Gary</span></div>
                     <div class="cast-tile"><span class="baker-name">Mo</span></div>
                     <div class="cast-tile"><span class="baker-name">Molly</span></div>
                     <div class="cast-tile"><span class="baker-name">Moyin</span></div>
-                    
-                    <!-- Third Row -->
                     <div class="cast-tile"><span class="baker-name">Nikki</span></div>
                     <div class="cast-tile"><span class="baker-name">Shannon</span></div>
                     <div class="cast-tile"><span class="baker-name">Tom</span></div>
@@ -479,21 +239,18 @@
             </section>
         </div>
 
-        <!-- TAB 2: Make Your Choices (Form) -->
+        <!-- TAB 2: Make Your Choices -->
         <div id="tab-choices" class="tab-content">
             <div class="form-container">
-                <h2>Week 1 Predictions</h2>
+                <h2 id="form-week-title">Week 1 Predictions</h2>
                 
-                <!-- This message only appears when the form is greyed out -->
-                <div id="form-closed-msg">Choices are now closed. <br><br>Please wait until the end of the show to submit next week's choices!</div>
+                <div id="form-closed-msg">Choices are now closed. <br><br>Please wait until 9:30 PM to submit next week's choices!</div>
                 
                 <form id="prediction-form">
-                    
                     <div class="input-group">
                         <label for="player-select">Your Name</label>
                         <select id="player-select" class="styled-select" required>
                             <option value="" disabled selected>Select your name...</option>
-                            <!-- Javascript populates existing names here -->
                             <option value="ADD_NEW">+ Add a new name...</option>
                         </select>
                     </div>
@@ -533,10 +290,10 @@
             </div>
         </div>
 
-        <!-- TAB 3: The Choices (Data blurred until countdown ends) -->
+        <!-- TAB 3: The Choices -->
         <div id="tab-choices-table" class="tab-content">
             <section class="data-section">
-                <h2>The Choices</h2>
+                <h2 id="choices-table-title">Week 1 Choices</h2>
                 <p id="blur-message">Choices are hidden until 8pm on Tuesday</p>
                 
                 <div class="table-container">
@@ -551,7 +308,7 @@
                             </tr>
                         </thead>
                         <tbody id="choices-table-body">
-                            <!-- Populated by JavaScript -->
+                            <!-- Populated by JS -->
                         </tbody>
                     </table>
                 </div>
@@ -572,7 +329,7 @@
                             </tr>
                         </thead>
                         <tbody id="leaderboard-body">
-                            <!-- Populated by JavaScript -->
+                            <!-- Populated by JS -->
                         </tbody>
                     </table>
                 </div>
@@ -581,7 +338,9 @@
     </main>
 
     <script>
-        // --- BAKER BIOS ---
+        // --- DATA SETUP ---
+        const ALL_BAKERS = ["Clara", "Connie", "Gabe", "Danni", "Gary", "Mo", "Molly", "Moyin", "Nikki", "Shannon", "Tom", "Yannis"];
+        
         const bakerBios = {
             "Clara": `<strong>24 | Hertfordshire | Marketing Graduate</strong><br><br>A passionate Portuguese polyglot pocket rocket, Clara is a bundle of energy and believes "the first bite of a bake is always with the eyes". She loves creating colourful, chaotically beautiful designs, balanced with fresh, fruity flavours. Originally from Aveiro in Portugal, Clara moved to the UK at 18 to study marketing. She began baking cakes two years ago as a creative outlet, and then recreating Portuguese classics like Tarte de Nata for her British fiancé Kieran and his family. Clara’s greatest loves are her spaniel Gigi and pygmy hedgehog, Pecan, and she is happiest when surrounded by animals. A self-confessed "fantasy girly", Clara is bringing plenty of colour, warmth and Portuguese sunshine to the tent.`,
             "Connie": `<strong>63 | London | NHS Hospital Discharge Lead</strong><br><br>Known as "the Cake Lady", Connie can’t remember a time when she didn’t bake. After over 20 years working for the NHS, baking is her way to unwind after a busy day. She is best known for her hearty carrot cakes, with favourite flavours including rum fruit, lemon and lavender. She keeps a jar of fruit permanently soaking in rum, wine and cinnamon - "you can smell the cake before you see it!" A devoted fan of black-and-white films, Connie loves an audiobook and often has a thriller series playing in the background while she bakes. She has been married to Myke, a musician and music teacher, for 23 years, and together they run a music centre in London where Connie loves to try out her new recipes on the students.`,
@@ -597,10 +356,113 @@
             "Yannis": `<strong>28 | London | Paediatric Doctor</strong><br><br>Yannis is challenging the stigma that Bangladeshi men don’t belong in the kitchen, one pastry at a time! Working in a busy NICU, he loves how a cake can bring joy to the ward and has won over the nurses with his bakes. Born in Vienna before moving to London aged 11, Yannis’ baking has been influenced by many food cultures. His first baking memory is making Bhapa Pitha with his grandmother, while his school days introduced him to classic Austrian treats. Watching Bake Off also helped Yannis learn English, making the show especially close to his heart. Outside the kitchen, he is also a Bhangra dancer, and his wedding shimmy has become legendary! For Yannis, baking and medicine have a lot in common: both are about caring for people.`
         };
 
-        // Initialize players array completely empty so it starts with a clean slate
+        // Players structure: [{ name: "Name", score: 0, predictions: { 1: {tech: "", star:"", ...}, 2: {...} } }]
         let players = JSON.parse(localStorage.getItem('gbbo_players')) || [];
+        // Results structure: { 1: {tech: "", star: ["Name1", "Name2"], leave: "", handshake: ""}, ... }
+        let adminResults = JSON.parse(localStorage.getItem('gbbo_results')) || {};
 
-        // --- Player Name Dropdown Logic ---
+        // --- 10 WEEK SCHEDULE ENGINE ---
+        // Generates 10 weeks starting Sept 22, 2026. Lock at 8:00PM, Unlock at 9:30PM (BST / GMT+0100)
+        const START_DATE = new Date("Sep 22, 2026 20:00:00 GMT+0100"); 
+        const schedule = [];
+        for(let i=0; i<10; i++) {
+            let lock = new Date(START_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000));
+            let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000)); // Adds 1.5 hours
+            schedule.push({ week: i+1, lockTime: lock.getTime(), unlockTime: unlock.getTime() });
+        }
+
+        let currentAppState = { week: 1, status: 'OPEN', targetTime: schedule[0].lockTime };
+
+        function updateScheduleEngine() {
+            const now = new Date().getTime();
+            let stateFound = false;
+
+            for (let i = 0; i < schedule.length; i++) {
+                if (now < schedule[i].lockTime) {
+                    currentAppState = { week: schedule[i].week, status: 'OPEN', targetTime: schedule[i].lockTime };
+                    stateFound = true; break;
+                } else if (now >= schedule[i].lockTime && now < schedule[i].unlockTime) {
+                    currentAppState = { week: schedule[i].week, status: 'LOCKED', targetTime: schedule[i].unlockTime };
+                    stateFound = true; break;
+                }
+            }
+            if(!stateFound) {
+                currentAppState = { week: 10, status: 'ENDED', targetTime: null };
+            }
+
+            renderUIBasedOnState();
+        }
+
+        function renderUIBasedOnState() {
+            const form = document.getElementById('prediction-form');
+            const closedMsg = document.getElementById('form-closed-msg');
+            const choicesTable = document.getElementById('choices-table');
+            const blurMsg = document.getElementById('blur-message');
+            const formTitle = document.getElementById('form-week-title');
+            const choicesTitle = document.getElementById('choices-table-title');
+            const timerHeader = document.getElementById('timer-header');
+            const adminPanel = document.getElementById('admin-results-panel');
+            
+            formTitle.innerText = `Week ${currentAppState.week} Predictions`;
+            
+            if (currentAppState.status === 'OPEN') {
+                timerHeader.innerText = `Week ${currentAppState.week} Closes In:`;
+                form.classList.remove('greyed-out');
+                closedMsg.style.display = 'none';
+                
+                // Show *previous* week's choices clearly, blur the *current* week
+                choicesTitle.innerText = `Week ${currentAppState.week} Choices`;
+                choicesTable.classList.add('table-blur-active');
+                blurMsg.style.display = 'block';
+                blurMsg.innerText = `Choices are hidden until 8pm on Tuesday`;
+                adminPanel.classList.remove('active');
+
+            } else if (currentAppState.status === 'LOCKED') {
+                timerHeader.innerText = `Week ${currentAppState.week} Voting Closed. Next Round In:`;
+                form.classList.add('greyed-out');
+                closedMsg.style.display = 'block';
+                
+                // Unblur choices
+                choicesTitle.innerText = `Week ${currentAppState.week} Choices`;
+                choicesTable.classList.remove('table-blur-active');
+                blurMsg.style.display = 'none';
+                
+                // Show Admin Panel
+                adminPanel.classList.add('active');
+
+            } else {
+                timerHeader.innerText = "Season Complete!";
+                document.getElementById('countdown-display').style.display = 'none';
+                form.classList.add('greyed-out');
+                closedMsg.innerText = "The season is over!";
+                closedMsg.style.display = 'block';
+                choicesTitle.innerText = `Final Choices`;
+                choicesTable.classList.remove('table-blur-active');
+                blurMsg.style.display = 'none';
+                adminPanel.classList.add('active');
+            }
+            renderTables();
+        }
+
+        // --- TIMER LOOP ---
+        setInterval(() => {
+            updateScheduleEngine();
+            if(!currentAppState.targetTime) return;
+            
+            const distance = currentAppState.targetTime - new Date().getTime();
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }, 1000);
+
+
+        // --- UI INITIALIZATION ---
         const playerSelect = document.getElementById('player-select');
         const newPlayerGroup = document.getElementById('new-player-group');
         const newPlayerInput = document.getElementById('new-player-name');
@@ -628,48 +490,10 @@
                 newPlayerInput.removeAttribute('required');
             }
         });
-
         loadPlayersToDropdown();
 
-        // --- Countdown Timer & "Form Closed" Logic ---
-        const targetDate = new Date("Sep 22, 2026 20:00:00 GMT+0100").getTime();
-        
-        const countdownInterval = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            
-            if (distance < 0) {
-                // Countdown reached 0
-                clearInterval(countdownInterval);
-                document.getElementById("countdown-display").innerHTML = "<div class='started-msg'>Bake Off Has Started!</div>";
-                
-                // Remove blur from the specific choice cells in Tab 3
-                document.getElementById('choices-table').classList.remove('table-blur-active');
-                document.getElementById('blur-message').style.display = 'none';
-                
-                // Grey out Tab 2 (The Form)
-                document.getElementById('prediction-form').classList.add('greyed-out');
-                document.getElementById('form-closed-msg').style.display = 'block';
-                return;
-            }
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
-            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
-            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
-            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
-        }, 1000);
-
-        // --- Setup Modal Grid by cloning Main Grid ---
-        const mainGrid = document.getElementById('main-cast-grid');
-        const modalGrid = document.getElementById('modal-grid');
-        modalGrid.innerHTML = mainGrid.innerHTML;
-
-        // --- Tab Switching Logic ---
+        // Modals Setup
+        document.getElementById('modal-grid').innerHTML = document.getElementById('main-cast-grid').innerHTML;
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         tabBtns.forEach(btn => {
@@ -677,48 +501,36 @@
                 tabBtns.forEach(b => b.classList.remove('active'));
                 tabContents.forEach(c => c.classList.remove('active'));
                 btn.classList.add('active');
-                const targetId = btn.getAttribute('data-target');
-                document.getElementById(targetId).classList.add('active');
+                document.getElementById(btn.getAttribute('data-target')).classList.add('active');
             });
         });
 
-        // --- Bio Modal Logic (Tab 1) ---
+        // Bio Modal
         const bioModal = document.getElementById('bio-modal');
-        const bioTitle = document.getElementById('bio-title');
-        const bioText = document.getElementById('bio-text');
-        
         document.querySelectorAll('#main-cast-grid .cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
                 const bakerName = tile.querySelector('.baker-name').textContent.trim();
-                bioTitle.innerText = bakerName;
-                bioText.innerHTML = bakerBios[bakerName] || "Bio coming soon...";
+                document.getElementById('bio-title').innerText = bakerName;
+                document.getElementById('bio-text').innerHTML = bakerBios[bakerName] || "Bio coming soon...";
                 bioModal.classList.add('active');
             });
         });
+        document.getElementById('close-bio-btn').addEventListener('click', () => bioModal.classList.remove('active'));
 
-        document.getElementById('close-bio-btn').addEventListener('click', () => {
-            bioModal.classList.remove('active');
-        });
-
-        // --- Form Modal Picker Logic (Tab 2) ---
+        // Form Baker Modal
         const formBakerModal = document.getElementById('baker-modal');
-        const formModalTitle = document.getElementById('modal-title');
-        let activeInputId = null;
-        let activeBtn = null;
-
+        let activeInputId = null; let activeBtn = null;
         document.querySelectorAll('.select-baker-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                // Prevent opening if form is greyed out
                 if (document.getElementById('prediction-form').classList.contains('greyed-out')) return;
-                
                 activeInputId = btn.getAttribute('data-target-input');
                 activeBtn = btn;
-                formModalTitle.innerText = `Select ${btn.getAttribute('data-label')}`;
+                document.getElementById('modal-title').innerText = `Select ${btn.getAttribute('data-label')}`;
                 formBakerModal.classList.add('active');
             });
         });
 
-        modalGrid.querySelectorAll('.cast-tile').forEach(tile => {
+        document.querySelectorAll('#modal-grid .cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
                 const bakerName = tile.querySelector('.baker-name').textContent.trim();
                 document.getElementById(activeInputId).value = bakerName;
@@ -727,130 +539,161 @@
                 formBakerModal.classList.remove('active');
             });
         });
-
         document.getElementById('modal-none-btn').addEventListener('click', () => {
             document.getElementById(activeInputId).value = "None";
             activeBtn.innerText = "None Selected";
             activeBtn.classList.remove('selected');
             formBakerModal.classList.remove('active');
         });
+        document.getElementById('modal-cancel-btn').addEventListener('click', () => formBakerModal.classList.remove('active'));
 
-        document.getElementById('modal-cancel-btn').addEventListener('click', () => {
-            formBakerModal.classList.remove('active');
-        });
-
-        // --- Form Submission with Local Storage & Google Sheets Sync ---
+        // --- SUBMIT PREDICTIONS ---
         document.getElementById('prediction-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // Safety check in case they try to submit via keyboard after deadline
             if (document.getElementById('prediction-form').classList.contains('greyed-out')) return;
 
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzm9kZ19JFh7NbBAZp0v2GxTGySldBfJ2y7axjyidmU4UZLsfqe7tvd4LxSmGte0GkS/exec';
-            
             const tech = document.getElementById('technical').value;
             const star = document.getElementById('star-baker').value;
             const leave = document.getElementById('leaving').value;
             const handshake = document.getElementById('handshake').value || "None";
             
             if(!tech || !star || !leave || tech === "None" || star === "None" || leave === "None") {
-                alert("Please select a baker for Technical, Star Baker, and Leaving.");
-                return;
+                alert("Please select a baker for Technical, Star Baker, and Leaving."); return;
             }
 
-            let finalName = playerSelect.value;
-            if (finalName === 'ADD_NEW') {
-                finalName = newPlayerInput.value.trim();
-            }
-
-            // Save data locally so we can render the tables instantly
+            let finalName = playerSelect.value === 'ADD_NEW' ? newPlayerInput.value.trim() : playerSelect.value;
             let playerIndex = players.findIndex(p => p.name === finalName);
-            if (playerIndex >= 0) {
-                // Update existing player's choices
-                players[playerIndex].technical = tech;
-                players[playerIndex].starBaker = star;
-                players[playerIndex].leaving = leave;
-                players[playerIndex].handshake = handshake;
-            } else {
-                // Add new player
-                players.push({ 
-                    name: finalName, score: 0, 
-                    technical: tech, starBaker: star, 
-                    leaving: leave, handshake: handshake 
-                });
+            
+            // Setup new player or update existing
+            if (playerIndex === -1) {
+                players.push({ name: finalName, score: 0, predictions: {} });
+                playerIndex = players.length - 1;
             }
             
+            // Save to current week
+            players[playerIndex].predictions[currentAppState.week] = { technical: tech, starBaker: star, leaving: leave, handshake: handshake };
             localStorage.setItem('gbbo_players', JSON.stringify(players));
+            
             loadPlayersToDropdown();
             renderTables();
 
             const submitBtn = document.querySelector('.submit-btn');
             const originalBtnText = submitBtn.innerText;
-            submitBtn.innerText = "Saving to League...";
-            submitBtn.disabled = true;
+            submitBtn.innerText = "Saving to League..."; submitBtn.disabled = true;
 
-            const payload = {
-                playerName: finalName,
-                technical: tech,
-                starBaker: star,
-                leaving: leave,
-                handshake: handshake
-            };
+            const payload = { week: currentAppState.week, playerName: finalName, technical: tech, starBaker: star, leaving: leave, handshake: handshake };
 
-            fetch(scriptURL, {
-                method: 'POST',
-                body: JSON.stringify(payload),
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(`Success! Predictions saved for ${finalName}. Check the Google Sheet!`);
-                
-                e.target.reset();
-                newPlayerGroup.classList.add('hidden-field');
-                document.querySelectorAll('.select-baker-btn').forEach(btn => {
-                    btn.innerText = "Tap to select a baker...";
-                    btn.classList.remove('selected');
-                });
+            fetch('https://script.google.com/macros/s/AKfycbzm9kZ19JFh7NbBAZp0v2GxTGySldBfJ2y7axjyidmU4UZLsfqe7tvd4LxSmGte0GkS/exec', {
+                method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
+            }).then(r => r.json()).then(data => {
+                alert(`Success! Predictions saved for ${finalName}.`);
+                e.target.reset(); newPlayerGroup.classList.add('hidden-field');
+                document.querySelectorAll('.select-baker-btn').forEach(btn => { btn.innerText = "Tap to select a baker..."; btn.classList.remove('selected'); });
                 document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
-                
-                submitBtn.innerText = originalBtnText;
-                submitBtn.disabled = false;
-            })
-            .catch(error => {
-                console.error('Error!', error.message);
-                alert("There was an error saving your predictions. Please try again.");
-                submitBtn.innerText = originalBtnText;
-                submitBtn.disabled = false;
+                submitBtn.innerText = originalBtnText; submitBtn.disabled = false;
+            }).catch(e => {
+                alert("Saved locally, but failed to sync to Google Sheets.");
+                submitBtn.innerText = originalBtnText; submitBtn.disabled = false;
             });
         });
 
-        // --- Render Both Tab 3 (Choices) and Tab 4 (League) ---
+        // --- ADMIN RESULTS LOGIC ---
+        function populateAdminDropdowns() {
+            const tech = document.getElementById('res-tech');
+            const leaving = document.getElementById('res-leaving');
+            const hand = document.getElementById('res-handshake');
+            const starCont = document.getElementById('res-star-container');
+            
+            tech.innerHTML = '<option value="None">Select...</option>';
+            leaving.innerHTML = '<option value="None">Select...</option>';
+            hand.innerHTML = '<option value="None">None</option>';
+            starCont.innerHTML = '';
+
+            ALL_BAKERS.forEach(baker => {
+                tech.innerHTML += `<option value="${baker}">${baker}</option>`;
+                leaving.innerHTML += `<option value="${baker}">${baker}</option>`;
+                hand.innerHTML += `<option value="${baker}">${baker}</option>`;
+                
+                starCont.innerHTML += `
+                    <label class="multi-check">
+                        <input type="checkbox" name="starbakers" value="${baker}"> ${baker}
+                    </label>
+                `;
+            });
+        }
+        populateAdminDropdowns();
+
+        const resultsModal = document.getElementById('results-modal');
+        document.getElementById('open-results-btn').addEventListener('click', () => {
+            document.getElementById('results-title').innerText = `Log Week ${currentAppState.week} Results`;
+            resultsModal.classList.add('active');
+        });
+        document.getElementById('close-results-btn').addEventListener('click', () => resultsModal.classList.remove('active'));
+
+        document.getElementById('results-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const tech = document.getElementById('res-tech').value;
+            const leaving = document.getElementById('res-leaving').value;
+            const hand = document.getElementById('res-handshake').value;
+            
+            // Get all checked star bakers
+            const starCheckboxes = document.querySelectorAll('input[name="starbakers"]:checked');
+            const starBakers = Array.from(starCheckboxes).map(cb => cb.value);
+
+            adminResults[currentAppState.week] = { technical: tech, starBaker: starBakers, leaving: leaving, handshake: hand };
+            localStorage.setItem('gbbo_results', JSON.stringify(adminResults));
+            
+            calculateScores();
+            alert(`Results for Week ${currentAppState.week} saved & scores updated!`);
+            resultsModal.classList.remove('active');
+            e.target.reset();
+        });
+
+        // --- AUTOMATED SCORING ENGINE ---
+        function calculateScores() {
+            players.forEach(player => {
+                let totalScore = 0;
+                // Loop through all 10 weeks
+                for(let w=1; w<=10; w++) {
+                    const result = adminResults[w];
+                    const pred = player.predictions ? player.predictions[w] : null;
+                    if(result && pred) {
+                        if(pred.technical === result.technical && result.technical !== "None") totalScore += 3;
+                        if(result.starBaker.includes(pred.starBaker)) totalScore += 5;
+                        if(pred.leaving === result.leaving && result.leaving !== "None") totalScore += 2;
+                        if(pred.handshake === result.handshake && result.handshake !== "None") totalScore += 10;
+                    }
+                }
+                player.score = totalScore;
+            });
+            localStorage.setItem('gbbo_players', JSON.stringify(players));
+            renderTables();
+        }
+
+        // --- RENDER TABLES ---
         function renderTables() {
             const choicesBody = document.getElementById("choices-table-body");
             const leagueBody = document.getElementById("leaderboard-body");
+            choicesBody.innerHTML = ""; leagueBody.innerHTML = "";
             
-            choicesBody.innerHTML = "";
-            leagueBody.innerHTML = "";
-            
-            // Tab 3: The Choices Table
+            // Choices for current active week
+            let weekToShow = currentAppState.week;
             players.forEach((player) => {
-                // Only show players who have made predictions
-                if(player.technical) {
+                let p = player.predictions ? player.predictions[weekToShow] : null;
+                if(p) {
                     const row = document.createElement("tr");
-                    // Note the "secret-choice" class here: this causes the blur effect
                     row.innerHTML = `
                         <td><strong>${player.name}</strong></td>
-                        <td class="secret-choice">${player.technical || "-"}</td>
-                        <td class="secret-choice">${player.starBaker || "-"}</td>
-                        <td class="secret-choice">${player.leaving || "-"}</td>
-                        <td class="secret-choice">${player.handshake || "None"}</td>
+                        <td class="secret-choice">${p.technical || "-"}</td>
+                        <td class="secret-choice">${p.starBaker || "-"}</td>
+                        <td class="secret-choice">${p.leaving || "-"}</td>
+                        <td class="secret-choice">${p.handshake || "None"}</td>
                     `;
                     choicesBody.appendChild(row);
                 }
             });
 
-            // Tab 4: League Table
+            // League
             let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
             sortedPlayers.forEach((player, index) => {
                 const row = document.createElement("tr");
@@ -858,53 +701,30 @@
                 leagueBody.appendChild(row);
             });
             
-            // Show empty states if no data exists yet
-            if(choicesBody.innerHTML === "") {
-                choicesBody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No predictions submitted yet!</td></tr>";
-            }
-            if(leagueBody.innerHTML === "") {
-                leagueBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No players have joined yet!</td></tr>";
-            }
+            if(choicesBody.innerHTML === "") choicesBody.innerHTML = `<tr><td colspan='5' style='text-align:center;'>No predictions submitted for Week ${weekToShow} yet!</td></tr>`;
+            if(leagueBody.innerHTML === "") leagueBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No players have joined yet!</td></tr>";
         }
 
-        // --- Grid Animation Logic ---
-        function animateGrid() {
-            const tiles = document.querySelectorAll('#tab-bakers .cast-tile');
-            tiles.forEach((tile, index) => {
-                setTimeout(() => { tile.classList.add('visible'); }, index * 400);
-            });
-        }
-
-        // --- Intro Sequence & Audio Timing Logic ---
+        // --- INITIALIZATION ---
         document.addEventListener("DOMContentLoaded", () => {
+            updateScheduleEngine();
             const hasVisited = localStorage.getItem("gbbo_visited");
-            const introSequence = document.getElementById("intro-sequence");
-            const logo = document.getElementById("gbbo-logo");
-            const enterText = document.getElementById("enter-text");
-            const bgAudio = document.getElementById("bg-audio");
-
             if (!hasVisited) {
-                setTimeout(() => { logo.classList.add("fade-in"); }, 1000);
-                setTimeout(() => { enterText.classList.add("fade-in"); }, 3000);
-                
-                enterText.addEventListener("click", () => {
-                    introSequence.classList.add("hidden");
+                setTimeout(() => { document.getElementById("gbbo-logo").classList.add("fade-in"); }, 1000);
+                setTimeout(() => { document.getElementById("enter-text").classList.add("fade-in"); }, 3000);
+                document.getElementById("enter-text").addEventListener("click", () => {
+                    document.getElementById("intro-sequence").classList.add("hidden");
                     localStorage.setItem("gbbo_visited", "true"); 
-                    
-                    bgAudio.volume = 0.5; 
-                    bgAudio.play().catch(e => console.log("Audio playback was prevented by the browser.", e));
-
-                    setTimeout(animateGrid, 300); 
+                    document.getElementById("bg-audio").volume = 0.5; 
+                    document.getElementById("bg-audio").play().catch(e => console.log(e));
+                    setTimeout(() => { document.querySelectorAll('#tab-bakers .cast-tile').forEach((t, i) => setTimeout(() => t.classList.add('visible'), i * 400)); }, 300); 
                 });
             } else {
-                introSequence.classList.add("hidden");
-                setTimeout(animateGrid, 300);
+                document.getElementById("intro-sequence").classList.add("hidden");
+                setTimeout(() => { document.querySelectorAll('#tab-bakers .cast-tile').forEach((t, i) => setTimeout(() => t.classList.add('visible'), i * 400)); }, 300);
             }
-            
-            // Populate initial tables
-            renderTables();
+            calculateScores(); // Initial render and score calc
         });
-
     </script>
 </body>
 </html>
