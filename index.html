@@ -98,6 +98,38 @@
         .bio-content h3 { font-size: 28px; margin-top: 0; margin-bottom: 15px; }
         .bio-content p { font-size: 14px; line-height: 1.6; color: #ddd; margin-bottom: 25px; text-align: left; }
 
+        /* SUCCESS GIF MODAL STYLES */
+        .gif-modal-content {
+            background: #111827;
+            border: 2px solid #E2FF26;
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .gif-modal-content img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .gif-modal-content p {
+            color: #ffffff;
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 0;
+            font-weight: 600;
+        }
+
         /* --- TABLES (Tab 3 & 4) --- */
         .data-section { width: 100%; max-width: 900px; padding: 20px; box-sizing: border-box; position: relative; }
         .data-section h2 { color: #E2FF26; text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
@@ -124,7 +156,6 @@
             overflow: hidden;
         }
 
-        /* Fullscreen Background Video */
         #bg-video {
             position: absolute;
             top: 50%; left: 50%;
@@ -137,7 +168,6 @@
             transition: opacity 2s ease;
         }
 
-        /* Overlay to keep text readable against video */
         #intro-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -178,7 +208,6 @@
     <audio id="bg-audio" src="theme.mp3" loop></audio>
 
     <div id="intro-sequence">
-        <!-- Background MP4 Video -->
         <video id="bg-video" autoplay muted loop playsinline src="background.mp4"></video>
         <div id="intro-overlay"></div>
 
@@ -186,7 +215,6 @@
         <p id="enter-text">Click here to enter</p>
     </div>
 
-    <!-- Modals -->
     <div id="baker-modal" class="custom-modal">
         <h3 id="modal-title">Select Baker</h3>
         <div class="cast-wrapper">
@@ -206,6 +234,14 @@
         </div>
     </div>
 
+    <div id="success-gif-modal" class="custom-modal">
+        <div class="gif-modal-content">
+            <img id="success-gif-img" src="" alt="GBBO Reaction GIF">
+            <p id="success-gif-text"></p>
+            <button class="submit-btn" id="close-gif-btn" style="margin-top: 5px; padding: 12px 25px;">Awesome!</button>
+        </div>
+    </div>
+
     <div class="countdown-wrapper">
         <h3 id="timer-header">Loading Schedule...</h3>
         <div class="countdown" id="countdown-display">
@@ -216,7 +252,6 @@
         </div>
     </div>
 
-    <!-- Header Navigation Tabs -->
     <nav class="tabs-nav">
         <button class="tab-btn active" data-target="tab-bakers">The Bakers</button>
         <button class="tab-btn" data-target="tab-choices">Make Your Choices</button>
@@ -226,7 +261,6 @@
     </nav>
 
     <main>
-        <!-- TAB 1: Animated Baker Grid -->
         <div id="tab-bakers" class="tab-content active">
             <section class="cast-wrapper">
                 <div class="cast-grid" id="main-cast-grid">
@@ -246,7 +280,6 @@
             </section>
         </div>
 
-        <!-- TAB 2: Make Your Choices -->
         <div id="tab-choices" class="tab-content">
             <div class="form-container">
                 <h2 id="form-week-title">Week 1 Predictions</h2>
@@ -297,7 +330,6 @@
             </div>
         </div>
 
-        <!-- TAB 3: The Choices -->
         <div id="tab-choices-table" class="tab-content">
             <section class="data-section">
                 <h2 id="choices-table-title">Week 1 Choices</h2>
@@ -315,14 +347,12 @@
                             </tr>
                         </thead>
                         <tbody id="choices-table-body">
-                            <!-- Populated by JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </section>
         </div>
 
-        <!-- TAB 4: League Table -->
         <div id="tab-league" class="tab-content">
             <section class="data-section">
                 <h2>League Table</h2>
@@ -336,17 +366,14 @@
                             </tr>
                         </thead>
                         <tbody id="leaderboard-body">
-                            <!-- Populated by JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </section>
         </div>
 
-        <!-- TAB 5: ADMIN (Password Protected) -->
         <div id="tab-admin" class="tab-content">
             
-            <!-- Login View -->
             <div id="admin-login-view" class="form-container">
                 <h2>Admin Access</h2>
                 <div class="input-group">
@@ -357,7 +384,6 @@
                 <button id="admin-login-btn" class="submit-btn">Login</button>
             </div>
 
-            <!-- Dashboard View -->
             <div id="admin-dashboard-view" class="form-container" style="display: none; max-width: 600px;">
                 <h2>Log Episode Results</h2>
                 <p style="text-align: center; color: rgba(255,255,255,0.7); font-size: 12px; margin-top: -10px;">Updates league and eliminates bakers instantly.</p>
@@ -410,6 +436,20 @@
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzm9kZ19JFh7NbBAZp0v2GxTGySldBfJ2y7axjyidmU4UZLsfqe7tvd4LxSmGte0GkS/exec';
         const ALL_BAKERS = ["Clara", "Connie", "Gabe", "Danni", "Gary", "Mo", "Molly", "Moyin", "Nikki", "Shannon", "Tom", "Yannis"];
         
+        // Random Submission GIFs
+        const SUBMISSION_GIFS = [
+            "https://thegreatbritishbakeoff.co.uk/wp-content/uploads/2016/08/PaulHandshakeWEB.gif",
+            "https://thegreatbritishbakeoff.co.uk/wp-content/uploads/2016/10/Mel-and-Sue-Jaffa-Cake-WEB.gif",
+            "https://thegreatbritishbakeoff.co.uk/wp-content/uploads/2016/10/Cake-frisbee-WEB.gif",
+            "https://thegreatbritishbakeoff.co.uk/wp-content/uploads/2016/10/Mel-swirl-WEB.gif",
+            "https://thegreatbritishbakeoff.co.uk/wp-content/uploads/2016/10/Pray-for-bread-WEB-1.gif",
+            "https://i.pinimg.com/originals/08/91/41/089141ca11112a1154ae8ce6109a9cff.gif",
+            "https://www.mandatory.com/wp-content/uploads/sites/10/gallery/great-british-baking-show-gifs/great-british-bake-off-mel-and-matt.gif",
+            "https://thegreatbritishbakeoff.co.uk/wp-content/uploads/2016/10/Candice-dance-WEB.gif",
+            "https://hips.hearstapps.com/digitalspyuk.cdnds.net/16/37/1473700943-berry.gif?resize=640:*",
+            "https://img.buzzfeed.com/buzzfeed-static/static/2020-12/21/22/asset/c1a360e18dfc/anigif_sub-buzz-6642-1608590681-29.gif"
+        ];
+
         const bakerBios = {
             "Clara": `<strong>24 | Hertfordshire | Marketing Graduate</strong><br><br>A passionate Portuguese polyglot pocket rocket, Clara is a bundle of energy and believes "the first bite of a bake is always with the eyes". She loves creating colourful, chaotically beautiful designs, balanced with fresh, fruity flavours. Originally from Aveiro in Portugal, Clara moved to the UK at 18 to study marketing. She began baking cakes two years ago as a creative outlet, and then recreating Portuguese classics like Tarte de Nata for her British fiancé Kieran and his family. Clara’s greatest loves are her spaniel Gigi and pygmy hedgehog, Pecan, and she is happiest when surrounded by animals. A self-confessed "fantasy girly", Clara is bringing plenty of colour, warmth and Portuguese sunshine to the tent.`,
             "Connie": `<strong>63 | London | NHS Hospital Discharge Lead</strong><br><br>Known as "the Cake Lady", Connie can’t remember a time when she didn’t bake. After over 20 years working for the NHS, baking is her way to unwind after a busy day. She is best known for her hearty carrot cakes, with favourite flavours including rum fruit, lemon and lavender. She keeps a jar of fruit permanently soaking in rum, wine and cinnamon - "you can smell the cake before you see it!" A devoted fan of black-and-white films, Connie loves an audiobook and often has a thriller series playing in the background while she bakes. She has been married to Myke, a musician and music teacher, for 23 years, and together they run a music centre in London where Connie loves to try out her new recipes on the students.`,
@@ -671,6 +711,22 @@
         });
         document.getElementById('modal-cancel-btn').addEventListener('click', () => formBakerModal.classList.remove('active'));
 
+        // GIF Modal Helper
+        const successGifModal = document.getElementById('success-gif-modal');
+        const successGifImg = document.getElementById('success-gif-img');
+        const successGifText = document.getElementById('success-gif-text');
+        
+        function showSuccessGifModal() {
+            const randomGif = SUBMISSION_GIFS[Math.floor(Math.random() * SUBMISSION_GIFS.length)];
+            successGifImg.src = randomGif;
+            successGifText.innerText = `Your choices have been submitted for week ${currentAppState.week}! Come back at 8pm on Tuesday to see everyone's choices!`;
+            successGifModal.classList.add('active');
+        }
+
+        document.getElementById('close-gif-btn').addEventListener('click', () => {
+            successGifModal.classList.remove('active');
+        });
+
         // --- SUBMIT PREDICTIONS ---
         document.getElementById('prediction-form').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -708,7 +764,9 @@
             fetch(SCRIPT_URL, {
                 method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
             }).then(r => r.json()).then(data => {
-                alert(`Success! Predictions saved for ${finalName}.`);
+                // Show GIF Modal instead of alert
+                showSuccessGifModal();
+                
                 e.target.reset(); newPlayerGroup.classList.add('hidden-field');
                 document.querySelectorAll('.select-baker-btn').forEach(btn => { btn.innerText = "Tap to select a baker..."; btn.classList.remove('selected'); });
                 document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
@@ -716,7 +774,12 @@
                 
                 setTimeout(fetchGoogleSheetData, 1500); 
             }).catch(e => {
-                alert("Saved locally, but failed to sync to Google Sheets.");
+                // Show GIF Modal on local save fallback as well
+                showSuccessGifModal();
+                
+                e.target.reset(); newPlayerGroup.classList.add('hidden-field');
+                document.querySelectorAll('.select-baker-btn').forEach(btn => { btn.innerText = "Tap to select a baker..."; btn.classList.remove('selected'); });
+                document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
                 submitBtn.innerText = originalBtnText; submitBtn.disabled = false;
             });
         });
@@ -862,11 +925,9 @@
             const bgAudio = document.getElementById("bg-audio");
             const bgVideo = document.getElementById("bg-video");
 
-            // Logo and text fade in sequence
             setTimeout(() => { logo.classList.add("fade-in"); }, 1000);
             setTimeout(() => { enterText.classList.add("fade-in"); }, 3000);
 
-            // MP4 Video background fades in after exactly 2 seconds
             setTimeout(() => {
                 if (bgVideo) bgVideo.classList.add("fade-in");
             }, 2000);
