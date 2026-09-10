@@ -109,11 +109,66 @@
         .table-blur-active .secret-choice { filter: blur(6px); opacity: 0.6; user-select: none; pointer-events: none; transition: filter 1s ease, opacity 1s ease; }
         #blur-message { text-align: center; color: rgba(255, 255, 255, 0.7); font-style: italic; letter-spacing: 1px; font-size: 14px; margin-bottom: 20px; }
 
-        /* --- INTRO SEQUENCE --- */
-        #intro-sequence { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #000000; z-index: 10005; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease; }
-        #gbbo-logo { max-width: 80%; max-height: 50vh; opacity: 0; transition: opacity 1.5s ease-in-out; }
-        #enter-text { color: #ffffff; font-size: 24px; margin-top: 40px; cursor: pointer; opacity: 0; transition: opacity 1.5s ease-in-out; text-transform: uppercase; letter-spacing: 2px; font-weight: bold; }
+        /* --- INTRO SEQUENCE & BACKGROUND VIDEO --- */
+        #intro-sequence { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100vw; height: 100vh; 
+            background-color: #000000; 
+            z-index: 10005; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            transition: opacity 1s ease; 
+            overflow: hidden;
+        }
+
+        /* Fullscreen Background Video */
+        #bg-video {
+            position: absolute;
+            top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        /* Overlay to keep text readable against video */
+        #intro-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 2;
+        }
+
+        #gbbo-logo { 
+            position: relative;
+            z-index: 3;
+            max-width: 80%; 
+            max-height: 50vh; 
+            opacity: 0; 
+            transition: opacity 1.5s ease-in-out; 
+        }
+
+        #enter-text { 
+            position: relative;
+            z-index: 3;
+            color: #ffffff; 
+            font-size: 24px; 
+            margin-top: 40px; 
+            cursor: pointer; 
+            opacity: 0; 
+            transition: opacity 1.5s ease-in-out; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            font-weight: bold; 
+        }
         #enter-text:hover { color: #E2FF26; }
+        
         .fade-in { opacity: 1 !important; }
         .hidden { display: none !important; }
     </style>
@@ -123,6 +178,10 @@
     <audio id="bg-audio" src="theme.mp3" loop></audio>
 
     <div id="intro-sequence">
+        <!-- Background MP4 Video -->
+        <video id="bg-video" autoplay muted loop playsinline src="background.mp4"></video>
+        <div id="intro-overlay"></div>
+
         <img id="gbbo-logo" src="https://ic.c4assets.com/bips/10683838/08B3E439-97FF-4e5e-998b-cb45c11bf795.png?imformat=chrome" alt="GBBO Logo">
         <p id="enter-text">Click here to enter</p>
     </div>
@@ -366,13 +425,13 @@
             "Yannis": `<strong>28 | London | Paediatric Doctor</strong><br><br>Yannis is challenging the stigma that Bangladeshi men don’t belong in the kitchen, one pastry at a time! Working in a busy NICU, he loves how a cake can bring joy to the ward and has won over the nurses with his bakes. Born in Vienna before moving to London aged 11, Yannis’ baking has been influenced by many food cultures. His first baking memory is making Bhapa Pitha with his grandmother, while his school days introduced him to classic Austrian treats. Watching Bake Off also helped Yannis learn English, making the show especially close to his heart. Outside the kitchen, he is also a Bhangra dancer, and his wedding shimmy has become legendary! For Yannis, baking and medicine have a lot in common: both are about caring for people.`
         };
 
-        let players = []; // Overwritten dynamically by Google Sheet data
+        let players = []; 
         let adminResults = JSON.parse(localStorage.getItem('gbbo_results')) || {};
 
         // --- JSONP FETCH FROM GOOGLE SHEETS ---
         function handleGoogleSheetResponse(res) {
             if (res && res.status === "success" && res.data) {
-                players = []; // Wipe local memory to mirror Google Sheet exactly
+                players = []; 
                 
                 res.data.forEach(item => {
                     let playerName = item.playerName ? item.playerName.trim() : "";
@@ -401,7 +460,6 @@
         }
 
         function fetchGoogleSheetData() {
-            // Dynamic script injection to execute JSONP callback
             const script = document.createElement('script');
             script.src = SCRIPT_URL + '?callback=handleGoogleSheetResponse&t=' + new Date().getTime(); 
             document.body.appendChild(script);
@@ -656,7 +714,6 @@
                 document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
                 submitBtn.innerText = originalBtnText; submitBtn.disabled = false;
                 
-                // Re-fetch sheet after brief delay to catch Google background writing
                 setTimeout(fetchGoogleSheetData, 1500); 
             }).catch(e => {
                 alert("Saved locally, but failed to sync to Google Sheets.");
@@ -797,15 +854,22 @@
         // --- INITIALIZATION ---
         document.addEventListener("DOMContentLoaded", () => {
             updateScheduleEngine();
-            fetchGoogleSheetData(); // Fetches live sheet data via JSONP
+            fetchGoogleSheetData(); 
             
             const introSequence = document.getElementById("intro-sequence");
             const logo = document.getElementById("gbbo-logo");
             const enterText = document.getElementById("enter-text");
             const bgAudio = document.getElementById("bg-audio");
+            const bgVideo = document.getElementById("bg-video");
 
+            // Logo and text fade in sequence
             setTimeout(() => { logo.classList.add("fade-in"); }, 1000);
             setTimeout(() => { enterText.classList.add("fade-in"); }, 3000);
+
+            // MP4 Video background fades in after exactly 2 seconds
+            setTimeout(() => {
+                if (bgVideo) bgVideo.classList.add("fade-in");
+            }, 2000);
 
             enterText.addEventListener("click", () => {
                 introSequence.classList.add("hidden");
