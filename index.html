@@ -342,9 +342,9 @@
         <div id="tab-winner" class="tab-content">
             <div class="form-container">
                 <h2>Predict the GBBO Winner</h2>
-                <div class="form-subtitle">Predict who will win the entire series! Correctly guessing the winner awards <strong>10 points</strong>. Submissions lock at 8pm on 22nd September.</div>
+                <div class="form-subtitle">Predict who will win the entire series! Correctly guessing the winner awards <strong>10 points</strong>. Submissions open at 9:30 PM on 22nd September and lock at 8:00 PM on 29th September.</div>
                 
-                <div id="winner-closed-msg" class="form-closed-overlay">Overall winner predictions are now locked!</div>
+                <div id="winner-closed-msg" class="form-closed-overlay">Winner predictions open at 9:30 PM on 22nd September!</div>
 
                 <form id="winner-form">
                     <div class="input-group">
@@ -641,25 +641,35 @@
             const choicesTitle = document.getElementById('choices-table-title');
             const timerHeader = document.getElementById('timer-header');
             
-            // Winner Tab Locking/Blurring (Locks Sept 22 8pm, Unblurs Sept 29 8pm)
+            // Winner Tab Logic:
+            // Opens: Sept 22 at 9:30 PM (End of Week 1 episode - schedule[0].unlockTime)
+            // Locks: Sept 29 at 8:00 PM (Start of Week 2 episode - schedule[1].lockTime)
             const now = new Date().getTime();
-            const winnerLockTime = schedule[0].lockTime; // Sept 22 8pm
-            const winnerRevealTime = schedule[1].lockTime; // Sept 29 8pm
+            const winnerOpenTime = schedule[0].unlockTime; // Sept 22 9:30 PM
+            const winnerLockTime = schedule[1].lockTime;   // Sept 29 8:00 PM
             
             const winnerForm = document.getElementById('winner-form');
             const winnerClosedMsg = document.getElementById('winner-closed-msg');
             const winnerTable = document.getElementById('winner-table');
             const winnerBlurMsg = document.getElementById('winner-blur-message');
 
-            if (now >= winnerLockTime) {
+            if (now < winnerOpenTime) {
+                // Before Week 1 ends
                 winnerForm.classList.add('greyed-out');
+                winnerClosedMsg.innerText = "Winner predictions open at 9:30 PM on 22nd September!";
+                winnerClosedMsg.style.display = 'block';
+            } else if (now >= winnerLockTime) {
+                // After Week 2 starts
+                winnerForm.classList.add('greyed-out');
+                winnerClosedMsg.innerText = "Overall winner predictions are now locked!";
                 winnerClosedMsg.style.display = 'block';
             } else {
+                // Window between 22nd Sept 9:30 PM and 29th Sept 8:00 PM
                 winnerForm.classList.remove('greyed-out');
                 winnerClosedMsg.style.display = 'none';
             }
 
-            if (now >= winnerRevealTime) {
+            if (now >= winnerLockTime) {
                 winnerTable.classList.remove('table-blur-active');
                 winnerBlurMsg.style.display = 'none';
             } else {
