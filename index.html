@@ -58,10 +58,12 @@
 
         /* --- PREDICTION & ADMIN FORMS --- */
         .form-container { width: 100%; max-width: 500px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; position: relative; }
-        .form-container h2 { text-align: center; color: #E2FF26; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        #prediction-form { transition: all 0.5s ease; }
-        #prediction-form.greyed-out { opacity: 0.2; filter: grayscale(100%); pointer-events: none; }
-        #form-closed-msg { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(8, 12, 22, 0.95); border: 2px solid #E2FF26; color: #E2FF26; padding: 30px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 18px; line-height: 1.5; text-transform: uppercase; letter-spacing: 1px; z-index: 10; width: 80%; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .form-container h2 { text-align: center; color: #E2FF26; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .form-subtitle { text-align: center; color: rgba(255,255,255,0.7); font-size: 13px; margin-top: -10px; margin-bottom: 10px; }
+        
+        #prediction-form, #winner-form { transition: all 0.5s ease; }
+        #prediction-form.greyed-out, #winner-form.greyed-out { opacity: 0.2; filter: grayscale(100%); pointer-events: none; }
+        .form-closed-overlay { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(8, 12, 22, 0.95); border: 2px solid #E2FF26; color: #E2FF26; padding: 30px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 18px; line-height: 1.5; text-transform: uppercase; letter-spacing: 1px; z-index: 10; width: 80%; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
 
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         .input-group label { font-size: 14px; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 1px; }
@@ -139,7 +141,7 @@
         th { background-color: rgba(53, 43, 255, 0.3); color: #E2FF26; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 
         .table-blur-active .secret-choice { filter: blur(6px); opacity: 0.6; user-select: none; pointer-events: none; transition: filter 1s ease, opacity 1s ease; }
-        #blur-message { text-align: center; color: rgba(255, 255, 255, 0.7); font-style: italic; letter-spacing: 1px; font-size: 14px; margin-bottom: 20px; }
+        #blur-message, #winner-blur-message { text-align: center; color: rgba(255, 255, 255, 0.7); font-style: italic; letter-spacing: 1px; font-size: 14px; margin-bottom: 20px; }
 
         /* --- INTRO SEQUENCE & BACKGROUND VIDEO --- */
         #intro-sequence { 
@@ -215,6 +217,7 @@
         <p id="enter-text">Click here to enter</p>
     </div>
 
+    <!-- Modals -->
     <div id="baker-modal" class="custom-modal">
         <h3 id="modal-title">Select Baker</h3>
         <div class="cast-wrapper">
@@ -234,6 +237,7 @@
         </div>
     </div>
 
+    <!-- Submission Success GIF Modal -->
     <div id="success-gif-modal" class="custom-modal">
         <div class="gif-modal-content">
             <img id="success-gif-img" src="" alt="GBBO Reaction GIF">
@@ -252,15 +256,18 @@
         </div>
     </div>
 
+    <!-- Header Navigation Tabs -->
     <nav class="tabs-nav">
         <button class="tab-btn active" data-target="tab-bakers">The Bakers</button>
         <button class="tab-btn" data-target="tab-choices">Make Your Choices</button>
+        <button class="tab-btn" data-target="tab-winner">Series Winner</button>
         <button class="tab-btn" data-target="tab-choices-table">The Choices</button>
         <button class="tab-btn" data-target="tab-league">League Table</button>
         <button class="tab-btn" data-target="tab-admin">Admin</button>
     </nav>
 
     <main>
+        <!-- TAB 1: Animated Baker Grid -->
         <div id="tab-bakers" class="tab-content active">
             <section class="cast-wrapper">
                 <div class="cast-grid" id="main-cast-grid">
@@ -280,11 +287,12 @@
             </section>
         </div>
 
+        <!-- TAB 2: Make Your Choices -->
         <div id="tab-choices" class="tab-content">
             <div class="form-container">
                 <h2 id="form-week-title">Week 1 Predictions</h2>
                 
-                <div id="form-closed-msg">Choices are now closed. <br><br>Please wait until 9:30 PM to submit next week's choices!</div>
+                <div id="form-closed-msg" class="form-closed-overlay">Choices are now closed. <br><br>Please wait until 9:30 PM to submit next week's choices!</div>
                 
                 <form id="prediction-form">
                     <div class="input-group">
@@ -330,6 +338,54 @@
             </div>
         </div>
 
+        <!-- TAB 3: Series Winner Prediction -->
+        <div id="tab-winner" class="tab-content">
+            <div class="form-container">
+                <h2>Predict the GBBO Winner</h2>
+                <div class="form-subtitle">Predict who will win the entire series! Correctly guessing the winner awards <strong>10 points</strong>. Submissions lock at 8pm on 22nd September.</div>
+                
+                <div id="winner-closed-msg" class="form-closed-overlay">Overall winner predictions are now locked!</div>
+
+                <form id="winner-form">
+                    <div class="input-group">
+                        <label for="winner-player-select">Your Name</label>
+                        <select id="winner-player-select" class="styled-select" required>
+                            <option value="" disabled selected>Select your name...</option>
+                        </select>
+                    </div>
+
+                    <input type="hidden" id="overall-winner-input" required>
+
+                    <div class="input-group" style="margin-top: 15px;">
+                        <label>Overall GBBO Winner (10 pts)</label>
+                        <button type="button" class="select-baker-btn" id="winner-select-btn" data-target-input="overall-winner-input" data-label="Overall Winner">Tap to select a baker...</button>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Winner Prediction</button>
+                </form>
+            </div>
+
+            <!-- Revealing Table for Winner Predictions -->
+            <section class="data-section" style="margin-top: 30px;">
+                <h2>All Winner Predictions</h2>
+                <p id="winner-blur-message">Reveals at 8:00 PM on 29th September (Week 2)</p>
+                <div class="table-container">
+                    <table id="winner-table" class="table-blur-active">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Predicted Winner</th>
+                            </tr>
+                        </thead>
+                        <tbody id="winner-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 4: The Choices -->
         <div id="tab-choices-table" class="tab-content">
             <section class="data-section">
                 <h2 id="choices-table-title">Week 1 Choices</h2>
@@ -347,12 +403,14 @@
                             </tr>
                         </thead>
                         <tbody id="choices-table-body">
-                            </tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
                     </table>
                 </div>
             </section>
         </div>
 
+        <!-- TAB 5: League Table -->
         <div id="tab-league" class="tab-content">
             <section class="data-section">
                 <h2>League Table</h2>
@@ -366,14 +424,17 @@
                             </tr>
                         </thead>
                         <tbody id="leaderboard-body">
-                            </tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
                     </table>
                 </div>
             </section>
         </div>
 
+        <!-- TAB 6: ADMIN (Password Protected) -->
         <div id="tab-admin" class="tab-content">
             
+            <!-- Login View -->
             <div id="admin-login-view" class="form-container">
                 <h2>Admin Access</h2>
                 <div class="input-group">
@@ -384,6 +445,7 @@
                 <button id="admin-login-btn" class="submit-btn">Login</button>
             </div>
 
+            <!-- Dashboard View -->
             <div id="admin-dashboard-view" class="form-container" style="display: none; max-width: 600px;">
                 <h2>Log Episode Results</h2>
                 <p style="text-align: center; color: rgba(255,255,255,0.7); font-size: 12px; margin-top: -10px;">Updates league and eliminates bakers instantly.</p>
@@ -425,7 +487,21 @@
                         <select id="res-handshake" class="styled-select"></select>
                     </div>
 
-                    <button type="submit" class="submit-btn">Save Results & Update League</button>
+                    <button type="submit" class="submit-btn">Save Weekly Results</button>
+                </form>
+
+                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 30px 0;">
+
+                <h2>Log Final Series Winner</h2>
+                <p style="text-align: center; color: rgba(255,255,255,0.7); font-size: 12px; margin-top: -10px;">Awards 10 points to players with correct predictions.</p>
+
+                <form id="admin-final-winner-form">
+                    <div class="input-group" style="margin-bottom: 15px;">
+                        <label>Who Won GBBO?</label>
+                        <select id="admin-final-winner-select" class="styled-select" required></select>
+                    </div>
+
+                    <button type="submit" class="submit-btn" style="background-color: #E2FF26; color: #080C16;">Save Final Series Winner</button>
                 </form>
             </div>
         </div>
@@ -467,31 +543,50 @@
 
         let players = []; 
         let adminResults = JSON.parse(localStorage.getItem('gbbo_results')) || {};
+        let finalSeriesWinner = localStorage.getItem('gbbo_final_winner') || "";
 
         // --- JSONP FETCH FROM GOOGLE SHEETS ---
         function handleGoogleSheetResponse(res) {
-            if (res && res.status === "success" && res.data) {
+            if (res && res.status === "success") {
                 players = []; 
                 
-                res.data.forEach(item => {
-                    let playerName = item.playerName ? item.playerName.trim() : "";
-                    let weekNum = parseInt(item.week) || 1;
-                    
-                    if (playerName) {
-                        let playerIndex = players.findIndex(p => p.name === playerName);
-                        if (playerIndex === -1) {
-                            players.push({ name: playerName, score: 0, predictions: {} });
-                            playerIndex = players.length - 1;
-                        }
+                // Process Sheet1 (Weekly Predictions)
+                if (res.data) {
+                    res.data.forEach(item => {
+                        let playerName = item.playerName ? item.playerName.trim() : "";
+                        let weekNum = parseInt(item.week) || 1;
                         
-                        players[playerIndex].predictions[weekNum] = {
-                            technical: item.technical || "",
-                            starBaker: item.starBaker || "",
-                            leaving: item.leaving || "",
-                            handshake: item.handshake || "None"
-                        };
-                    }
-                });
+                        if (playerName) {
+                            let playerIndex = players.findIndex(p => p.name === playerName);
+                            if (playerIndex === -1) {
+                                players.push({ name: playerName, score: 0, predictions: {}, predictedWinner: "" });
+                                playerIndex = players.length - 1;
+                            }
+                            
+                            players[playerIndex].predictions[weekNum] = {
+                                technical: item.technical || "",
+                                starBaker: item.starBaker || "",
+                                leaving: item.leaving || "",
+                                handshake: item.handshake || "None"
+                            };
+                        }
+                    });
+                }
+
+                // Process Sheet2 (Overall Winner Predictions)
+                if (res.winnerData) {
+                    res.winnerData.forEach(item => {
+                        let playerName = item.playerName ? item.playerName.trim() : "";
+                        if (playerName) {
+                            let playerIndex = players.findIndex(p => p.name === playerName);
+                            if (playerIndex === -1) {
+                                players.push({ name: playerName, score: 0, predictions: {}, predictedWinner: item.predictedWinner || "" });
+                            } else {
+                                players[playerIndex].predictedWinner = item.predictedWinner || "";
+                            }
+                        }
+                    });
+                }
                 
                 localStorage.setItem('gbbo_players', JSON.stringify(players));
                 loadPlayersToDropdown();
@@ -546,6 +641,32 @@
             const choicesTitle = document.getElementById('choices-table-title');
             const timerHeader = document.getElementById('timer-header');
             
+            // Winner Tab Locking/Blurring (Locks Sept 22 8pm, Unblurs Sept 29 8pm)
+            const now = new Date().getTime();
+            const winnerLockTime = schedule[0].lockTime; // Sept 22 8pm
+            const winnerRevealTime = schedule[1].lockTime; // Sept 29 8pm
+            
+            const winnerForm = document.getElementById('winner-form');
+            const winnerClosedMsg = document.getElementById('winner-closed-msg');
+            const winnerTable = document.getElementById('winner-table');
+            const winnerBlurMsg = document.getElementById('winner-blur-message');
+
+            if (now >= winnerLockTime) {
+                winnerForm.classList.add('greyed-out');
+                winnerClosedMsg.style.display = 'block';
+            } else {
+                winnerForm.classList.remove('greyed-out');
+                winnerClosedMsg.style.display = 'none';
+            }
+
+            if (now >= winnerRevealTime) {
+                winnerTable.classList.remove('table-blur-active');
+                winnerBlurMsg.style.display = 'none';
+            } else {
+                winnerTable.classList.add('table-blur-active');
+                winnerBlurMsg.style.display = 'block';
+            }
+
             formTitle.innerText = `Week ${currentAppState.week} Predictions`;
             
             if (currentAppState.status === 'OPEN') {
@@ -623,16 +744,24 @@
 
         // --- UI INITIALIZATION ---
         const playerSelect = document.getElementById('player-select');
+        const winnerPlayerSelect = document.getElementById('winner-player-select');
         const newPlayerGroup = document.getElementById('new-player-group');
         const newPlayerInput = document.getElementById('new-player-name');
 
         function loadPlayersToDropdown() {
             playerSelect.innerHTML = '<option value="" disabled selected>Select your name...</option>';
+            winnerPlayerSelect.innerHTML = '<option value="" disabled selected>Select your name...</option>';
+            
             players.forEach(player => {
-                const option = document.createElement('option');
-                option.value = player.name;
-                option.textContent = player.name;
-                playerSelect.appendChild(option);
+                const option1 = document.createElement('option');
+                option1.value = player.name;
+                option1.textContent = player.name;
+                playerSelect.appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = player.name;
+                option2.textContent = player.name;
+                winnerPlayerSelect.appendChild(option2);
             });
 
             if (currentAppState.week === 1) {
@@ -683,15 +812,18 @@
         // Form Baker Modal
         const formBakerModal = document.getElementById('baker-modal');
         let activeInputId = null; let activeBtn = null;
-        document.querySelectorAll('.select-baker-btn').forEach(btn => {
+        
+        function attachBakerPicker(btn) {
             btn.addEventListener('click', () => {
-                if (document.getElementById('prediction-form').classList.contains('greyed-out')) return;
+                if (btn.closest('form') && btn.closest('form').classList.contains('greyed-out')) return;
                 activeInputId = btn.getAttribute('data-target-input');
                 activeBtn = btn;
                 document.getElementById('modal-title').innerText = `Select ${btn.getAttribute('data-label')}`;
                 formBakerModal.classList.add('active');
             });
-        });
+        }
+
+        document.querySelectorAll('.select-baker-btn').forEach(attachBakerPicker);
 
         document.querySelectorAll('#modal-grid .cast-tile').forEach(tile => {
             tile.addEventListener('click', () => {
@@ -716,10 +848,10 @@
         const successGifImg = document.getElementById('success-gif-img');
         const successGifText = document.getElementById('success-gif-text');
         
-        function showSuccessGifModal() {
+        function showSuccessGifModal(customText) {
             const randomGif = SUBMISSION_GIFS[Math.floor(Math.random() * SUBMISSION_GIFS.length)];
             successGifImg.src = randomGif;
-            successGifText.innerText = `Your choices have been submitted for week ${currentAppState.week}! Come back at 8pm on Tuesday to see everyone's choices!`;
+            successGifText.innerText = customText || `Your choices have been submitted for week ${currentAppState.week}! Come back at 8pm on Tuesday to see everyone's choices!`;
             successGifModal.classList.add('active');
         }
 
@@ -727,7 +859,7 @@
             successGifModal.classList.remove('active');
         });
 
-        // --- SUBMIT PREDICTIONS ---
+        // --- SUBMIT WEEKLY PREDICTIONS ---
         document.getElementById('prediction-form').addEventListener('submit', (e) => {
             e.preventDefault();
             if (document.getElementById('prediction-form').classList.contains('greyed-out')) return;
@@ -745,7 +877,7 @@
             let playerIndex = players.findIndex(p => p.name === finalName);
             
             if (playerIndex === -1) {
-                players.push({ name: finalName, score: 0, predictions: {} });
+                players.push({ name: finalName, score: 0, predictions: {}, predictedWinner: "" });
                 playerIndex = players.length - 1;
             }
             
@@ -755,34 +887,76 @@
             loadPlayersToDropdown();
             renderTables();
 
-            const submitBtn = document.querySelector('.submit-btn');
+            const submitBtn = e.target.querySelector('.submit-btn');
             const originalBtnText = submitBtn.innerText;
-            submitBtn.innerText = "Saving to League..."; submitBtn.disabled = true;
+            submitBtn.innerText = "Saving..."; submitBtn.disabled = true;
 
-            const payload = { week: currentAppState.week, playerName: finalName, technical: tech, starBaker: star, leaving: leave, handshake: handshake };
+            const payload = { targetSheet: "Sheet1", week: currentAppState.week, playerName: finalName, technical: tech, starBaker: star, leaving: leave, handshake: handshake };
 
             fetch(SCRIPT_URL, {
                 method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
             }).then(r => r.json()).then(data => {
-                // Show GIF Modal instead of alert
                 showSuccessGifModal();
-                
                 e.target.reset(); newPlayerGroup.classList.add('hidden-field');
-                document.querySelectorAll('.select-baker-btn').forEach(btn => { btn.innerText = "Tap to select a baker..."; btn.classList.remove('selected'); });
-                document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
+                document.querySelectorAll('#prediction-form .select-baker-btn').forEach(btn => { btn.innerText = "Tap to select a baker..."; btn.classList.remove('selected'); });
+                document.querySelectorAll('#prediction-form input[type="hidden"]').forEach(input => input.value = "");
                 submitBtn.innerText = originalBtnText; submitBtn.disabled = false;
-                
                 setTimeout(fetchGoogleSheetData, 1500); 
             }).catch(e => {
-                // Show GIF Modal on local save fallback as well
                 showSuccessGifModal();
-                
                 e.target.reset(); newPlayerGroup.classList.add('hidden-field');
-                document.querySelectorAll('.select-baker-btn').forEach(btn => { btn.innerText = "Tap to select a baker..."; btn.classList.remove('selected'); });
-                document.querySelectorAll('input[type="hidden"]').forEach(input => input.value = "");
+                document.querySelectorAll('#prediction-form .select-baker-btn').forEach(btn => { btn.innerText = "Tap to select a baker..."; btn.classList.remove('selected'); });
+                document.querySelectorAll('#prediction-form input[type="hidden"]').forEach(input => input.value = "");
                 submitBtn.innerText = originalBtnText; submitBtn.disabled = false;
             });
         });
+
+        // --- SUBMIT OVERALL WINNER PREDICTION ---
+        document.getElementById('winner-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (document.getElementById('winner-form').classList.contains('greyed-out')) return;
+
+            const finalName = winnerPlayerSelect.value;
+            const winnerPick = document.getElementById('overall-winner-input').value;
+
+            if(!winnerPick || winnerPick === "None") {
+                alert("Please select a baker for Overall Winner."); return;
+            }
+
+            let playerIndex = players.findIndex(p => p.name === finalName);
+            if (playerIndex >= 0) {
+                players[playerIndex].predictedWinner = winnerPick;
+            } else {
+                players.push({ name: finalName, score: 0, predictions: {}, predictedWinner: winnerPick });
+            }
+
+            localStorage.setItem('gbbo_players', JSON.stringify(players));
+            renderTables();
+
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Saving Winner..."; submitBtn.disabled = true;
+
+            const payload = { targetSheet: "Sheet2", playerName: finalName, predictedWinner: winnerPick };
+
+            fetch(SCRIPT_URL, {
+                method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
+            }).then(r => r.json()).then(data => {
+                showSuccessGifModal(`Your overall winner prediction (${winnerPick}) has been locked in for ${finalName}!`);
+                document.getElementById('winner-select-btn').innerText = "Tap to select a baker...";
+                document.getElementById('winner-select-btn').classList.remove('selected');
+                document.getElementById('overall-winner-input').value = "";
+                submitBtn.innerText = originalBtnText; submitBtn.disabled = false;
+                setTimeout(fetchGoogleSheetData, 1500); 
+            }).catch(e => {
+                showSuccessGifModal(`Your overall winner prediction (${winnerPick}) has been saved locally!`);
+                document.getElementById('winner-select-btn').innerText = "Tap to select a baker...";
+                document.getElementById('winner-select-btn').classList.remove('selected');
+                document.getElementById('overall-winner-input').value = "";
+                submitBtn.innerText = originalBtnText; submitBtn.disabled = false;
+            });
+        });
+
 
         // --- ADMIN SECURE TAB LOGIC ---
         document.getElementById('admin-login-btn').addEventListener('click', () => {
@@ -793,6 +967,7 @@
                 
                 document.getElementById('admin-week-select').value = currentAppState.week;
                 populateAdminFormForWeek(currentAppState.week);
+                populateAdminFinalWinnerSelect();
             } else {
                 document.getElementById('admin-error').style.display = 'block';
             }
@@ -842,6 +1017,17 @@
             }
         }
 
+        function populateAdminFinalWinnerSelect() {
+            const finalWinSelect = document.getElementById('admin-final-winner-select');
+            finalWinSelect.innerHTML = '<option value="" disabled selected>Select series winner...</option>';
+            ALL_BAKERS.forEach(baker => {
+                finalWinSelect.innerHTML += `<option value="${baker}">${baker}</option>`;
+            });
+            if (finalSeriesWinner) {
+                finalWinSelect.value = finalSeriesWinner;
+            }
+        }
+
         document.getElementById('admin-results-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const weekNum = parseInt(document.getElementById('admin-week-select').value);
@@ -860,10 +1046,20 @@
             alert(`Results for Week ${weekNum} saved!`);
         });
 
+        document.getElementById('admin-final-winner-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            finalSeriesWinner = document.getElementById('admin-final-winner-select').value;
+            localStorage.setItem('gbbo_final_winner', finalSeriesWinner);
+            calculateScores();
+            alert(`Series Winner set to ${finalSeriesWinner}! Scores updated.`);
+        });
+
         // --- AUTOMATED SCORING ENGINE ---
         function calculateScores() {
             players.forEach(player => {
                 let totalScore = 0;
+                
+                // 1. Weekly Predictions Points
                 for(let w=1; w<=10; w++) {
                     const result = adminResults[w];
                     const pred = player.predictions ? player.predictions[w] : null;
@@ -874,6 +1070,12 @@
                         if(pred.handshake === result.handshake && result.handshake !== "None") totalScore += 10;
                     }
                 }
+
+                // 2. Series Winner Prediction Points (10 Points)
+                if (finalSeriesWinner && player.predictedWinner === finalSeriesWinner) {
+                    totalScore += 10;
+                }
+
                 player.score = totalScore;
             });
             localStorage.setItem('gbbo_players', JSON.stringify(players));
@@ -884,9 +1086,24 @@
         // --- RENDER TABLES ---
         function renderTables() {
             const choicesBody = document.getElementById("choices-table-body");
+            const winnerBody = document.getElementById("winner-table-body");
             const leagueBody = document.getElementById("leaderboard-body");
-            choicesBody.innerHTML = ""; leagueBody.innerHTML = "";
             
+            choicesBody.innerHTML = ""; 
+            winnerBody.innerHTML = "";
+            leagueBody.innerHTML = "";
+            
+            // Tab 3: Overall Winner Predictions
+            players.forEach((player) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td><strong>${player.name}</strong></td>
+                    <td class="secret-choice">${player.predictedWinner || "-"}</td>
+                `;
+                winnerBody.appendChild(row);
+            });
+
+            // Tab 4: Weekly Choices
             let weekToShow = currentAppState.week;
             players.forEach((player) => {
                 let p = player.predictions ? player.predictions[weekToShow] : null;
@@ -903,6 +1120,7 @@
                 }
             });
 
+            // Tab 5: League Table
             let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
             sortedPlayers.forEach((player, index) => {
                 const row = document.createElement("tr");
@@ -910,6 +1128,7 @@
                 leagueBody.appendChild(row);
             });
             
+            if(winnerBody.innerHTML === "") winnerBody.innerHTML = `<tr><td colspan='2' style='text-align:center;'>No overall winner predictions submitted yet!</td></tr>`;
             if(choicesBody.innerHTML === "") choicesBody.innerHTML = `<tr><td colspan='5' style='text-align:center;'>No predictions submitted for Week ${weekToShow} yet!</td></tr>`;
             if(leagueBody.innerHTML === "") leagueBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No players have joined yet!</td></tr>";
         }
