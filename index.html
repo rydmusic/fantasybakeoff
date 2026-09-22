@@ -614,10 +614,20 @@
                     });
                 }
 
-                // Sheet3 (Admin Results Log from Google Sheet if available)
+                // Sheet3 (Admin Results Log from Google Sheet)
                 if (res.adminResults && Object.keys(res.adminResults).length > 0) {
                     adminResults = res.adminResults;
                     localStorage.setItem('gbbo_results', JSON.stringify(adminResults));
+                }
+
+                // Sheet4 (Leaderboard from Google Sheet if present)
+                if (res.leaderboard && res.leaderboard.length > 0) {
+                    res.leaderboard.forEach(item => {
+                        let playerIndex = players.findIndex(p => p.name === item.name);
+                        if (playerIndex >= 0) {
+                            players[playerIndex].score = item.score;
+                        }
+                    });
                 }
                 
                 localStorage.setItem('gbbo_players', JSON.stringify(players));
@@ -1169,6 +1179,20 @@
                 player.score = totalScore;
             });
             localStorage.setItem('gbbo_players', JSON.stringify(players));
+            
+            // Sort players for leaderboard export
+            let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+
+            // Sync updated calculations to Sheet4 (Leaderboard)
+            const payload = {
+                targetSheet: "Sheet4",
+                leaderboard: sortedPlayers.map(p => ({ name: p.name, score: p.score }))
+            };
+
+            fetch(SCRIPT_URL, {
+                method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
+            }).catch(err => console.log("Sheet4 Sync Note:", err));
+
             renderTables();
             renderEliminatedBakers(); 
             renderStarBakerBadges();
