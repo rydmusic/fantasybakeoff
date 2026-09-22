@@ -556,7 +556,6 @@
         let adminResults = JSON.parse(localStorage.getItem('gbbo_results')) || {};
         let finalSeriesWinner = localStorage.getItem('gbbo_final_winner') || "";
 
-        // Function to render Cast Tiles (Main Grid & Modals) dynamically
         function renderCastTiles() {
             const mainGrid = document.getElementById('main-cast-grid');
             mainGrid.innerHTML = '';
@@ -569,7 +568,6 @@
                 mainGrid.appendChild(tile);
             });
 
-            // Clone to picker modal
             document.getElementById('modal-grid').innerHTML = mainGrid.innerHTML;
         }
 
@@ -578,6 +576,7 @@
             if (res && res.status === "success") {
                 players = []; 
                 
+                // Sheet1 (Weekly Predictions)
                 if (res.data) {
                     res.data.forEach(item => {
                         let playerName = item.playerName ? item.playerName.trim() : "";
@@ -600,6 +599,7 @@
                     });
                 }
 
+                // Sheet2 (Overall Winner Predictions)
                 if (res.winnerData) {
                     res.winnerData.forEach(item => {
                         let playerName = item.playerName ? item.playerName.trim() : "";
@@ -612,6 +612,12 @@
                             }
                         }
                     });
+                }
+
+                // Sheet3 (Admin Results Log from Google Sheet if available)
+                if (res.adminResults && Object.keys(res.adminResults).length > 0) {
+                    adminResults = res.adminResults;
+                    localStorage.setItem('gbbo_results', JSON.stringify(adminResults));
                 }
                 
                 localStorage.setItem('gbbo_players', JSON.stringify(players));
@@ -761,7 +767,6 @@
         // --- STAR BAKER BADGE LOGIC ---
         function getMostRecentStarBakers() {
             let mostRecentStar = [];
-            // Finds the latest week with logged Star Baker results
             for (let w = 10; w >= 1; w--) {
                 if (adminResults[w] && adminResults[w].starBaker && adminResults[w].starBaker.length > 0) {
                     mostRecentStar = adminResults[w].starBaker;
@@ -773,13 +778,10 @@
 
         function renderStarBakerBadges() {
             const recentStars = getMostRecentStarBakers();
-
-            // Clear any existing badges first
             document.querySelectorAll('.star-baker-badge').forEach(badge => badge.remove());
 
             if (recentStars.length === 0) return;
 
-            // Append badge to the top-left of the current Star Baker(s)
             document.querySelectorAll('.cast-tile').forEach(tile => {
                 const nameEl = tile.querySelector('.baker-name');
                 if (nameEl) {
@@ -1116,6 +1118,20 @@
             adminResults[weekNum] = { technical: tech, starBaker: starBakers, leaving: leaving, handshake: hand };
             localStorage.setItem('gbbo_results', JSON.stringify(adminResults));
             
+            // Post results to Sheet3
+            const payload = {
+                targetSheet: "Sheet3",
+                week: weekNum,
+                technical: tech,
+                starBaker: starBakers,
+                leaving: leaving,
+                handshake: hand
+            };
+
+            fetch(SCRIPT_URL, {
+                method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } 
+            }).then(() => setTimeout(fetchGoogleSheetData, 1500)).catch(err => console.log(err));
+
             calculateScores();
             alert(`Results for Week ${weekNum} saved!`);
         });
@@ -1133,6 +1149,7 @@
             players.forEach(player => {
                 let totalScore = 0;
                 
+                // 1. Weekly Predictions Points
                 for(let w=1; w<=10; w++) {
                     const result = adminResults[w];
                     const pred = player.predictions ? player.predictions[w] : null;
@@ -1144,6 +1161,7 @@
                     }
                 }
 
+                // 2. Series Winner Prediction Points (10 Points)
                 if (finalSeriesWinner && player.predictedWinner === finalSeriesWinner) {
                     totalScore += 10;
                 }
