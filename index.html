@@ -6,6 +6,7 @@
     <title>Fantasy GBBO League</title>
     
     <style>
+        /* --- GLOBAL THEME BASE --- */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #080C16; color: #ffffff; margin: 0; padding: 0; overflow-x: hidden; }
 
         /* --- COUNTDOWN TIMER --- */
@@ -15,6 +16,8 @@
         .time-box { display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; min-width: 60px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .time-box span { color: #E2FF26; font-size: clamp(20px, 5vw, 32px); font-weight: bold; }
         .time-box small { color: rgba(255, 255, 255, 0.7); font-size: 10px; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; }
+
+        .started-msg { color: #E2FF26; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; padding: 20px; }
 
         /* --- TAB NAVIGATION --- */
         .tabs-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 20px; background-color: #080C16; position: relative; z-index: 100; }
@@ -44,7 +47,7 @@
         .cast-tile:nth-child(12) { background-position: 100% 100%; }
         .cast-tile.visible { opacity: 1; }
 
-        /* STAR BAKER BADGE OVERLAY */
+        /* STAR BAKER BADGE OVERLAY - FADES IN AND STAYS STATIC */
         .star-baker-badge {
             position: absolute;
             top: 8px;
@@ -58,12 +61,12 @@
             z-index: 12;
             pointer-events: none;
             filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.7));
-            animation: badgePop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
         }
 
-        @keyframes badgePop {
-            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        .star-baker-badge.badge-loaded {
+            opacity: 1;
         }
 
         /* ELIMINATION STYLES */
@@ -100,14 +103,63 @@
         .multi-check { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 5px; font-size: 14px; cursor: pointer; transition: background 0.2s; }
         .multi-check:hover { background: rgba(255,255,255,0.2); }
 
-        /* --- ACCORDION COMPONENT FOR TAB 4 --- */
-        .accordion-item { width: 100%; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; overflow: hidden; background: rgba(255, 255, 255, 0.02); }
-        .accordion-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: rgba(53, 43, 255, 0.2); color: #E2FF26; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; border: none; outline: none; cursor: pointer; text-align: left; font-size: 15px; transition: background 0.3s ease; box-sizing: border-box; }
-        .accordion-header:hover { background: rgba(53, 43, 255, 0.4); }
-        .accordion-arrow { font-size: 14px; transition: transform 0.3s ease; color: #ffffff; }
-        .accordion-item.open .accordion-arrow { transform: rotate(180deg); color: #E2FF26; }
-        .accordion-content { display: none; padding: 15px; box-sizing: border-box; background: rgba(8, 12, 22, 0.6); border-top: 1px solid rgba(255, 255, 255, 0.1); }
-        .accordion-item.open .accordion-content { display: block; }
+        /* --- ACCORDIONS ("The Choices" Tab) --- */
+        .accordion-item {
+            width: 100%;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        .accordion-header {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            box-sizing: border-box;
+            transition: background 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .accordion-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #E2FF26;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .accordion-arrow {
+            color: #ffffff;
+            font-size: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.active .accordion-arrow {
+            transform: rotate(180deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 15px;
+        }
+
+        .accordion-item.active .accordion-body {
+            padding: 15px;
+            max-height: 2000px;
+        }
 
         /* --- MODALS --- */
         .custom-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(8, 12, 22, 0.95); z-index: 10002; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; overflow-y: auto; padding: 20px; box-sizing: border-box;}
@@ -160,7 +212,7 @@
             font-weight: 600;
         }
 
-        /* --- TABLES (Tab 3 & 4) --- */
+        /* --- TABLES (Tab 3, 4, 5) --- */
         .data-section { width: 100%; max-width: 900px; padding: 20px; box-sizing: border-box; position: relative; }
         .data-section h2 { color: #E2FF26; text-align: center; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
         .table-container { width: 100%; overflow-x: auto; margin-top: 15px; }
@@ -169,7 +221,7 @@
         th { background-color: rgba(53, 43, 255, 0.3); color: #E2FF26; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 
         .table-blur-active .secret-choice { filter: blur(6px); opacity: 0.6; user-select: none; pointer-events: none; transition: filter 1s ease, opacity 1s ease; }
-        #blur-message, #winner-blur-message, .blur-msg-sub { text-align: center; color: rgba(255, 255, 255, 0.7); font-style: italic; letter-spacing: 1px; font-size: 14px; margin-bottom: 20px; }
+        #winner-blur-message, .week-blur-msg { text-align: center; color: rgba(255, 255, 255, 0.7); font-style: italic; letter-spacing: 1px; font-size: 14px; margin-bottom: 20px; }
 
         /* --- INTRO SEQUENCE & BACKGROUND VIDEO --- */
         #intro-sequence { 
@@ -304,7 +356,7 @@
             </section>
         </div>
 
-        <!-- TAB 2: Make Your Choices (Includes Live Blurred Table Below) -->
+        <!-- TAB 2: Make Your Choices -->
         <div id="tab-choices" class="tab-content">
             <div class="form-container">
                 <h2 id="form-week-title">Week 1 Predictions</h2>
@@ -354,12 +406,12 @@
                 </form>
             </div>
 
-            <!-- Live Blurred Choices Table directly under Form on Tab 2 -->
+            <!-- Current Week Blurred Table Below Submission Form -->
             <section class="data-section" style="margin-top: 30px;">
-                <h2 id="current-week-choices-title">This Week's Choices</h2>
-                <p id="current-week-blur-message" class="blur-msg-sub">Choices are hidden until 8:00 PM on Tuesday</p>
+                <h2 id="current-week-live-title">Week 1 Submitted Choices</h2>
+                <p id="current-week-live-msg" class="week-blur-msg">Choices for this week are hidden until 8:00 PM on Tuesday</p>
                 <div class="table-container">
-                    <table id="current-week-table" class="table-blur-active">
+                    <table id="current-week-live-table" class="table-blur-active">
                         <thead>
                             <tr>
                                 <th>Player</th>
@@ -369,7 +421,7 @@
                                 <th>Handshake</th>
                             </tr>
                         </thead>
-                        <tbody id="current-week-table-body">
+                        <tbody id="current-week-live-body">
                             <!-- Populated by JS -->
                         </tbody>
                     </table>
@@ -424,14 +476,14 @@
             </section>
         </div>
 
-        <!-- TAB 4: The Choices (Collapsible Accordion for All 10 Weeks) -->
+        <!-- TAB 4: The Choices Accordion View -->
         <div id="tab-choices-table" class="tab-content">
             <section class="data-section">
                 <h2>All Weekly Choices</h2>
-                <p class="blur-msg-sub">Tap any week below to view choices. Unrevealed weeks remain secret until 8:00 PM on Tuesday!</p>
+                <p style="text-align: center; color: rgba(255,255,255,0.7); font-size: 13px; margin-bottom: 20px;">Tap any week to open or close choices.</p>
                 
-                <div id="all-weeks-accordion-container" style="width: 100%; margin-top: 20px;">
-                    <!-- Javascript generates 10 weekly collapsible accordions -->
+                <div id="accordions-container" style="width: 100%;">
+                    <!-- Accordions generated by JS -->
                 </div>
             </section>
         </div>
@@ -459,6 +511,7 @@
 
         <!-- TAB 6: ADMIN (Password Protected) -->
         <div id="tab-admin" class="tab-content">
+            
             <!-- Login View -->
             <div id="admin-login-view" class="form-container">
                 <h2>Admin Access</h2>
@@ -473,7 +526,7 @@
             <!-- Dashboard View -->
             <div id="admin-dashboard-view" class="form-container" style="display: none; max-width: 600px;">
                 <h2>Log Episode Results</h2>
-                <p style="text-align: center; color: rgba(255,255,255,0.7); font-size: 12px; margin-top: -10px;">Updates league and eliminates bakers instantly.</p>
+                <p style="text-align: center; color: rgba(255,255,255,0.7); font-size: 12px; margin-top: -10px;">Updates league and eliminates bakers instantly. Select multiple if needed.</p>
                 
                 <form id="admin-results-form">
                     <div class="input-group" style="margin-bottom: 15px;">
@@ -493,23 +546,23 @@
                     </div>
 
                     <div class="input-group" style="margin-bottom: 15px;">
-                        <label>Technical Winner</label>
-                        <select id="res-tech" class="styled-select" required></select>
+                        <label>Technical Winner(s)</label>
+                        <div class="multi-select-container" id="res-tech-container"></div>
                     </div>
                     
                     <div class="input-group" style="margin-bottom: 15px;">
-                        <label>Star Baker (Select multiple if needed)</label>
+                        <label>Star Baker(s)</label>
                         <div class="multi-select-container" id="res-star-container"></div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 15px;">
                         <label>Who Left?</label>
-                        <select id="res-leaving" class="styled-select" required></select>
+                        <div class="multi-select-container" id="res-leaving-container"></div>
                     </div>
 
                     <div class="input-group" style="margin-bottom: 15px;">
-                        <label>Hollywood Handshake (Optional)</label>
-                        <select id="res-handshake" class="styled-select"></select>
+                        <label>Hollywood Handshake(s)</label>
+                        <div class="multi-select-container" id="res-handshake-container"></div>
                     </div>
 
                     <button type="submit" class="submit-btn">Save Weekly Results</button>
@@ -585,6 +638,13 @@
             document.getElementById('modal-grid').innerHTML = mainGrid.innerHTML;
         }
 
+        // Helper to convert comma-separated string or array to Array
+        function parseArrayResult(val) {
+            if (!val) return [];
+            if (Array.isArray(val)) return val;
+            return val.toString().split(", ").map(s => s.trim()).filter(Boolean);
+        }
+
         // --- JSONP FETCH FROM GOOGLE SHEETS ---
         function handleGoogleSheetResponse(res) {
             if (res && res.status === "success") {
@@ -630,11 +690,20 @@
 
                 // Sheet3 (Admin Results Log from Google Sheet)
                 if (res.adminResults && Object.keys(res.adminResults).length > 0) {
-                    adminResults = res.adminResults;
+                    adminResults = {};
+                    for (let w in res.adminResults) {
+                        let r = res.adminResults[w];
+                        adminResults[w] = {
+                            technical: parseArrayResult(r.technical),
+                            starBaker: parseArrayResult(r.starBaker),
+                            leaving: parseArrayResult(r.leaving),
+                            handshake: parseArrayResult(r.handshake)
+                        };
+                    }
                     localStorage.setItem('gbbo_results', JSON.stringify(adminResults));
                 }
 
-                // Sheet4 (Leaderboard from Google Sheet if present)
+                // Sheet4 (Leaderboard from Google Sheet)
                 if (res.leaderboard && res.leaderboard.length > 0) {
                     res.leaderboard.forEach(item => {
                         let playerIndex = players.findIndex(p => p.name === item.name);
@@ -747,15 +816,22 @@
                 closedMsg.innerText = "The season is over!";
                 closedMsg.style.display = 'block';
             }
+
             renderTables();
+            renderAccordions();
         }
 
         // --- ELIMINATION LOGIC ---
         function getEliminatedBakers() {
             const eliminated = [];
             for (let w = 1; w <= 10; w++) {
-                if (adminResults[w] && adminResults[w].leaving && adminResults[w].leaving !== "None") {
-                    eliminated.push(adminResults[w].leaving);
+                if (adminResults[w] && adminResults[w].leaving) {
+                    const leavers = parseArrayResult(adminResults[w].leaving);
+                    leavers.forEach(l => {
+                        if (l !== "None" && !eliminated.includes(l)) {
+                            eliminated.push(l);
+                        }
+                    });
                 }
             }
             return eliminated;
@@ -774,13 +850,16 @@
             });
         }
 
-        // --- STAR BAKER BADGE LOGIC ---
+        // --- STAR BAKER BADGE LOGIC (FADES IN SMOOTHLY AND STAYS STATIC) ---
         function getMostRecentStarBakers() {
             let mostRecentStar = [];
             for (let w = 10; w >= 1; w--) {
-                if (adminResults[w] && adminResults[w].starBaker && adminResults[w].starBaker.length > 0) {
-                    mostRecentStar = adminResults[w].starBaker;
-                    break;
+                if (adminResults[w] && adminResults[w].starBaker) {
+                    const stars = parseArrayResult(adminResults[w].starBaker);
+                    if (stars.length > 0 && !stars.includes("None")) {
+                        mostRecentStar = stars;
+                        break;
+                    }
                 }
             }
             return mostRecentStar;
@@ -788,18 +867,23 @@
 
         function renderStarBakerBadges() {
             const recentStars = getMostRecentStarBakers();
-            document.querySelectorAll('.star-baker-badge').forEach(badge => badge.remove());
-
-            if (recentStars.length === 0) return;
 
             document.querySelectorAll('.cast-tile').forEach(tile => {
                 const nameEl = tile.querySelector('.baker-name');
                 if (nameEl) {
                     const name = nameEl.textContent.trim();
+                    let existingBadge = tile.querySelector('.star-baker-badge');
+
                     if (recentStars.includes(name)) {
-                        const badge = document.createElement('div');
-                        badge.className = 'star-baker-badge';
-                        tile.appendChild(badge);
+                        if (!existingBadge) {
+                            existingBadge = document.createElement('div');
+                            existingBadge.className = 'star-baker-badge';
+                            tile.appendChild(existingBadge);
+                            // Trigger smooth fade-in
+                            setTimeout(() => existingBadge.classList.add('badge-loaded'), 50);
+                        }
+                    } else {
+                        if (existingBadge) existingBadge.remove();
                     }
                 }
             });
@@ -972,6 +1056,7 @@
             
             loadPlayersToDropdown();
             renderTables();
+            renderAccordions();
 
             const submitBtn = e.target.querySelector('.submit-btn');
             const originalBtnText = submitBtn.innerText;
@@ -1044,7 +1129,7 @@
         });
 
 
-        // --- ADMIN SECURE TAB LOGIC ---
+        // --- ADMIN SECURE TAB LOGIC WITH MULTI-SELECT FOR ALL QUESTIONS ---
         document.getElementById('admin-login-btn').addEventListener('click', () => {
             const pwd = document.getElementById('admin-password').value;
             if (pwd === "GBBO26") {
@@ -1064,42 +1149,47 @@
         });
 
         function populateAdminFormForWeek(weekNum) {
-            const tech = document.getElementById('res-tech');
-            const leaving = document.getElementById('res-leaving');
-            const hand = document.getElementById('res-handshake');
+            const techCont = document.getElementById('res-tech-container');
             const starCont = document.getElementById('res-star-container');
+            const leavingCont = document.getElementById('res-leaving-container');
+            const handCont = document.getElementById('res-handshake-container');
             
-            tech.innerHTML = '<option value="None">Select...</option>';
-            leaving.innerHTML = '<option value="None">Select...</option>';
-            hand.innerHTML = '<option value="None">None</option>';
+            techCont.innerHTML = '';
             starCont.innerHTML = '';
+            leavingCont.innerHTML = '';
+            handCont.innerHTML = '';
 
             const eliminatedPrior = [];
             for (let w = 1; w < weekNum; w++) {
-                if (adminResults[w] && adminResults[w].leaving && adminResults[w].leaving !== "None") {
-                    eliminatedPrior.push(adminResults[w].leaving);
+                if (adminResults[w] && adminResults[w].leaving) {
+                    const leavers = parseArrayResult(adminResults[w].leaving);
+                    leavers.forEach(l => {
+                        if (l !== "None" && !eliminatedPrior.includes(l)) eliminatedPrior.push(l);
+                    });
                 }
             }
 
             ALL_BAKERS.forEach(baker => {
                 if(!eliminatedPrior.includes(baker)) {
-                    tech.innerHTML += `<option value="${baker}">${baker}</option>`;
-                    leaving.innerHTML += `<option value="${baker}">${baker}</option>`;
-                    hand.innerHTML += `<option value="${baker}">${baker}</option>`;
-                    starCont.innerHTML += `<label class="multi-check"><input type="checkbox" name="starbakers" value="${baker}"> ${baker}</label>`;
+                    techCont.innerHTML += `<label class="multi-check"><input type="checkbox" name="res_tech" value="${baker}"> ${baker}</label>`;
+                    starCont.innerHTML += `<label class="multi-check"><input type="checkbox" name="res_star" value="${baker}"> ${baker}</label>`;
+                    leavingCont.innerHTML += `<label class="multi-check"><input type="checkbox" name="res_leaving" value="${baker}"> ${baker}</label>`;
+                    handCont.innerHTML += `<label class="multi-check"><input type="checkbox" name="res_handshake" value="${baker}"> ${baker}</label>`;
                 }
             });
 
+            // Pre-fill existing checkboxes if results exist for this week
             const weekData = adminResults[weekNum];
             if (weekData) {
-                tech.value = weekData.technical || "None";
-                leaving.value = weekData.leaving || "None";
-                hand.value = weekData.handshake || "None";
-                if (weekData.starBaker) {
-                    document.querySelectorAll('input[name="starbakers"]').forEach(cb => {
-                        if (weekData.starBaker.includes(cb.value)) cb.checked = true;
-                    });
-                }
+                const techList = parseArrayResult(weekData.technical);
+                const starList = parseArrayResult(weekData.starBaker);
+                const leavingList = parseArrayResult(weekData.leaving);
+                const handList = parseArrayResult(weekData.handshake);
+
+                document.querySelectorAll('input[name="res_tech"]').forEach(cb => { if (techList.includes(cb.value)) cb.checked = true; });
+                document.querySelectorAll('input[name="res_star"]').forEach(cb => { if (starList.includes(cb.value)) cb.checked = true; });
+                document.querySelectorAll('input[name="res_leaving"]').forEach(cb => { if (leavingList.includes(cb.value)) cb.checked = true; });
+                document.querySelectorAll('input[name="res_handshake"]').forEach(cb => { if (handList.includes(cb.value)) cb.checked = true; });
             }
         }
 
@@ -1118,24 +1208,33 @@
             e.preventDefault();
             const weekNum = parseInt(document.getElementById('admin-week-select').value);
             
-            const tech = document.getElementById('res-tech').value;
-            const leaving = document.getElementById('res-leaving').value;
-            const hand = document.getElementById('res-handshake').value;
-            
-            const starCheckboxes = document.querySelectorAll('input[name="starbakers"]:checked');
-            const starBakers = Array.from(starCheckboxes).map(cb => cb.value);
+            const techCheckboxes = document.querySelectorAll('input[name="res_tech"]:checked');
+            const starCheckboxes = document.querySelectorAll('input[name="res_star"]:checked');
+            const leavingCheckboxes = document.querySelectorAll('input[name="res_leaving"]:checked');
+            const handCheckboxes = document.querySelectorAll('input[name="res_handshake"]:checked');
 
-            adminResults[weekNum] = { technical: tech, starBaker: starBakers, leaving: leaving, handshake: hand };
+            const techBakers = Array.from(techCheckboxes).map(cb => cb.value);
+            const starBakers = Array.from(starCheckboxes).map(cb => cb.value);
+            const leavingBakers = Array.from(leavingCheckboxes).map(cb => cb.value);
+            const handshakeBakers = Array.from(handCheckboxes).map(cb => cb.value);
+
+            adminResults[weekNum] = { 
+                technical: techBakers, 
+                starBaker: starBakers, 
+                leaving: leavingBakers, 
+                handshake: handshakeBakers 
+            };
+            
             localStorage.setItem('gbbo_results', JSON.stringify(adminResults));
             
             // Post results to Sheet3
             const payload = {
                 targetSheet: "Sheet3",
                 week: weekNum,
-                technical: tech,
-                starBaker: starBakers,
-                leaving: leaving,
-                handshake: hand
+                technical: techBakers.join(", "),
+                starBaker: starBakers.join(", "),
+                leaving: leavingBakers.join(", "),
+                handshake: handshakeBakers.join(", ")
             };
 
             fetch(SCRIPT_URL, {
@@ -1164,19 +1263,26 @@
                     const result = adminResults[w];
                     const pred = player.predictions ? player.predictions[w] : null;
                     if(result && pred) {
-                        if(pred.technical === result.technical && result.technical !== "None") totalScore += 3;
-                        if(result.starBaker.includes(pred.starBaker)) totalScore += 5;
-                        if(pred.leaving === result.leaving && result.leaving !== "None") totalScore += 2;
-                        if(pred.handshake === result.handshake && result.handshake !== "None") totalScore += 10;
+                        const techList = parseArrayResult(result.technical);
+                        const starList = parseArrayResult(result.starBaker);
+                        const leavingList = parseArrayResult(result.leaving);
+                        const handList = parseArrayResult(result.handshake);
+
+                        if(techList.includes(pred.technical) && pred.technical !== "None") totalScore += 3;
+                        if(starList.includes(pred.starBaker) && pred.starBaker !== "None") totalScore += 5;
+                        if(leavingList.includes(pred.leaving) && pred.leaving !== "None") totalScore += 2;
+                        if(handList.includes(pred.handshake) && pred.handshake !== "None") totalScore += 10;
                     }
                 }
 
+                // 2. Series Winner Prediction Points (10 Points)
                 if (finalSeriesWinner && player.predictedWinner === finalSeriesWinner) {
                     totalScore += 10;
                 }
 
                 player.score = totalScore;
             });
+            
             localStorage.setItem('gbbo_players', JSON.stringify(players));
             
             // Sort players for leaderboard export
@@ -1193,19 +1299,25 @@
             }).catch(err => console.log("Sheet4 Sync Note:", err));
 
             renderTables();
+            renderAccordions();
             renderEliminatedBakers(); 
             renderStarBakerBadges();
         }
 
-        // --- RENDER TABLES & ACCORDIONS ---
+        // --- RENDER TABLES ---
         function renderTables() {
             const winnerBody = document.getElementById("winner-table-body");
             const leagueBody = document.getElementById("leaderboard-body");
-            
+            const liveBody = document.getElementById("current-week-live-body");
+            const liveTitle = document.getElementById("current-week-live-title");
+            const liveMsg = document.getElementById("current-week-live-msg");
+            const liveTable = document.getElementById("current-week-live-table");
+
             winnerBody.innerHTML = "";
             leagueBody.innerHTML = "";
+            liveBody.innerHTML = "";
             
-            // Tab 3: Overall Winner Predictions Table
+            // Series Winner Table
             players.forEach((player) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -1215,46 +1327,21 @@
                 winnerBody.appendChild(row);
             });
 
-            // Tab 2: Live Table for Current Active Week (below form)
-            renderCurrentWeekTable();
-
-            // Tab 4: Multi-Week Collapsible Accordions (Weeks 1 to 10)
-            renderAllWeeksAccordion();
-
-            // Tab 5: League Table
-            let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
-            sortedPlayers.forEach((player, index) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `<td>${index + 1}</td><td>${player.name}</td><td>${player.score}</td>`;
-                leagueBody.appendChild(row);
-            });
-            
-            if(winnerBody.innerHTML === "") winnerBody.innerHTML = `<tr><td colspan='2' style='text-align:center;'>No overall winner predictions submitted yet!</td></tr>`;
-            if(leagueBody.innerHTML === "") leagueBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No players have joined yet!</td></tr>";
-        }
-
-        // Render current week choices table directly on Tab 2
-        function renderCurrentWeekTable() {
-            const currentWeekBody = document.getElementById("current-week-table-body");
-            const titleEl = document.getElementById("current-week-choices-title");
-            const blurMsgEl = document.getElementById("current-week-blur-message");
-            const tableEl = document.getElementById("current-week-table");
-            
-            const weekNum = currentAppState.week;
-            titleEl.innerText = `Week ${weekNum} Choices`;
-            currentWeekBody.innerHTML = "";
+            // Live Table for Current Active Week beneath Make Your Choices tab
+            let currentWeekNum = currentAppState.week;
+            liveTitle.innerText = `Week ${currentWeekNum} Submitted Choices`;
 
             if (currentAppState.status === 'OPEN') {
-                tableEl.classList.add('table-blur-active');
-                blurMsgEl.innerText = `Choices for Week ${weekNum} are blurred until 8:00 PM on Tuesday`;
-                blurMsgEl.style.display = 'block';
+                liveTable.classList.add('table-blur-active');
+                liveMsg.style.display = 'block';
+                liveMsg.innerText = `Choices for Week ${currentWeekNum} are hidden until 8:00 PM on Tuesday`;
             } else {
-                tableEl.classList.remove('table-blur-active');
-                blurMsgEl.style.display = 'none';
+                liveTable.classList.remove('table-blur-active');
+                liveMsg.style.display = 'none';
             }
 
             players.forEach((player) => {
-                let p = player.predictions ? player.predictions[weekNum] : null;
+                let p = player.predictions ? player.predictions[currentWeekNum] : null;
                 if (p) {
                     const row = document.createElement("tr");
                     row.innerHTML = `
@@ -1264,42 +1351,53 @@
                         <td class="secret-choice">${p.leaving || "-"}</td>
                         <td class="secret-choice">${p.handshake || "None"}</td>
                     `;
-                    currentWeekBody.appendChild(row);
+                    liveBody.appendChild(row);
                 }
             });
 
-            if (currentWeekBody.innerHTML === "") {
-                currentWeekBody.innerHTML = `<tr><td colspan='5' style='text-align:center;'>No predictions submitted for Week ${weekNum} yet!</td></tr>`;
-            }
+            // Leaderboard Table
+            let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+            sortedPlayers.forEach((player, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${index + 1}</td><td>${player.name}</td><td>${player.score}</td>`;
+                leagueBody.appendChild(row);
+            });
+            
+            if(winnerBody.innerHTML === "") winnerBody.innerHTML = `<tr><td colspan='2' style='text-align:center;'>No overall winner predictions submitted yet!</td></tr>`;
+            if(liveBody.innerHTML === "") liveBody.innerHTML = `<tr><td colspan='5' style='text-align:center;'>No predictions submitted for Week ${currentWeekNum} yet!</td></tr>`;
+            if(leagueBody.innerHTML === "") leagueBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No players have joined yet!</td></tr>";
         }
 
-        // Render Collapsible 10-Week Accordions for Tab 4 (Defaulting to CLOSED)
-        function renderAllWeeksAccordion() {
-            const container = document.getElementById("all-weeks-accordion-container");
-            const now = new Date().getTime();
-            
-            // Preserve open states across re-renders
+        // --- RENDER ACCORDIONS ("The Choices" Tab) ---
+        function renderAccordions() {
+            const container = document.getElementById("accordions-container");
+            if (!container) return;
+
+            // Preserve active/open states across re-renders
             const openWeekNums = [];
-            document.querySelectorAll('.accordion-item.open').forEach(item => {
-                const w = item.getAttribute('data-week');
-                if (w) openWeekNums.push(parseInt(w));
+            document.querySelectorAll('.accordion-item.active').forEach(item => {
+                openWeekNums.push(item.getAttribute('data-week'));
             });
 
             container.innerHTML = "";
 
             for (let w = 1; w <= 10; w++) {
-                const item = document.createElement('div');
-                item.className = `accordion-item ${openWeekNums.includes(w) ? 'open' : ''}`;
-                item.setAttribute('data-week', w);
+                const item = document.createElement("div");
+                item.className = "accordion-item";
+                item.setAttribute("data-week", w);
 
-                const isSecret = (w > currentAppState.week) || (w === currentAppState.week && currentAppState.status === 'OPEN');
+                if (openWeekNums.includes(w.toString())) {
+                    item.classList.add("active");
+                }
+
+                const isWeekLockedOrPassed = (w < currentAppState.week) || (w === currentAppState.week && currentAppState.status !== 'OPEN');
+                const blurClass = isWeekLockedOrPassed ? "" : "table-blur-active";
+                const statusNote = isWeekLockedOrPassed ? "" : `<p class="week-blur-msg">Choices for Week ${w} are hidden until voting closes.</p>`;
 
                 let rowsHtml = "";
-                let count = 0;
-                players.forEach((player) => {
+                players.forEach(player => {
                     let p = player.predictions ? player.predictions[w] : null;
                     if (p) {
-                        count++;
                         rowsHtml += `
                             <tr>
                                 <td><strong>${player.name}</strong></td>
@@ -1312,19 +1410,19 @@
                     }
                 });
 
-                if (count === 0) {
-                    rowsHtml = `<tr><td colspan='5' style='text-align:center;'>No choices submitted for Week ${w} yet!</td></tr>`;
+                if (!rowsHtml) {
+                    rowsHtml = `<tr><td colspan="5" style="text-align:center;">No predictions submitted for Week ${w} yet!</td></tr>`;
                 }
 
                 item.innerHTML = `
-                    <button type="button" class="accordion-header">
-                        <span>Week ${w} Choices (${count} Submissions)</span>
+                    <div class="accordion-header">
+                        <h3>Week ${w} Choices</h3>
                         <span class="accordion-arrow">▼</span>
-                    </button>
-                    <div class="accordion-content">
-                        ${isSecret ? `<p class="blur-msg-sub" style="margin-top:0;">Choices are hidden until 8:00 PM on Tuesday of Week ${w}</p>` : ''}
+                    </div>
+                    <div class="accordion-body">
+                        ${statusNote}
                         <div class="table-container">
-                            <table class="${isSecret ? 'table-blur-active' : ''}">
+                            <table class="${blurClass}">
                                 <thead>
                                     <tr>
                                         <th>Player</th>
@@ -1342,10 +1440,10 @@
                     </div>
                 `;
 
-                // Toggle click listener for Arrow/Header
-                const headerBtn = item.querySelector('.accordion-header');
-                headerBtn.addEventListener('click', () => {
-                    item.classList.toggle('open');
+                // Accordion click toggle logic
+                const header = item.querySelector(".accordion-header");
+                header.addEventListener("click", () => {
+                    item.classList.toggle("active");
                 });
 
                 container.appendChild(item);
