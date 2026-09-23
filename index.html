@@ -6,7 +6,6 @@
     <title>Fantasy GBBO League</title>
     
     <style>
-        /* --- GLOBAL THEME BASE --- */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #080C16; color: #ffffff; margin: 0; padding: 0; overflow-x: hidden; }
 
         /* --- COUNTDOWN TIMER --- */
@@ -16,8 +15,6 @@
         .time-box { display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 10px; min-width: 60px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .time-box span { color: #E2FF26; font-size: clamp(20px, 5vw, 32px); font-weight: bold; }
         .time-box small { color: rgba(255, 255, 255, 0.7); font-size: 10px; text-transform: uppercase; margin-top: 5px; letter-spacing: 1px; }
-
-        .started-msg { color: #E2FF26; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; padding: 20px; }
 
         /* --- TAB NAVIGATION --- */
         .tabs-nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; padding: 20px; background-color: #080C16; position: relative; z-index: 100; }
@@ -103,6 +100,15 @@
         .multi-check { display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 5px; font-size: 14px; cursor: pointer; transition: background 0.2s; }
         .multi-check:hover { background: rgba(255,255,255,0.2); }
 
+        /* --- ACCORDION COMPONENT FOR TAB 4 --- */
+        .accordion-item { width: 100%; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px; overflow: hidden; background: rgba(255, 255, 255, 0.02); }
+        .accordion-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: rgba(53, 43, 255, 0.2); color: #E2FF26; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; border: none; outline: none; cursor: pointer; text-align: left; font-size: 15px; transition: background 0.3s ease; box-sizing: border-box; }
+        .accordion-header:hover { background: rgba(53, 43, 255, 0.4); }
+        .accordion-arrow { font-size: 14px; transition: transform 0.3s ease; color: #ffffff; }
+        .accordion-item.open .accordion-arrow { transform: rotate(180deg); color: #E2FF26; }
+        .accordion-content { display: none; padding: 15px; box-sizing: border-box; background: rgba(8, 12, 22, 0.6); border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        .accordion-item.open .accordion-content { display: block; }
+
         /* --- MODALS --- */
         .custom-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(8, 12, 22, 0.95); z-index: 10002; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; overflow-y: auto; padding: 20px; box-sizing: border-box;}
         .custom-modal.active { opacity: 1; pointer-events: auto; }
@@ -163,7 +169,7 @@
         th { background-color: rgba(53, 43, 255, 0.3); color: #E2FF26; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 
         .table-blur-active .secret-choice { filter: blur(6px); opacity: 0.6; user-select: none; pointer-events: none; transition: filter 1s ease, opacity 1s ease; }
-        #blur-message, #winner-blur-message { text-align: center; color: rgba(255, 255, 255, 0.7); font-style: italic; letter-spacing: 1px; font-size: 14px; margin-bottom: 20px; }
+        #blur-message, #winner-blur-message, .blur-msg-sub { text-align: center; color: rgba(255, 255, 255, 0.7); font-style: italic; letter-spacing: 1px; font-size: 14px; margin-bottom: 20px; }
 
         /* --- INTRO SEQUENCE & BACKGROUND VIDEO --- */
         #intro-sequence { 
@@ -298,7 +304,7 @@
             </section>
         </div>
 
-        <!-- TAB 2: Make Your Choices -->
+        <!-- TAB 2: Make Your Choices (Includes Live Blurred Table Below) -->
         <div id="tab-choices" class="tab-content">
             <div class="form-container">
                 <h2 id="form-week-title">Week 1 Predictions</h2>
@@ -347,6 +353,28 @@
                     <button type="submit" class="submit-btn">Submit Predictions</button>
                 </form>
             </div>
+
+            <!-- Live Blurred Choices Table directly under Form on Tab 2 -->
+            <section class="data-section" style="margin-top: 30px;">
+                <h2 id="current-week-choices-title">This Week's Choices</h2>
+                <p id="current-week-blur-message" class="blur-msg-sub">Choices are hidden until 8:00 PM on Tuesday</p>
+                <div class="table-container">
+                    <table id="current-week-table" class="table-blur-active">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Technical</th>
+                                <th>Star Baker</th>
+                                <th>Leaving</th>
+                                <th>Handshake</th>
+                            </tr>
+                        </thead>
+                        <tbody id="current-week-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
 
         <!-- TAB 3: Series Winner Prediction -->
@@ -396,27 +424,14 @@
             </section>
         </div>
 
-        <!-- TAB 4: The Choices -->
+        <!-- TAB 4: The Choices (Collapsible Accordion for All 10 Weeks) -->
         <div id="tab-choices-table" class="tab-content">
             <section class="data-section">
-                <h2 id="choices-table-title">Week 1 Choices</h2>
-                <p id="blur-message">Choices are hidden until 8pm on Tuesday</p>
+                <h2>All Weekly Choices</h2>
+                <p class="blur-msg-sub">Tap any week below to view choices. Unrevealed weeks remain secret until 8:00 PM on Tuesday!</p>
                 
-                <div class="table-container">
-                    <table id="choices-table" class="table-blur-active">
-                        <thead>
-                            <tr>
-                                <th>Player</th>
-                                <th>Technical</th>
-                                <th>Star Baker</th>
-                                <th>Leaving</th>
-                                <th>Handshake</th>
-                            </tr>
-                        </thead>
-                        <tbody id="choices-table-body">
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
+                <div id="all-weeks-accordion-container" style="width: 100%; margin-top: 20px;">
+                    <!-- Javascript generates 10 weekly collapsible accordions -->
                 </div>
             </section>
         </div>
@@ -444,7 +459,6 @@
 
         <!-- TAB 6: ADMIN (Password Protected) -->
         <div id="tab-admin" class="tab-content">
-            
             <!-- Login View -->
             <div id="admin-login-view" class="form-container">
                 <h2>Admin Access</h2>
@@ -678,10 +692,7 @@
         function renderUIBasedOnState() {
             const form = document.getElementById('prediction-form');
             const closedMsg = document.getElementById('form-closed-msg');
-            const choicesTable = document.getElementById('choices-table');
-            const blurMsg = document.getElementById('blur-message');
             const formTitle = document.getElementById('form-week-title');
-            const choicesTitle = document.getElementById('choices-table-title');
             const timerHeader = document.getElementById('timer-header');
             
             // Winner Tab Logic:
@@ -723,19 +734,11 @@
                 timerHeader.innerText = `Week ${currentAppState.week} Closes In:`;
                 form.classList.remove('greyed-out');
                 closedMsg.style.display = 'none';
-                
-                choicesTitle.innerText = `Week ${currentAppState.week} Choices`;
-                choicesTable.classList.add('table-blur-active');
-                blurMsg.style.display = 'block';
 
             } else if (currentAppState.status === 'LOCKED') {
                 timerHeader.innerText = `Week ${currentAppState.week} Voting Closed. Next Round In:`;
                 form.classList.add('greyed-out');
                 closedMsg.style.display = 'block';
-                
-                choicesTitle.innerText = `Week ${currentAppState.week} Choices`;
-                choicesTable.classList.remove('table-blur-active');
-                blurMsg.style.display = 'none';
 
             } else {
                 timerHeader.innerText = "Season Complete!";
@@ -743,9 +746,6 @@
                 form.classList.add('greyed-out');
                 closedMsg.innerText = "The season is over!";
                 closedMsg.style.display = 'block';
-                choicesTitle.innerText = `Final Choices`;
-                choicesTable.classList.remove('table-blur-active');
-                blurMsg.style.display = 'none';
             }
             renderTables();
         }
@@ -1171,7 +1171,6 @@
                     }
                 }
 
-                // 2. Series Winner Prediction Points (10 Points)
                 if (finalSeriesWinner && player.predictedWinner === finalSeriesWinner) {
                     totalScore += 10;
                 }
@@ -1198,16 +1197,15 @@
             renderStarBakerBadges();
         }
 
-        // --- RENDER TABLES ---
+        // --- RENDER TABLES & ACCORDIONS ---
         function renderTables() {
-            const choicesBody = document.getElementById("choices-table-body");
             const winnerBody = document.getElementById("winner-table-body");
             const leagueBody = document.getElementById("leaderboard-body");
             
-            choicesBody.innerHTML = ""; 
             winnerBody.innerHTML = "";
             leagueBody.innerHTML = "";
             
+            // Tab 3: Overall Winner Predictions Table
             players.forEach((player) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -1217,22 +1215,13 @@
                 winnerBody.appendChild(row);
             });
 
-            let weekToShow = currentAppState.week;
-            players.forEach((player) => {
-                let p = player.predictions ? player.predictions[weekToShow] : null;
-                if(p) {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td><strong>${player.name}</strong></td>
-                        <td class="secret-choice">${p.technical || "-"}</td>
-                        <td class="secret-choice">${p.starBaker || "-"}</td>
-                        <td class="secret-choice">${p.leaving || "-"}</td>
-                        <td class="secret-choice">${p.handshake || "None"}</td>
-                    `;
-                    choicesBody.appendChild(row);
-                }
-            });
+            // Tab 2: Live Table for Current Active Week (below form)
+            renderCurrentWeekTable();
 
+            // Tab 4: Multi-Week Collapsible Accordions (Weeks 1 to 10)
+            renderAllWeeksAccordion();
+
+            // Tab 5: League Table
             let sortedPlayers = [...players].sort((a, b) => b.score - a.score);
             sortedPlayers.forEach((player, index) => {
                 const row = document.createElement("tr");
@@ -1241,8 +1230,126 @@
             });
             
             if(winnerBody.innerHTML === "") winnerBody.innerHTML = `<tr><td colspan='2' style='text-align:center;'>No overall winner predictions submitted yet!</td></tr>`;
-            if(choicesBody.innerHTML === "") choicesBody.innerHTML = `<tr><td colspan='5' style='text-align:center;'>No predictions submitted for Week ${weekToShow} yet!</td></tr>`;
             if(leagueBody.innerHTML === "") leagueBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No players have joined yet!</td></tr>";
+        }
+
+        // Render current week choices table directly on Tab 2
+        function renderCurrentWeekTable() {
+            const currentWeekBody = document.getElementById("current-week-table-body");
+            const titleEl = document.getElementById("current-week-choices-title");
+            const blurMsgEl = document.getElementById("current-week-blur-message");
+            const tableEl = document.getElementById("current-week-table");
+            
+            const weekNum = currentAppState.week;
+            titleEl.innerText = `Week ${weekNum} Choices`;
+            currentWeekBody.innerHTML = "";
+
+            if (currentAppState.status === 'OPEN') {
+                tableEl.classList.add('table-blur-active');
+                blurMsgEl.innerText = `Choices for Week ${weekNum} are blurred until 8:00 PM on Tuesday`;
+                blurMsgEl.style.display = 'block';
+            } else {
+                tableEl.classList.remove('table-blur-active');
+                blurMsgEl.style.display = 'none';
+            }
+
+            players.forEach((player) => {
+                let p = player.predictions ? player.predictions[weekNum] : null;
+                if (p) {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td><strong>${player.name}</strong></td>
+                        <td class="secret-choice">${p.technical || "-"}</td>
+                        <td class="secret-choice">${p.starBaker || "-"}</td>
+                        <td class="secret-choice">${p.leaving || "-"}</td>
+                        <td class="secret-choice">${p.handshake || "None"}</td>
+                    `;
+                    currentWeekBody.appendChild(row);
+                }
+            });
+
+            if (currentWeekBody.innerHTML === "") {
+                currentWeekBody.innerHTML = `<tr><td colspan='5' style='text-align:center;'>No predictions submitted for Week ${weekNum} yet!</td></tr>`;
+            }
+        }
+
+        // Render Collapsible 10-Week Accordions for Tab 4 (Defaulting to CLOSED)
+        function renderAllWeeksAccordion() {
+            const container = document.getElementById("all-weeks-accordion-container");
+            const now = new Date().getTime();
+            
+            // Preserve open states across re-renders
+            const openWeekNums = [];
+            document.querySelectorAll('.accordion-item.open').forEach(item => {
+                const w = item.getAttribute('data-week');
+                if (w) openWeekNums.push(parseInt(w));
+            });
+
+            container.innerHTML = "";
+
+            for (let w = 1; w <= 10; w++) {
+                const item = document.createElement('div');
+                item.className = `accordion-item ${openWeekNums.includes(w) ? 'open' : ''}`;
+                item.setAttribute('data-week', w);
+
+                const isSecret = (w > currentAppState.week) || (w === currentAppState.week && currentAppState.status === 'OPEN');
+
+                let rowsHtml = "";
+                let count = 0;
+                players.forEach((player) => {
+                    let p = player.predictions ? player.predictions[w] : null;
+                    if (p) {
+                        count++;
+                        rowsHtml += `
+                            <tr>
+                                <td><strong>${player.name}</strong></td>
+                                <td class="secret-choice">${p.technical || "-"}</td>
+                                <td class="secret-choice">${p.starBaker || "-"}</td>
+                                <td class="secret-choice">${p.leaving || "-"}</td>
+                                <td class="secret-choice">${p.handshake || "None"}</td>
+                            </tr>
+                        `;
+                    }
+                });
+
+                if (count === 0) {
+                    rowsHtml = `<tr><td colspan='5' style='text-align:center;'>No choices submitted for Week ${w} yet!</td></tr>`;
+                }
+
+                item.innerHTML = `
+                    <button type="button" class="accordion-header">
+                        <span>Week ${w} Choices (${count} Submissions)</span>
+                        <span class="accordion-arrow">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        ${isSecret ? `<p class="blur-msg-sub" style="margin-top:0;">Choices are hidden until 8:00 PM on Tuesday of Week ${w}</p>` : ''}
+                        <div class="table-container">
+                            <table class="${isSecret ? 'table-blur-active' : ''}">
+                                <thead>
+                                    <tr>
+                                        <th>Player</th>
+                                        <th>Technical</th>
+                                        <th>Star Baker</th>
+                                        <th>Leaving</th>
+                                        <th>Handshake</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${rowsHtml}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+
+                // Toggle click listener for Arrow/Header
+                const headerBtn = item.querySelector('.accordion-header');
+                headerBtn.addEventListener('click', () => {
+                    item.classList.toggle('open');
+                });
+
+                container.appendChild(item);
+            }
         }
 
         // --- INITIALIZATION ---
