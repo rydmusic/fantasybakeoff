@@ -380,7 +380,7 @@
                     <input type="hidden" id="technical" required>
                     <input type="hidden" id="star-baker" required>
                     <input type="hidden" id="leaving" required>
-                    <input type="hidden" id="handshake">
+                    <input type="hidden" id="handshake" required>
 
                     <div class="input-group" style="margin-top: 15px;">
                         <label>Technical Winner (3 pts)</label>
@@ -399,7 +399,7 @@
 
                     <div class="input-group">
                         <label>Hollywood Handshake? (10 pts)</label>
-                        <button type="button" class="select-baker-btn" data-target-input="handshake" data-label="Hollywood Handshake">Tap to select a baker... (Optional)</button>
+                        <button type="button" class="select-baker-btn" data-target-input="handshake" data-label="Hollywood Handshake">Tap to select a baker...</button>
                     </div>
 
                     <button type="submit" class="submit-btn">Submit Predictions</button>
@@ -638,7 +638,6 @@
             document.getElementById('modal-grid').innerHTML = mainGrid.innerHTML;
         }
 
-        // Helper to convert comma-separated string or array to Array
         function parseArrayResult(val) {
             if (!val) return [];
             if (Array.isArray(val)) return val;
@@ -879,7 +878,6 @@
                             existingBadge = document.createElement('div');
                             existingBadge.className = 'star-baker-badge';
                             tile.appendChild(existingBadge);
-                            // Trigger smooth fade-in
                             setTimeout(() => existingBadge.classList.add('badge-loaded'), 50);
                         }
                     } else {
@@ -1037,10 +1035,10 @@
             const tech = document.getElementById('technical').value;
             const star = document.getElementById('star-baker').value;
             const leave = document.getElementById('leaving').value;
-            const handshake = document.getElementById('handshake').value || "None";
+            const handshake = document.getElementById('handshake').value;
             
-            if(!tech || !star || !leave || tech === "None" || star === "None" || leave === "None") {
-                alert("Please select a baker for Technical, Star Baker, and Leaving."); return;
+            if(!tech || !star || !leave || !handshake || tech === "None" || star === "None" || leave === "None" || handshake === "None") {
+                alert("Please select a baker for Technical, Star Baker, Leaving, and Hollywood Handshake."); return;
             }
 
             let finalName = playerSelect.value === 'ADD_NEW' ? newPlayerInput.value.trim() : playerSelect.value;
