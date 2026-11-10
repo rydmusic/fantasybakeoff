@@ -724,14 +724,27 @@
             document.body.appendChild(script);
         }
 
-        // --- 10 WEEK SCHEDULE ENGINE ---
-        const schedule = [];
-        const START_DATE = new Date("Sep 22, 2026 20:00:00 GMT+0100"); 
-        for(let i=0; i<10; i++) {
-            let lock = new Date(START_DATE.getTime() + (i * 7 * 24 * 60 * 60 * 1000));
-            let unlock = new Date(lock.getTime() + (1.5 * 60 * 60 * 1000));
-            schedule.push({ week: i+1, lockTime: lock.getTime(), unlockTime: unlock.getTime() });
-        }
+        // --- 10 WEEK SCHEDULE ENGINE (EXPLICIT UK TIME OFFSET FOR BST/GMT CHANGE) ---
+        // Clocks in the UK go back on Sunday 25 October 2026 at 2am.
+        // Weeks 1-5 use BST (GMT+0100); Weeks 6-10 use GMT (GMT+0000).
+        const scheduleDates = [
+            { week: 1,  dateStr: "Sep 22, 2026", tz: "GMT+0100" }, // BST
+            { week: 2,  dateStr: "Sep 29, 2026", tz: "GMT+0100" }, // BST
+            { week: 3,  dateStr: "Oct 06, 2026", tz: "GMT+0100" }, // BST
+            { week: 4,  dateStr: "Oct 13, 2026", tz: "GMT+0100" }, // BST
+            { week: 5,  dateStr: "Oct 20, 2026", tz: "GMT+0100" }, // BST
+            { week: 6,  dateStr: "Oct 27, 2026", tz: "GMT+0000" }, // GMT
+            { week: 7,  dateStr: "Nov 03, 2026", tz: "GMT+0000" }, // GMT
+            { week: 8,  dateStr: "Nov 10, 2026", tz: "GMT+0000" }, // GMT
+            { week: 9,  dateStr: "Nov 17, 2026", tz: "GMT+0000" }, // GMT
+            { week: 10, dateStr: "Nov 24, 2026", tz: "GMT+0000" }  // GMT
+        ];
+
+        const schedule = scheduleDates.map(item => {
+            const lockTime = new Date(`${item.dateStr} 20:00:00 ${item.tz}`).getTime();
+            const unlockTime = new Date(`${item.dateStr} 21:30:00 ${item.tz}`).getTime();
+            return { week: item.week, lockTime, unlockTime };
+        });
 
         let currentAppState = { week: 1, status: 'OPEN', targetTime: schedule[0].lockTime };
 
